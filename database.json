@@ -1,0 +1,26 @@
+{
+  "adminPassword": "trendtan2026",
+  "posConfig": {
+    "provider": "paytr",
+    "apiKey": "",
+    "secretKey": "",
+    "merchantSalt": ""
+  },
+  "sellers": [],
+  "sellerApplications": [],
+  "customers": [],
+  "products": [],
+  "coupons": [
+    {
+      "code": "TREND10",
+      "type": "percent",
+      "value": 10
+    },
+    {
+      "code": "HOSGELDIN50",
+      "type": "fixed",
+      "value": 50
+    }
+  ],
+  "orders": []
+}

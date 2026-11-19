@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRENDTAN | Çok Satıcılı Alışveriş Platformu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ÜST BİLGİ BARI -->
+    <div class="top-promo-bar">
+        <span><i class="fa-solid fa-tag"></i> Kupon Kodları: <strong>TREND10</strong> (%10 İndirim) | <strong>HOSGELDIN50</strong> (50 ₺ İndirim)</span>
+    </div>
+
+    <!-- HEADER / NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-content">
+            <!-- Gizli Admin Girişi: Logoya 5 kez seri tıklayın, Ctrl+Shift+A basın veya ?admin=trendtan kullanın -->
+            <div class="brand-logo" id="secretAdminTrigger" title="TRENDTAN">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>TREND<strong>TAN</strong></span>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Ürün, kategori veya mağaza ara...">
+                <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn-seller-portal" id="openSellerModalBtn">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Satıcı Paneli</span>
+                </button>
+                <button class="btn-cart" id="openCartBtn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Sepetim</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- KATEGORİ ŞERİDİ -->
+        <nav class="category-bar">
+            <div class="container category-list" id="categoryList">
+                <button class="cat-btn active" data-category="all">Tümü</button>
+                <button class="cat-btn" data-category="Elektronik">Elektronik</button>
+                <button class="cat-btn" data-category="Moda & Giyim">Moda & Giyim</button>
+                <button class="cat-btn" data-category="Ev & Yaşam">Ev & Yaşam</button>
+                <button class="cat-btn" data-category="Oto & Aksesuar">Oto & Aksesuar</button>
+                <button class="cat-btn" data-category="Kozmetik">Kozmetik</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ANA VİTRİN (MÜŞTERİ EKRANI) -->
+    <main class="container main-store" id="customerStoreView">
+        <!-- Banner -->
+        <section class="hero-banner">
+            <div class="hero-text">
+                <span class="hero-badge">TRENDTAN MAĞAZA</span>
+                <h1>Güvenli ve Hızlı Alışveriş Platformu</h1>
+                <p>Onaylı satıcıların ürünleri, anında kupon indirimleri ve güvenli ödeme altyapısı.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-box"><i class="fa-solid fa-shield-halved"></i><span>Güvenli Ödeme</span></div>
+                <div class="stat-box"><i class="fa-solid fa-truck-fast"></i><span>Hızlı Kargo</span></div>
+            </div>
+        </section>
+
+        <!-- Filtre ve Sıralama -->
+        <section class="filter-bar">
+            <div class="filter-left">
+                <h2 id="currentCategoryTitle">Tüm Ürünler</h2>
+                <span id="productCountText">(0 ürün)</span>
+            </div>
+            <div class="filter-right">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="freeShippingFilter"> Ücretsiz Kargo
+                </label>
+                <select id="sortSelect">
+                    <option value="default">Önerilen Sıralama</option>
+                    <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
+                    <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
+                    <option value="discount">En Yüksek İndirim</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Ürün Listesi Grid -->
+        <section class="product-grid" id="productGrid"></section>
+    </main>
+
+    <!-- SATICI YÖNETİM PANELİ -->
+    <section class="dashboard-section hidden" id="sellerDashboardView">
+        <div class="container">
+            <div class="dash-header">
+                <div>
+                    <span class="role-badge seller">ONAYLI SATICI PANELİ</span>
+                    <h2 id="sellerStoreTitle">Mağaza Adı</h2>
+                </div>
+                <div class="dash-header-actions">
+                    <button class="btn-outline" id="backToStoreFromSeller"><i class="fa-solid fa-shop"></i> Mağazaya Dön</button>
+                    <button class="btn-danger" id="sellerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+                </div>
+            </div>
+
+            <!-- Satıcı Özet İstatistikleri -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon blue"><i class="fa-solid fa-wallet"></i></div>
+                    <div>
+                        <span>Toplam Satış Tutarı</span>
+                        <h3 id="sellerTotalRevenue">0,00 ₺</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon orange"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <span>Gelen / Bekleyen Sipariş</span>
+                        <h3 id="sellerPendingOrdersCount">0</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div>
+                        <span>Tamamlanan Sipariş</span>
+                        <h3 id="sellerCompletedOrdersCount">0</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon purple"><i class="fa-solid fa-box-open"></i></div>
+                    <div>
+                        <span>Yayındaki Ürün Sayısı</span>
+                        <h3 id="sellerProductCount">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Satıcı Sekmeleri -->
+            <div class="dash-tabs">
+                <button class="tab-btn active" data-tab="seller-products">Ürünlerim & Ekle/Düzenle</button>
+                <button class="tab-btn" data-tab="seller-incoming-orders">Gelen Siparişler</button>
+                <button class="tab-btn" data-tab="seller-completed-orders">Tamamlanan Siparişler</button>
+            </div>
+
+            <!-- SEKME 1: ÜRÜN EKLEME VE YÖNETİMİ -->
+            <div class="tab-content active" id="seller-products">
+                <div class="panel-card">
+                    <h3 id="productFormHeading"><i class="fa-solid fa-plus-circle"></i> Yeni Ürün Ekle</h3>
+                    <form id="sellerProductForm" class="grid-form">
+                        <input type="hidden" id="editProductId">
+
+                        <div class="form-group">
+                            <label>Ürün Adı *</label>
+                            <input type="text" id="prodName" required placeholder="Ürün adını girin">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kategori *</label>
+                            <select id="prodCategory" required>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Moda & Giyim">Moda & Giyim</option>
+                                <option value="Ev & Yaşam">Ev & Yaşam</option>
+                                <option value="Oto & Aksesuar">Oto & Aksesuar</option>
+                                <option value="Kozmetik">Kozmetik</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Normal Liste Fiyatı (₺) *</label>
+                            <input type="number" id="prodOldPrice" step="0.01" min="0.01" required placeholder="Örn: 1200.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label>İndirimli Satış Fiyatı (₺) *</label>
+                            <input type="number" id="prodPrice" step="0.01" min="0.01" required placeholder="Örn: 899.90">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kargo Ücreti (₺) (0 = Ücretsiz Kargo) *</label>
+                            <input type="number" id="prodShipping" step="0.01" min="0" value="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Stok Adedi *</label>
+                            <input type="number" id="prodStock" min="0" value="10" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Ürün Görseli Yükle (Bilgisayar veya Telefon) *</label>
+                            <div class="file-upload-box">
+                                <input type="file" id="prodImageFile" accept="image/*" capture="environment">
+                                <div id="imagePreviewContainer" class="image-preview hidden">
+                                    <img id="prodImagePreview" src="" alt="Önizleme">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Ürün Açıklaması</label>
+                            <textarea id="prodDesc" rows="2" placeholder="Ürün özelliklerini yazın..."></textarea>
+                        </div>
+
+                        <div class="form-actions full-width">
+                            <button type="submit" class="btn-primary" id="saveProductBtn"><i class="fa-solid fa-save"></i> Ürünü Kaydet ve Yayınla</button>
+                            <button type="button" class="btn-outline hidden" id="cancelEditProductBtn">Düzenlemeyi İptal Et</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-list"></i> Mağazamdaki Ürünler</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Görsel</th>
+                                    <th>Ürün Adı</th>
+                                    <th>Liste Fiyatı</th>
+                                    <th>Satış Fiyatı</th>
+                                    <th>Kargo</th>
+                                    <th>Stok</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sellerProductsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEKME 2: GELEN SİPARİŞLER -->
+            <div class="tab-content" id="seller-incoming-orders">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-truck-ramp-box"></i> Hazırlanacak / Gelen Siparişler</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sipariş No</th>
+                                    <th>Müşteri & Adres</th>
+                                    <th>Ürünler</th>
+                                    <th>Tutar</th>
+                                    <th>Ödeme Yöntemi</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sellerIncomingOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEKME 3: TAMAMLANAN SİPARİŞLER -->
+            <div class="tab-content" id="seller-completed-orders">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-check-double"></i> Tamamlanan Sipariş Geçmişi</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sipariş No</th>
+                                    <th>Müşteri</th>
+                                    <th>Ürünler</th>
+                                    <th>Kazanç Tutarı</th>
+                                    <th>Tarih</th>
+                                    <th>Durum</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sellerCompletedOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GİZLİ SÜPER ADMIN PANELİ -->
+    <section class="dashboard-section hidden" id="superAdminDashboardView">
+        <div class="container">
+            <div class="dash-header admin-theme">
+                <div>
+                    <span class="role-badge admin">TRENDTAN SÜPER ADMIN KONTROL MERKEZİ</span>
+                    <h2>Platform Genel Yönetimi</h2>
+                </div>
+                <div class="dash-header-actions">
+                    <button class="btn-outline" id="backToStoreFromAdmin"><i class="fa-solid fa-shop"></i> Mağazaya Dön</button>
+                    <button class="btn-danger" id="adminLogoutBtn"><i class="fa-solid fa-lock"></i> Admin Çıkışı</button>
+                </div>
+            </div>
+
+            <!-- Genel Platform İstatistikleri -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon green"><i class="fa-solid fa-turkish-lira-sign"></i></div>
+                    <div>
+                        <span>Toplam Platform Cirosu</span>
+                        <h3 id="adminTotalPlatformRevenue">0,00 ₺</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon orange"><i class="fa-solid fa-user-clock"></i></div>
+                    <div>
+                        <span>Bekleyen Satıcı Başvurusu</span>
+                        <h3 id="adminPendingAppsCount">0</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon blue"><i class="fa-solid fa-store"></i></div>
+                    <div>
+                        <span>Kayıtlı Satıcı</span>
+                        <h3 id="adminActiveSellersCount">0</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon purple"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <span>Alışveriş Yapan Müşteri</span>
+                        <h3 id="adminCustomerCount">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Sekmeleri -->
+            <div class="dash-tabs">
+                <button class="tab-btn active" data-tab="admin-applications">Satıcı Başvuruları & Onay</button>
+                <button class="tab-btn" data-tab="admin-sellers">Tüm Satıcılar</button>
+                <button class="tab-btn" data-tab="admin-customers">Müşteri Kayıtları & Siparişler</button>
+                <button class="tab-btn" data-tab="admin-coupons">Kupon Yönetimi</button>
+                <button class="tab-btn" data-tab="admin-pos">PayTR / iyzico Sanal POS</button>
+            </div>
+
+            <!-- ADMIN SEKME 1: SATICI BAŞVURULARI -->
+            <div class="tab-content active" id="admin-applications">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-file-signature"></i> Kurumsal Satıcı Başvuru Kayıtları</h3>
+                    <p class="helper-text">Başvuran firmaların tüm iletişim, vergi/TC kimlik ve adres bilgilerini inceleyip kullanıcı adı ve şifre atayarak onaylayabilirsiniz.</p>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Firma Tam Adı</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Telefon & E-Posta</th>
+                                    <th>VKN / T.C. Kimlik</th>
+                                    <th>Açık Adres</th>
+                                    <th>Tarih</th>
+                                    <th>İnceleme & Onay</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminApplicationsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME 2: TÜM SATICILAR -->
+            <div class="tab-content" id="admin-sellers">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-users-gear"></i> Kayıtlı Satıcı Hesapları</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Firma Tam Adı & Yetkili</th>
+                                    <th>VKN / T.C. & Adres</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Şifre</th>
+                                    <th>İletişim</th>
+                                    <th>Durum</th>
+                                    <th>Yönet</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminSellersListBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME 3: ALIŞVERİŞ YAPAN MÜŞTERİLER -->
+            <div class="tab-content" id="admin-customers">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-user-check"></i> Alışveriş Yapan Müşteriler ve Sipariş Kayıtları</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Müşteri Ad Soyad</th>
+                                    <th>Telefon</th>
+                                    <th>Teslimat Adresi</th>
+                                    <th>Toplam Harcama</th>
+                                    <th>Sipariş Adedi</th>
+                                    <th>Son Sipariş Tarihi</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCustomersListBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME 4: KUPON YÖNETİMİ -->
+            <div class="tab-content" id="admin-coupons">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-tag"></i> Yeni İndirim Kuponu Oluştur</h3>
+                    <form id="adminCouponForm" class="inline-form">
+                        <input type="text" id="newCouponCode" placeholder="Kupon Kodu (Örn: TREND20)" required>
+                        <select id="newCouponType">
+                            <option value="percent">Yüzde İndirim (%)</option>
+                            <option value="fixed">Sabit Tutar İndirimi (₺)</option>
+                        </select>
+                        <input type="number" id="newCouponValue" step="0.01" placeholder="Değer (Örn: 20)" min="0.01" required>
+                        <button type="submit" class="btn-primary">Kupon Ekle</button>
+                    </form>
+                    <div class="table-responsive" style="margin-top: 20px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Kupon Kodu</th>
+                                    <th>İndirim Tipi</th>
+                                    <th>Değer</th>
+                                    <th>Sil</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCouponsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME 5: PAYTR / IYZICO SANAL POS -->
+            <div class="tab-content" id="admin-pos">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-credit-card"></i> Sanal POS Altyapı Yapılandırması (PayTR & iyzico)</h3>
+                    <p class="helper-text">PayTR veya iyzico hesabınız aktif olduğunda API bilgilerinizi buraya kaydedebilirsiniz.</p>
+                    <form id="posSettingsForm" class="grid-form">
+                        <div class="form-group">
+                            <label>Aktif Ödeme Sağlayıcı</label>
+                            <select id="posProvider">
+                                <option value="paytr">PayTR Sanal POS</option>
+                                <option value="iyzico">iyzico Ödeme Sistemi</option>
+                                <option value="manual">Standart Kart Formu (POS Anahtarı Bekleniyor)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Merchant ID / API Key</label>
+                            <input type="text" id="posApiKey" placeholder="Merchant ID veya API Key">
+                        </div>
+                        <div class="form-group">
+                            <label>Merchant Key / Secret Key</label>
+                            <input type="password" id="posSecretKey" placeholder="Merchant Key veya Secret Key">
+                        </div>
+                        <div class="form-group">
+                            <label>Merchant Salt (PayTR için)</label>
+                            <input type="password" id="posMerchantSalt" placeholder="Merchant Salt">
+                        </div>
+                        <div class="form-actions full-width">
+                            <button type="submit" class="btn-primary"><i class="fa-solid fa-shield-check"></i> POS Ayarlarını Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEPET ÇEKMECESİ -->
+    <div class="drawer-overlay hidden" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Alışveriş Sepetim</h3>
+            <button class="close-btn" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="cart-items-container" id="cartItemsContainer"></div>
+
+        <!-- Kupon Uygulama Alanı -->
+        <div class="cart-coupon-box">
+            <div class="coupon-input-group">
+                <input type="text" id="cartCouponInput" placeholder="İndirim Kuponu Girin">
+                <button id="applyCouponBtn">Uygula</button>
+            </div>
+            <small id="couponMessage" class="coupon-msg"></small>
+        </div>
+
+        <!-- Sepet Özeti -->
+        <div class="cart-summary">
+            <div class="summary-row"><span>Ara Toplam:</span><span id="cartSubtotal">0,00 ₺</span></div>
+            <div class="summary-row"><span>Kargo Toplamı:</span><span id="cartShippingTotal">0,00 ₺</span></div>
+            <div class="summary-row discount-row hidden" id="cartDiscountRow"><span>Kupon İndirimi:</span><span id="cartDiscountAmount">-0,00 ₺</span></div>
+            <div class="summary-row total-row"><span>Genel Toplam:</span><span id="cartGrandTotal">0,00 ₺</span></div>
+            <button class="btn-checkout" id="proceedCheckoutBtn">Siparişi Tamamla <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </aside>
+
+    <!-- MODAL 1: SATICI GİRİŞ & KURUMSAL BAŞVURU MODALI -->
+    <div class="modal-backdrop hidden" id="sellerAuthModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>TRENDTAN Satıcı Merkezi</h3>
+                <button class="close-btn" data-close="sellerAuthModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-tabs">
+                <button class="m-tab active" data-mtab="sellerLoginTab">Satıcı Girişi</button>
+                <button class="m-tab" data-mtab="sellerApplyTab">Kurumsal Satıcı Başvurusu</button>
+            </div>
+
+            <!-- Satıcı Giriş Formu -->
+            <form id="sellerLoginForm" class="modal-form active">
+                <div class="form-group">
+                    <label>Satıcı Kullanıcı Adı</label>
+                    <input type="text" id="sellerLoginUser" required placeholder="Yönetici tarafından verilen kullanıcı adı">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="sellerLoginPass" required placeholder="Şifreniz">
+                </div>
+                <button type="submit" class="btn-primary full-btn">Satıcı Paneline Giriş Yap</button>
+            </form>
+
+            <!-- Kurumsal Satıcı Başvuru Formu -->
+            <form id="sellerApplyForm" class="modal-form hidden">
+                <p class="helper-text">Başvurunuz TRENDTAN yönetim paneline kaydedilir. İnceleme ve onay sonrası kullanıcı adı ve şifreniz tanımlanır.</p>
+                
+                <div class="two-col" style="margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>İsim *</label>
+                        <input type="text" id="applyFirstName" required placeholder="Adınız">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Soyisim *</label>
+                        <input type="text" id="applyLastName" required placeholder="Soyadınız">
+                    </div>
+                </div>
+
+                <div class="two-col" style="margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Telefon *</label>
+                        <input type="tel" id="applyPhone" required placeholder="05XX XXX XX XX">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>E-Posta *</label>
+                        <input type="email" id="applyEmail" required placeholder="ornek@firma.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Firma Tam Adı *</label>
+                    <input type="text" id="applyCompanyName" required placeholder="Resmi şirket veya mağaza tam adı">
+                </div>
+
+                <div class="form-group">
+                    <label>Vergi Kimlik No (VKN) veya T.C. Kimlik No *</label>
+                    <input type="text" id="applyTaxOrTc" required maxlength="11" placeholder="10 haneli VKN veya 11 haneli T.C. Kimlik No">
+                </div>
+
+                <div class="form-group">
+                    <label>Açık Adres *</label>
+                    <textarea id="applyAddress" rows="2" required placeholder="İl, İlçe, Mahalle, Cadde/Sokak, Bina/No"></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary full-btn">Başvuruyu Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: GİZLİ ADMIN GİRİŞ MODALI -->
+    <div class="modal-backdrop hidden" id="adminLoginModal">
+        <div class="modal-box small-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-shield"></i> Süper Admin Girişi</h3>
+                <button class="close-btn" data-close="adminLoginModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="adminLoginForm" class="modal-form active">
+                <div class="form-group">
+                    <label>Yönetici Şifresi</label>
+                    <input type="password" id="superAdminPassInput" required placeholder="Yönetici şifrenizi girin">
+                </div>
+                <button type="submit" class="btn-primary full-btn">Yönetim Panelini Aç</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ÖDEME VE SİPARİŞ TAMAMLAMA MODALI -->
+    <div class="modal-backdrop hidden" id="checkoutModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-lock"></i> Ödeme ve Teslimat Bilgileri</h3>
+                <button class="close-btn" data-close="checkoutModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="checkoutForm" class="modal-form active">
+                <div class="form-group">
+                    <label>Alıcı Adı Soyadı *</label>
+                    <input type="text" id="custName" required placeholder="Adınız Soyadınız">
+                </div>
+                <div class="form-group">
+                    <label>Telefon Numarası *</label>
+                    <input type="tel" id="custPhone" required placeholder="05XX XXX XX XX">
+                </div>
+                <div class="form-group">
+                    <label>Teslimat Adresi *</label>
+                    <textarea id="custAddress" rows="2" required placeholder="İl, İlçe, Mahalle, Sokak ve Kapı No"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Ödeme Yöntemi Seçin *</label>
+                    <div class="payment-methods-grid">
+                        <label class="payment-option selected">
+                            <input type="radio" name="paymentMethod" value="Kredi / Banka Kartı (PayTR / iyzico)" checked>
+                            <i class="fa-solid fa-credit-card"></i>
+                            <div>
+                                <strong>Kredi / Banka Kartı</strong>
+                                <small id="activePosLabel">PayTR / iyzico Sanal POS Altyapısı</small>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="Kapıda Ödeme">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                            <div>
+                                <strong>Kapıda Ödeme</strong>
+                                <small>Nakit veya Kapıda POS</small>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="Havale / EFT">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <div>
+                                <strong>Havale / EFT</strong>
+                                <small>Banka Hesabına Transfer</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="cardFieldsBox" class="card-box">
+                    <div class="form-group">
+                        <label>Kart Üzerindeki İsim</label>
+                        <input type="text" placeholder="AD SOYAD">
+                    </div>
+                    <div class="form-group">
+                        <label>Kart Numarası</label>
+                        <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                    </div>
+                    <div class="two-col">
+                        <input type="text" placeholder="AA/YY" maxlength="5">
+                        <input type="text" placeholder="CVV" maxlength="3">
+                    </div>
+                </div>
+
+                <div class="checkout-final-bar">
+                    <span>Ödenecek Tutar: <strong id="modalFinalPrice">0,00 ₺</strong></span>
+                    <button type="submit" class="btn-primary">Siparişi Onayla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ADMIN SATICI BAŞVURU İNCELEME, ONAY VE ŞİFRE ATAMA MODALI -->
+    <div class="modal-backdrop hidden" id="approveSellerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Başvuru İnceleme & Satıcı Hesabı Oluştur</h3>
+                <button class="close-btn" data-close="approveSellerModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="approveSellerForm" class="modal-form active">
+                <input type="hidden" id="approveAppId">
+                <div id="approveApplicantDetails" class="info-alert" style="line-height: 1.6;"></div>
+                <div class="form-group">
+                    <label>Satıcı Kullanıcı Adı Belirle *</label>
+                    <input type="text" id="assignSellerUsername" required placeholder="Satıcı giriş kullanıcı adı">
+                </div>
+                <div class="form-group">
+                    <label>Satıcı Giriş Şifresi Belirle *</label>
+                    <input type="text" id="assignSellerPassword" required placeholder="Satıcı giriş şifresi">
+                </div>
+                <button type="submit" class="btn-primary full-btn">Başvuruyu Onayla ve Hesabı Aktifleştir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BİLDİRİM TOAST -->
+    <div id="toastNotification" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
