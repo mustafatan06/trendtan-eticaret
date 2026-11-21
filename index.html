@@ -576,7 +576,7 @@
                         </div>
 
                         <div class="form-group full-width">
-                            <label>Ürün Görselleri Yükle (Birden Fazla Fotoğraf Seçebilirsiniz) *</label>
+                            <label>Ürün Görselleri Yükle (En Fazla 4 Fotoğraf, Otomatik Sıkıştırılır) *</label>
                             <div class="file-upload-box">
                                 <input type="file" id="prodImageFile" accept="image/*" capture="environment" multiple>
                                 <div id="imagePreviewContainer" class="multi-preview-grid hidden"></div>
@@ -1122,7 +1122,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAcpnR75lrd5j2CP9Vf5Fr6u60uhGfcNWs",
@@ -1248,7 +1248,9 @@
         let db = JSON.parse(JSON.stringify(DEFAULT_DB));
         let isSaving = false;
         let firestoreReady = false;
+        let firestoreDb = null;
         let storeDocRef = null;
+        let productsColRef = null;
 
         function loadSessionJson(key, fallback) {
             try {
@@ -1303,7 +1305,7 @@
             toast.textContent = msg;
             toast.classList.remove('hidden');
             clearTimeout(window.toastTimer);
-            window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 3800);
+            window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 4200);
         }
 
         function persistUiState() {
@@ -1398,19 +1400,59 @@
             }
         }
 
-        async function saveDB() {
-            if (!firestoreReady || !storeDocRef) return;
+        async function saveDB(includeProductsInMain = false) {
+            if (!firestoreReady || !storeDocRef) return true;
             isSaving = true;
             try {
-                await setDoc(storeDocRef, db);
+                const payload = {
+                    adminPassword: db.adminPassword || 'trendtan2026',
+                    posConfig: db.posConfig || { provider: 'paytr', apiKey: '', secretKey: '', merchantSalt: '' },
+                    sellers: db.sellers || [],
+                    sellerApplications: db.sellerApplications || [],
+                    customers: db.customers || [],
+                    coupons: db.coupons || [],
+                    orders: db.orders || [],
+                    products: includeProductsInMain ? (db.products || []) : []
+                };
+                await setDoc(storeDocRef, payload);
+                return true;
             } catch (err) {
-                showToast('Kayıt sırasında hata oluştu (görseller çok fazla veya büyük olabilir).');
+                showToast('Kayıt hatası: ' + (err.message || 'Veritabanı yazma sınırı aşılmış olabilir.'));
+                return false;
             } finally {
-                setTimeout(() => { isSaving = false; }, 300);
+                setTimeout(() => { isSaving = false; }, 350);
             }
         }
 
-        function compressImageToBase64(file, maxWidth = 650, quality = 0.68) {
+        async function saveProductToCollection(prod) {
+            if (!firestoreReady || !firestoreDb) return true;
+            isSaving = true;
+            try {
+                await setDoc(doc(firestoreDb, "trendtan_products", prod.id), prod);
+                return true;
+            } catch (err) {
+                showToast('Ürün kaydı başarısız: ' + (err.message || 'Görsel boyutu çok büyük olabilir.'));
+                return false;
+            } finally {
+                setTimeout(() => { isSaving = false; }, 350);
+            }
+        }
+
+        async function deleteProductFromCollection(prodId) {
+            if (!firestoreReady || !firestoreDb) return true;
+            isSaving = true;
+            try {
+                await deleteDoc(doc(firestoreDb, "trendtan_products", prodId));
+                return true;
+            } catch (err) {
+                showToast('Ürün silinemedi: ' + (err.message || 'Bağlantı hatası.'));
+                return false;
+            } finally {
+                setTimeout(() => { isSaving = false; }, 350);
+            }
+        }
+
+        function compressImageToBase64(file, maxWidth = 480, quality = 0.58) {
             return new Promise((resolve, reject) => {
                 if (!file) return resolve('');
                 const reader = new FileReader();
@@ -1830,7 +1872,7 @@
             $('prodStock').value = prod.stock;
             $('prodDesc').value = prod.desc || '';
             if ($('customVariantExtra')) $('customVariantExtra').value = '';
-            uploadedImages = [...getProductImages(prod)];
+            uploadedImages = [...getProductImages(prod)].slice(0, 4);
             renderSellerImagePreviews();
             renderCatalogVariantOptions(prod.category, prod.variants || ['Standart']);
             if ($('productFormHeading')) $('productFormHeading').innerHTML = `<i class="fa-solid fa-pen"></i> Ürünü Düzenle: ${prod.name}`;
@@ -1841,11 +1883,13 @@
 
         window.deleteSellerProduct = async function(prodId) {
             if (!confirm('Bu ürünü kalıcı olarak silmek istediğinize emin misiniz?')) return;
-            db.products = db.products.filter(p => p.id !== prodId);
-            await saveDB();
-            renderSellerDashboard();
-            renderProducts();
-            showToast('Ürün silindi.');
+            db.products = (db.products || []).filter(p => p.id !== prodId);
+            const ok = await deleteProductFromCollection(prodId);
+            if (ok) {
+                renderSellerDashboard();
+                renderProducts();
+                showToast('Ürün silindi.');
+            }
         };
 
         window.markOrderShipped = async function(orderId) {
@@ -2064,8 +2108,12 @@
 
         window.deleteSeller = async function(sellerId) {
             if (!confirm('Bu satıcıyı ve bağlı ürünlerini silmek istediğinize emin misiniz?')) return;
+            const targetIds = (db.products || []).filter(p => p.sellerId === sellerId).map(p => p.id);
             db.sellers = db.sellers.filter(s => s.id !== sellerId);
-            db.products = db.products.filter(p => p.sellerId !== sellerId);
+            db.products = (db.products || []).filter(p => p.sellerId !== sellerId);
+            for (const pid of targetIds) {
+                await deleteProductFromCollection(pid);
+            }
             await saveDB();
             renderAdminDashboard();
             renderProducts();
@@ -2188,12 +2236,16 @@
                 }
 
                 const sellerGroups = {};
+                const touchedProducts = [];
                 cart.forEach(item => {
                     const sId = item.product.sellerId;
                     if (!sellerGroups[sId]) sellerGroups[sId] = [];
                     sellerGroups[sId].push(item);
                     const dbProd = db.products.find(p => p.id === item.product.id);
-                    if (dbProd) dbProd.stock = Math.max(0, dbProd.stock - item.qty);
+                    if (dbProd) {
+                        dbProd.stock = Math.max(0, dbProd.stock - item.qty);
+                        touchedProducts.push(dbProd);
+                    }
                 });
 
                 const createdCodes = [];
@@ -2220,6 +2272,9 @@
                     });
                 });
 
+                for (const tp of touchedProducts) {
+                    await saveProductToCollection(tp);
+                }
                 await saveDB();
                 cart = []; appliedCoupon = null;
                 persistUiState();
@@ -2288,12 +2343,16 @@
             $('prodImageFile').addEventListener('change', async function(e) {
                 const files = Array.from(e.target.files || []);
                 if (!files.length) return;
-                showToast(`${files.length} görsel hazırlanıyor...`);
+                if (uploadedImages.length >= 4) {
+                    showToast('1000+ ürün kapasitesi için ürün başına en fazla 4 görsel eklenebilir.');
+                    return;
+                }
+                showToast(`${files.length} görsel sıkıştırılıyor...`);
                 try {
                     for (const file of files) {
-                        if (uploadedImages.length >= 8) break;
-                        const base64Img = await compressImageToBase64(file, 620, 0.68);
-                        const finalImg = base64Img.length > 420000 ? await compressImageToBase64(file, 450, 0.55) : base64Img;
+                        if (uploadedImages.length >= 4) break;
+                        const base64Img = await compressImageToBase64(file, 480, 0.58);
+                        const finalImg = base64Img.length > 220000 ? await compressImageToBase64(file, 360, 0.48) : base64Img;
                         if (finalImg) uploadedImages.push(finalImg);
                     }
                     renderSellerImagePreviews();
@@ -2332,23 +2391,33 @@
                         prod.price = price; prod.minOrderQty = minOrderQty; prod.variants = variants;
                         prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
                         if (uploadedImages.length > 0) {
-                            prod.images = [...uploadedImages];
-                            prod.image = uploadedImages[0];
+                            prod.images = [...uploadedImages].slice(0, 4);
+                            prod.image = prod.images[0];
+                        }
+                        const ok = await saveProductToCollection(prod);
+                        if (ok) {
+                            showToast('Ürün güncellendi.');
+                            resetSellerProductForm();
+                            renderSellerDashboard();
+                            renderProducts();
                         }
                     }
-                    showToast('Ürün güncellendi.');
                 } else {
-                    db.products.unshift({
+                    const imgs = [...uploadedImages].slice(0, 4);
+                    const newProd = {
                         id: 'prod_' + Date.now(), sellerId: currentSeller.id, sellerName: currentSeller.companyName,
                         name, category, oldPrice, price, minOrderQty, variants, shipping, stock,
-                        image: uploadedImages[0], images: [...uploadedImages], desc
-                    });
-                    showToast('Yeni ürün kalıcı olarak yayına alındı.');
+                        image: imgs[0], images: imgs, desc
+                    };
+                    const ok = await saveProductToCollection(newProd);
+                    if (ok) {
+                        if (!db.products.some(x => x.id === newProd.id)) db.products.unshift(newProd);
+                        showToast('Yeni ürün koleksiyona kaydedildi ve yayına alındı.');
+                        resetSellerProductForm();
+                        renderSellerDashboard();
+                        renderProducts();
+                    }
                 }
-                await saveDB();
-                resetSellerProductForm();
-                renderSellerDashboard();
-                renderProducts();
             });
         }
 
@@ -2483,17 +2552,34 @@
         (async () => {
             try {
                 const firebaseApp = initializeApp(firebaseConfig);
-                const firestoreDb = getFirestore(firebaseApp);
+                firestoreDb = getFirestore(firebaseApp);
                 storeDocRef = doc(firestoreDb, "trendtan_store", "main_state");
+                productsColRef = collection(firestoreDb, "trendtan_products");
                 firestoreReady = true;
 
                 const snap = await getDoc(storeDocRef);
+                let legacyProducts = [];
                 if (snap.exists()) {
                     const remoteData = snap.data() || {};
-                    db = { ...JSON.parse(JSON.stringify(DEFAULT_DB)), ...remoteData, adminPassword: remoteData.adminPassword || 'trendtan2026' };
+                    legacyProducts = Array.isArray(remoteData.products) ? remoteData.products : [];
+                    db = {
+                        ...JSON.parse(JSON.stringify(DEFAULT_DB)),
+                        ...remoteData,
+                        products: legacyProducts,
+                        adminPassword: remoteData.adminPassword || 'trendtan2026'
+                    };
+                    if (legacyProducts.length > 0) {
+                        for (const lp of legacyProducts) {
+                            if (lp && lp.id) {
+                                await setDoc(doc(firestoreDb, "trendtan_products", lp.id), lp);
+                            }
+                        }
+                        await saveDB(false);
+                    }
                 } else {
-                    await setDoc(storeDocRef, db);
+                    await setDoc(storeDocRef, { ...DEFAULT_DB, products: [] });
                 }
+
                 restoreSessionViewIfPossible();
                 refreshAllViews();
 
@@ -2510,15 +2596,37 @@
                 onSnapshot(storeDocRef, (docSnap) => {
                     if (isSaving || !docSnap.exists()) return;
                     const remoteData = docSnap.data() || {};
-                    db = { ...JSON.parse(JSON.stringify(DEFAULT_DB)), ...remoteData, adminPassword: remoteData.adminPassword || 'trendtan2026' };
+                    db = {
+                        ...db,
+                        ...remoteData,
+                        products: db.products || [],
+                        adminPassword: remoteData.adminPassword || 'trendtan2026'
+                    };
                     refreshAllViews();
                     const activeTrackQ = $('trackCodeInput') ? $('trackCodeInput').value.trim() : '';
                     if (activeTrackQ && $('trackOrderResult') && !$('trackOrderResult').classList.contains('hidden')) {
                         runOrderTrackingSearch(activeTrackQ);
                     }
                 });
+
+                onSnapshot(productsColRef, (colSnap) => {
+                    if (isSaving) return;
+                    const list = [];
+                    colSnap.forEach((d) => {
+                        const item = d.data() || {};
+                        list.push({ id: item.id || d.id, ...item });
+                    });
+                    list.sort((a, b) => {
+                        const numA = parseInt((a.id || '').replace(/\D+/g, ''), 10) || 0;
+                        const numB = parseInt((b.id || '').replace(/\D+/g, ''), 10) || 0;
+                        return numB - numA;
+                    });
+                    db.products = list;
+                    refreshAllViews();
+                });
             } catch (err) {
                 console.error(err);
+                showToast('Bağlantı hatası: ' + (err.message || 'Firestore başlatılamadı.'));
             }
         })();
     </script>
