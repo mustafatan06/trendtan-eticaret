@@ -7,26 +7,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css?v=20261121">
     <style>
-        /* Işıltılı Hero Banner */
+        /* Şekilli & Vurgulu Kampanya Hero Banner */
         .hero-banner.shimmer-hero {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(125deg, #1e1b4b 0%, #4338ca 42%, #f27a1a 100%);
+            background:
+                radial-gradient(circle at 88% 22%, rgba(255, 222, 89, 0.24) 0%, transparent 42%),
+                linear-gradient(120deg, #0f172a 0%, #312e81 44%, #ea580c 100%);
             color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 14px 34px rgba(30, 27, 75, 0.22);
+            border-radius: 18px;
+            padding: 26px 28px;
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.24);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .hero-banner.shimmer-hero::after {
+            content: "";
+            position: absolute;
+            right: -36px;
+            bottom: -44px;
+            width: 240px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.07);
+            transform: rotate(-16deg);
+            border-radius: 28px;
+            pointer-events: none;
         }
         .hero-banner.shimmer-hero::before {
             content: "";
             position: absolute;
             top: -50%;
             left: -60%;
-            width: 45%;
+            width: 42%;
             height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.26), transparent);
             transform: rotate(22deg);
             animation: trendtanShine 4.5s infinite ease-in-out;
             pointer-events: none;
+            z-index: 1;
         }
         @keyframes trendtanShine {
             0% { left: -60%; }
@@ -37,16 +58,54 @@
             position: relative;
             z-index: 2;
         }
+        .hero-ribbon-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
         .hero-banner.shimmer-hero .hero-badge {
-            background: rgba(255, 255, 255, 0.18);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(4px);
+            background: #facc15;
+            color: #0f172a;
+            border: none;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            transform: skewX(-10deg);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .hero-banner.shimmer-hero .hero-badge > * {
+            transform: skewX(10deg);
+        }
+        .hero-coupon-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.48);
+            border: 1px dashed rgba(255, 255, 255, 0.65);
+            color: #fef08a;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .hero-banner.shimmer-hero h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.4px;
+            line-height: 1.15;
+            margin-bottom: 8px;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
         }
         .hero-banner.shimmer-hero .stat-box {
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(15, 23, 42, 0.34);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.26);
             backdrop-filter: blur(6px);
         }
 
@@ -715,12 +774,12 @@
                 flex-direction: column !important;
                 align-items: flex-start !important;
                 gap: 10px !important;
-                padding: 14px 12px !important;
-                border-radius: 12px !important;
+                padding: 16px 14px !important;
+                border-radius: 14px !important;
             }
-            .hero-banner h1 {
-                font-size: 17px !important;
-                line-height: 1.25 !important;
+            .hero-banner.shimmer-hero h1 {
+                font-size: 19px !important;
+                line-height: 1.2 !important;
             }
             .hero-banner p {
                 font-size: 12px !important;
@@ -875,9 +934,9 @@
 </head>
 <body>
 
-    <!-- ÜST BİLGİ BARI -->
+    <!-- ÜST BİLGİ BARI (TEK KUPON: HOSGELDIN75) -->
     <div class="top-promo-bar">
-        <span><i class="fa-solid fa-tag"></i> Kupon Kodları: <strong>TREND10</strong> (%10 İndirim) | <strong>HOSGELDIN50</strong> (50 ₺ İndirim)</span>
+        <span><i class="fa-solid fa-tag"></i> Hoş Geldin Kuponu: <strong>HOSGELDIN75</strong> (75 TL İndirim)</span>
     </div>
 
     <!-- HEADER / NAVBAR -->
@@ -930,12 +989,15 @@
 
     <!-- ANA VİTRİN (MÜŞTERİ EKRANI) -->
     <main class="container main-store" id="customerStoreView">
-        <!-- Banner -->
+        <!-- Şekilli Kampanya Banner -->
         <section class="hero-banner shimmer-hero">
             <div class="hero-text">
-                <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> TRENDTAN MAĞAZA</span>
-                <h1>Güvenli ve Hızlı Alışveriş Platformu</h1>
-                <p>Onaylı satıcıların ürünleri, anında kupon indirimleri, otomatik sipariş takip kodu ve güvenli ödeme altyapısı.</p>
+                <div class="hero-ribbon-row">
+                    <span class="hero-badge"><i class="fa-solid fa-bolt"></i> FIRSAT VİTRİNİ</span>
+                    <span class="hero-coupon-pill"><i class="fa-solid fa-ticket"></i> KOD: HOSGELDIN75 • 75 TL İNDİRİM</span>
+                </div>
+                <h1>TRENDTAN SEÇKİN FIRSATLAR</h1>
+                <p>Onaylı satıcıların ürünleri, <strong>HOSGELDIN75</strong> ile 75 TL indirim, anlık sipariş takip kodu ve güvenli ödeme altyapısı.</p>
             </div>
             <div class="hero-stats">
                 <div class="stat-box"><i class="fa-solid fa-shield-halved"></i><span>Güvenli Ödeme</span></div>
@@ -1351,12 +1413,12 @@
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-tag"></i> Yeni İndirim Kuponu Oluştur</h3>
                     <form id="adminCouponForm" class="inline-form">
-                        <input type="text" id="newCouponCode" placeholder="Kupon Kodu (Örn: TREND20)" required>
+                        <input type="text" id="newCouponCode" placeholder="Kupon Kodu (Örn: HOSGELDIN75)" required>
                         <select id="newCouponType">
-                            <option value="percent">Yüzde İndirim (%)</option>
                             <option value="fixed">Sabit Tutar İndirimi (₺)</option>
+                            <option value="percent">Yüzde İndirim (%)</option>
                         </select>
-                        <input type="number" id="newCouponValue" step="0.01" placeholder="Değer (Örn: 20)" min="0.01" required>
+                        <input type="number" id="newCouponValue" step="0.01" placeholder="Değer (Örn: 75)" min="0.01" required>
                         <button type="submit" class="btn-primary">Kupon Ekle</button>
                     </form>
                     <div class="table-responsive" style="margin-top: 20px;">
@@ -1423,7 +1485,7 @@
         <!-- Kupon Uygulama Alanı -->
         <div class="cart-coupon-box">
             <div class="coupon-input-group">
-                <input type="text" id="cartCouponInput" placeholder="İndirim Kuponu Girin">
+                <input type="text" id="cartCouponInput" placeholder="İndirim Kuponu Girin (HOSGELDIN75)">
                 <button id="applyCouponBtn" type="button">Uygula</button>
             </div>
             <small id="couponMessage" class="coupon-msg"></small>
@@ -1784,8 +1846,7 @@
             customers: [],
             products: [],
             coupons: [
-                { code: 'TREND10', type: 'percent', value: 10 },
-                { code: 'HOSGELDIN50', type: 'fixed', value: 50 }
+                { code: 'HOSGELDIN75', type: 'fixed', value: 75 }
             ],
             orders: []
         };
@@ -1923,7 +1984,6 @@
             soundEnabled: 'trendtan_sound_enabled_v1'
         };
 
-        // Önbellekteki verilerle anında başlat (0ms bekleme)
         const cachedMain = readLocalCache(CACHE_KEYS.mainState, null);
         const cachedProducts = readLocalCache(CACHE_KEYS.products, []);
         let db = {
@@ -1931,6 +1991,9 @@
             ...(cachedMain || {}),
             products: Array.isArray(cachedProducts) ? cachedProducts : []
         };
+        if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
+            db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
+        }
 
         let isSaving = false;
         let firestoreReady = false;
@@ -1967,7 +2030,6 @@
         let activeDetailPhotoIdx = 0;
         let activeDetailVariant = '';
 
-        // Canlı Destek (Tam Site İçi + Firestore + Sesli Bildirim)
         let soundEnabled = loadSessionJson(SESSION_KEYS.soundEnabled, true);
         let audioCtx = null;
         let activeChatId = sessionStorage.getItem(SESSION_KEYS.supportChatId) || ('chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7));
@@ -2408,7 +2470,6 @@
             }
         }
 
-        // Hızlı ve hafif görsel sıkıştırma (sayfa açılışını yavaşlatmamak için kompakt boyut)
         function compressImageToBase64(file, maxWidth = 440, quality = 0.56) {
             return new Promise((resolve, reject) => {
                 if (!file) return resolve('');
@@ -3396,14 +3457,17 @@
             if ($('applyCouponBtn')) {
                 $('applyCouponBtn').addEventListener('click', () => {
                     const code = ($('cartCouponInput') ? $('cartCouponInput').value : '').trim().toUpperCase();
-                    const found = (db.coupons || []).find(c => c.code === code);
+                    let found = (db.coupons || []).find(c => c.code === code);
+                    if (!found && code === 'HOSGELDIN75') {
+                        found = { code: 'HOSGELDIN75', type: 'fixed', value: 75 };
+                    }
                     const msgEl = $('couponMessage');
                     if (!found) {
                         appliedCoupon = null;
                         if (msgEl) { msgEl.style.color = '#dc2626'; msgEl.textContent = 'Geçersiz kupon kodu!'; }
                     } else {
                         appliedCoupon = found;
-                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı.`; }
+                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı (75,00 ₺ İndirim).`; }
                     }
                     persistUiState();
                     updateCartUI();
@@ -3788,13 +3852,11 @@
             });
         }
 
-        // 1. Önbellekteki ürünleri ve arayüzü ANINDA çiz (0ms bekleme)
         bindAllUIEvents();
         applySavedDashTabs();
         restoreSessionViewIfPossible();
         refreshAllViews();
 
-        // 2. Firestore dinleyicilerini anında başlat ve arka planda senkronize et
         (async () => {
             try {
                 const firebaseApp = initializeApp(firebaseConfig);
@@ -3804,7 +3866,6 @@
                 liveChatsColRef = collection(firestoreDb, "trendtan_live_chats");
                 firestoreReady = true;
 
-                // Canlı ürün akışını hemen başlat
                 onSnapshot(productsColRef, (colSnap) => {
                     if (isSaving) return;
                     const list = [];
@@ -3822,7 +3883,6 @@
                     refreshAllViews();
                 });
 
-                // Canlı mağaza verisi ve sipariş akışını başlat
                 onSnapshot(storeDocRef, (docSnap) => {
                     if (isSaving || !docSnap.exists()) return;
                     const remoteData = docSnap.data() || {};
@@ -3832,6 +3892,9 @@
                         products: db.products || [],
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
+                    if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
+                        db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
+                    }
                     writeLocalCache(CACHE_KEYS.mainState, {
                         adminPassword: db.adminPassword,
                         posConfig: db.posConfig,
@@ -3848,13 +3911,11 @@
                     }
                 });
 
-                // Canlı destek akışını başlat
                 onSnapshot(liveChatsColRef, (colSnap) => {
                     if (isSaving) return;
                     handleLiveChatsSnapshot(colSnap);
                 });
 
-                // İlk doküman kontrolü ve eski gömülü ürün varsa koleksiyona taşıma
                 const snap = await getDoc(storeDocRef);
                 if (snap.exists()) {
                     const remoteData = snap.data() || {};
@@ -3865,6 +3926,9 @@
                         products: (db.products && db.products.length > 0) ? db.products : legacyProducts,
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
+                    if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
+                        db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
+                    }
                     if (legacyProducts.length > 0) {
                         for (const lp of legacyProducts) {
                             if (lp && lp.id) {
