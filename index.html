@@ -212,7 +212,7 @@
             border-color: #f27a1a;
         }
 
-        /* En Alt Marka & Politika Bağlantıları */
+        /* En Alt Marka & Politika Bağlantıları + Ön Planda Açılan Politika Penceresi */
         .legal-footer-bar {
             margin-top: 40px;
             padding: 22px 0;
@@ -239,16 +239,51 @@
             gap: 14px;
         }
         .legal-link-btn {
+            background: none;
+            border: none;
             color: #475569;
             font-size: 13px;
             font-weight: 600;
-            text-decoration: none;
+            cursor: pointer;
             padding: 4px 8px;
             border-radius: 6px;
         }
         .legal-link-btn:hover {
             color: #f27a1a;
             background: #fff7ed;
+        }
+        .policy-modal-box {
+            max-width: 720px;
+            z-index: 2500;
+        }
+        #policyPopupModal {
+            z-index: 2400;
+        }
+        .policy-modal-body {
+            max-height: 62vh;
+            overflow-y: auto;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #1e293b;
+            padding-right: 6px;
+        }
+        .policy-modal-body h4 {
+            margin: 14px 0 6px 0;
+            color: #0f172a;
+            font-size: 15px;
+        }
+        .policy-modal-body ul {
+            padding-left: 20px;
+            margin: 6px 0 12px 0;
+        }
+        .policy-modal-note {
+            margin-top: 14px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            font-size: 12px;
+            color: #9a3412;
         }
 
         /* Mobil Üst Üste Binme Koruması */
@@ -1051,17 +1086,32 @@
         </div>
     </div>
 
-    <!-- EN ALT MARKA & POLITIKA SAYFA BAĞLANTILARI -->
+    <!-- MODAL 7: ÖN PLANDA AÇILAN POLİTİKA METİN PENCERESİ -->
+    <div class="modal-backdrop hidden" id="policyPopupModal">
+        <div class="modal-box policy-modal-box">
+            <div class="modal-header">
+                <h3 id="policyPopupTitle">Politika Metni</h3>
+                <button class="close-btn" data-close="policyPopupModal" type="button"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-form active">
+                <div id="policyPopupContent" class="policy-modal-body"></div>
+                <div class="policy-modal-note">
+                    <strong>Not:</strong> Metinlerde yer alan <em>[Firma/Şahıs Ünvanı]</em>, <em>[Vergi/T.C. Kimlik No]</em>, <em>[Adres]</em>, <em>[Telefon]</em> ve <em>[E-Posta]</em> alanlarını kendi resmi bilgilerinizle doldurunuz.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EN ALT MARKA & POLITIKA BAŞLIKLARI -->
     <footer class="legal-footer-bar" id="siteLegalFooter">
         <div class="container">
             <div class="legal-footer-inner">
                 <div class="legal-brand-line">TAN MEDYA TASARIM MARKASIDIR.2026</div>
-                <nav class="legal-links-group" aria-label="Yasal ve Başvuru Politikaları">
-                    <a href="yasal.html?doc=gizlilik" class="legal-link-btn">Gizlilik Politikası</a>
-                    <a href="yasal.html?doc=kvkk" class="legal-link-btn">KVKK Aydınlatma Metni</a>
-                    <a href="yasal.html?doc=iade" class="legal-link-btn">İptal ve İade Politikası</a>
-                    <a href="yasal.html?doc=mesafeli" class="legal-link-btn">Mesafeli Satış Sözleşmesi</a>
-                    <a href="yasal.html?doc=pos-evrak" class="legal-link-btn">Sanal POS Başvuru Evrak &amp; Kontrol Listesi</a>
+                <nav class="legal-links-group" aria-label="Politikalar">
+                    <button type="button" class="legal-link-btn" onclick="openPolicyPopup('gizlilik')">Gizlilik Politikası</button>
+                    <button type="button" class="legal-link-btn" onclick="openPolicyPopup('kvkk')">KVKK Aydınlatma Metni</button>
+                    <button type="button" class="legal-link-btn" onclick="openPolicyPopup('iade')">İptal ve İade Politikası</button>
+                    <button type="button" class="legal-link-btn" onclick="openPolicyPopup('mesafeli')">Mesafeli Satış Sözleşmesi</button>
                 </nav>
             </div>
         </div>
@@ -1096,6 +1146,83 @@
                 { code: 'HOSGELDIN50', type: 'fixed', value: 50 }
             ],
             orders: []
+        };
+
+        const POLICY_TEXTS = {
+            gizlilik: {
+                title: 'Gizlilik Politikası',
+                html: `
+                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önem veriyoruz. Bu politika; sipariş, satıcı başvurusu ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
+                    <h4>1. Toplanan Veriler</h4>
+                    <ul>
+                        <li>Sipariş oluşturma sırasında paylaşılan ad-soyad, telefon numarası, teslimat adresi ve sipariş/takip bilgileri,</li>
+                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri,</li>
+                        <li>Site güvenliği ve performansını artırmaya yönelik teknik erişim kayıtları.</li>
+                    </ul>
+                    <h4>2. Ödeme Kartı Güvenliği</h4>
+                    <p>Kartlı ödemelerde kart bilgileri Sanal POS altyapısı (PayTR / iyzico vb.) üzerinden işlenir; platformumuzda kart numarası veya güvenlik kodu saklanmaz.</p>
+                    <h4>3. Verilerin Paylaşımı</h4>
+                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, ödeme doğrulaması veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz.</p>
+                `
+            },
+            kvkk: {
+                title: 'KVKK Aydınlatma Metni',
+                html: `
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu <strong>[Firma/Şahıs Ünvanı]</strong> sıfatıyla kişisel verilerinizi aşağıda belirtilen kapsamda işliyoruz.</p>
+                    <h4>1. Kişisel Verilerin İşlenme Amaçları</h4>
+                    <ul>
+                        <li>Alışveriş işlemlerinin yürütülmesi, siparişlerin oluşturulması, takip kodu üretilmesi ve teslimat süreçlerinin yönetilmesi,</li>
+                        <li>Satıcı üyelik ve başvuru süreçlerinin değerlendirilmesi,</li>
+                        <li>Muhasebe, faturalandırma, iade/iptal yönetimi ve mevzuattan doğan yükümlülüklerin yerine getirilmesi.</li>
+                    </ul>
+                    <h4>2. Hukuki Sebepler ve Aktarım</h4>
+                    <p>Verileriniz KVKK m.5 ve m.6 kapsamında sözleşmenin kurulması/ifası, hukuki yükümlülüklerin yerine getirilmesi ve meşru menfaat hukuki sebeplerine dayanarak işlenir; kargo, ödeme kuruluşu ve yetkili kamu kurumlarıyla ilgili mevzuat sınırları içinde paylaşılabilir.</p>
+                    <h4>3. İlgili Kişinin Hakları (KVKK m.11)</h4>
+                    <p>Veri sahipleri; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve kanuni şartlar oluştuğunda silinmesini/yok edilmesini talep etme haklarına sahiptir. Başvurularınızı <strong>[E-Posta]</strong> veya <strong>[Adres]</strong> üzerinden iletebilirsiniz.</p>
+                `
+            },
+            iade: {
+                title: 'İptal ve İade Politikası',
+                html: `
+                    <p>TRENDTAN üzerinden verilen siparişlerde iptal ve iade süreçleri, ilgili ürünün niteliğine ve yürürlükteki tüketici mevzuatına göre yürütülür.</p>
+                    <h4>1. Sipariş İptali</h4>
+                    <p>Henüz kargoya verilmemiş siparişler için <strong>[Telefon]</strong> veya <strong>[E-Posta]</strong> üzerinden sipariş/takip kodu ile iptal talebi oluşturulabilir.</p>
+                    <h4>2. Cayma ve İade Koşulları</h4>
+                    <ul>
+                        <li>Teslim alınan ürünlerde cayma hakkı ve iade talepleri, ilgili mevzuatta öngörülen süreler içinde ve ürünün kullanılmamış, hasar görmemiş, orijinal ambalajı ve aksesuarlarıyla eksiksiz olması kaydıyla değerlendirilir.</li>
+                        <li>Hijyenik açıdan iadesi uygun olmayan ürünler, tek kullanımlık ürünler, çabuk bozulabilen ürünler veya alıcının özel talebiyle hazırlanan ürünlerde mevzuat istisnaları geçerlidir.</li>
+                        <li>Toptan / minimum sipariş adediyle alınan ticari nitelikli ürünlerde satıcı ve anlaşma koşulları ayrıca dikkate alınır.</li>
+                    </ul>
+                    <h4>3. İade Geri Ödemesi</h4>
+                    <p>İade edilen ürünün satıcı/platform tarafından incelenip onaylanmasının ardından ödeme tutarı, ödemenin yapıldığı yöntemle alıcıya iade edilir; bankaya yansıma süresi banka süreçlerine bağlıdır.</p>
+                `
+            },
+            mesafeli: {
+                title: 'Mesafeli Satış Sözleşmesi',
+                html: `
+                    <p>İşbu bilgilendirme metni, elektronik ortamda sipariş oluşturan alıcı ile satıcı/platform arasındaki mesafeli satış süreçlerinin temel esaslarını özetler.</p>
+                    <h4>1. Taraflar</h4>
+                    <ul>
+                        <li><strong>Satıcı / Sağlayıcı:</strong> [Firma/Şahıs Ünvanı] — Adres: [Adres] — Tel: [Telefon] — E-Posta: [E-Posta] — VKN/T.C.: [Vergi/T.C. Kimlik No]</li>
+                        <li><strong>Alıcı:</strong> Sipariş formunda ad-soyad, telefon ve teslimat adresi bilgilerini beyan eden kişi.</li>
+                    </ul>
+                    <h4>2. Ürün, Fiyat ve Ödeme</h4>
+                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli ve uygulanan kupon indirimi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği kartlı ödeme veya havale/EFT yöntemiyle tamamlanır.</p>
+                    <h4>3. Teslimat ve Sorumluluk</h4>
+                    <p>Siparişler, sipariş takip kodu ile takip edilecek şekilde alıcının belirttiği teslimat adresine gönderilir. Teslimat sırasında paketin hasarlı olması halinde tutanak tutulması önerilir.</p>
+                `
+            }
+        };
+
+        window.openPolicyPopup = function(key) {
+            const item = POLICY_TEXTS[key];
+            if (!item) return;
+            const modal = document.getElementById('policyPopupModal');
+            const titleEl = document.getElementById('policyPopupTitle');
+            const bodyEl = document.getElementById('policyPopupContent');
+            if (titleEl) titleEl.textContent = item.title;
+            if (bodyEl) bodyEl.innerHTML = item.html;
+            if (modal) modal.classList.remove('hidden');
         };
 
         const CATALOG_VARIANTS_BY_CATEGORY = {
@@ -1957,7 +2084,6 @@
             renderAdminDashboard();
         };
 
-        // Kayıtlı filtre ve sıralama değerlerini geri yükle
         if ($('searchInput')) $('searchInput').value = currentSearch;
         if ($('freeShippingFilter')) $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
         if ($('sortSelect')) $('sortSelect').value = savedFilters.sort || 'default';
@@ -1970,7 +2096,6 @@
             });
         }
 
-        // Olay Bağlantıları
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
