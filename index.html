@@ -82,17 +82,17 @@
         .hero-banner.shimmer-hero .hero-badge > * {
             transform: skewX(10deg);
         }
-        .hero-coupon-pill {
+        .hero-weekly-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 5px 11px;
+            padding: 5px 12px;
             border-radius: 999px;
-            background: rgba(15, 23, 42, 0.48);
-            border: 1px dashed rgba(255, 255, 255, 0.65);
+            background: rgba(22, 163, 74, 0.28);
+            border: 1px solid rgba(134, 239, 172, 0.75);
             color: #fef08a;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
         }
         .hero-banner.shimmer-hero h1 {
             font-size: 28px;
@@ -139,6 +139,22 @@
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.26);
             backdrop-filter: blur(6px);
+        }
+
+        /* Ürün Kartı Bakiye Şansı Rozeti */
+        .bonus-chance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 4px 0 6px 0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+            font-size: 10.5px;
+            font-weight: 800;
+            line-height: 1.25;
         }
 
         /* Hızlı Açılış & Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
@@ -1107,9 +1123,9 @@
 </head>
 <body>
 
-    <!-- ÜST BİLGİ BARI (TEK KUPON: HOSGELDIN75) -->
+    <!-- ÜST BİLGİ BARI -->
     <div class="top-promo-bar">
-        <span><i class="fa-solid fa-tag"></i> Hoş Geldin Kuponu: <strong>HOSGELDIN75</strong> (75 TL İndirim)</span>
+        <span><i class="fa-solid fa-coins"></i> <strong>Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</strong> • Seçili zamanlarda sipariş ver, puan/bakiye kazan!</span>
     </div>
 
     <!-- HEADER / NAVBAR -->
@@ -1171,10 +1187,10 @@
             <div class="hero-text">
                 <div class="hero-ribbon-row">
                     <span class="hero-badge"><i class="fa-solid fa-bolt"></i> FIRSAT VİTRİNİ</span>
-                    <span class="hero-coupon-pill"><i class="fa-solid fa-ticket"></i> KOD: HOSGELDIN75 • 75 TL İNDİRİM</span>
+                    <span class="hero-weekly-pill"><i class="fa-solid fa-coins"></i> Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</span>
                 </div>
                 <h1>TRENDTAN SEÇKİN FIRSATLAR</h1>
-                <p>Onaylı satıcıların ürünleri, <strong>HOSGELDIN75</strong> ile 75 TL indirim, anlık sipariş takip kodu ve güvenli ödeme altyapısı.</p>
+                <p>Onaylı satıcıların ürünleri, <strong>her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</strong>, anlık sipariş takip kodu ve güvenli ödeme altyapısı.</p>
                 <div class="hero-wheel-cta-wrap">
                     <button type="button" class="shaped-wheel-cta" id="heroWheelCtaBtn">
                         <i class="fa-solid fa-dharmachakra"></i>
@@ -1235,6 +1251,9 @@
             <div class="customer-profile-banner">
                 <div>
                     <div style="font-size:13px; color:#475569;">Hoş geldiniz, <strong id="profileGreetingName">Müşteri</strong></div>
+                    <div style="margin-top:4px; font-size:12px; color:#15803d; font-weight:700;">
+                        <i class="fa-solid fa-coins"></i> Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI
+                    </div>
                     <div style="margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                         <span class="wallet-badge-pill" id="profileWheelStatusBadge">Çark Hakkı: 1 Kez Kullanılabilir</span>
                     </div>
@@ -1538,6 +1557,7 @@
             <!-- Admin Sekmeleri -->
             <div class="dash-tabs">
                 <button class="tab-btn active" data-tab="admin-all-orders" type="button">Tüm Platform Siparişleri</button>
+                <button class="tab-btn" data-tab="admin-timed-bonus" type="button">Zamanlı Seçili Ürün & Puan</button>
                 <button class="tab-btn" data-tab="admin-live-support" type="button" id="adminLiveSupportTabBtn">
                     Canlı Destek <span class="admin-unread-pill hidden" id="adminChatUnreadBadge">0</span>
                 </button>
@@ -1566,6 +1586,55 @@
                                 </tr>
                             </thead>
                             <tbody id="adminAllOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME: ZAMANLI SEÇİLİ ÜRÜN & PUAN KAZANIMI -->
+            <div class="tab-content" id="admin-timed-bonus">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Günün Belirli Zamanları Seçili Ürün & Puan Kazandırma</h3>
+                    <p class="helper-text">Seçili ürünü, gün içindeki başlangıç ve bitiş saat aralığını ve sipariş verildiğinde kazandırılacak puan/bakiye tutarını belirleyin. Belirlenen saat aralığında bu üründen sipariş veren müşteriye puan/bakiye eklenir.</p>
+                    <form id="adminTimedBonusForm" class="grid-form">
+                        <div class="form-group">
+                            <label>Seçili Ürün *</label>
+                            <select id="bonusProductSelect" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kazandırılacak Puan / Bakiye (₺) *</label>
+                            <input type="number" id="bonusRewardAmount" step="0.01" min="0.01" required placeholder="Örn: 50">
+                        </div>
+                        <div class="form-group">
+                            <label>Başlangıç Saati *</label>
+                            <input type="time" id="bonusStartTime" required value="09:00">
+                        </div>
+                        <div class="form-group">
+                            <label>Bitiş Saati *</label>
+                            <input type="time" id="bonusEndTime" required value="23:59">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="bonusRuleEnabled" checked> Zamanlı Seçili Ürün Puan Kampanyası Aktif
+                            </label>
+                        </div>
+                        <div class="form-actions full-width">
+                            <button type="submit" class="btn-primary"><i class="fa-solid fa-plus-circle"></i> Seçili Ürün Kuralını Ekle / Kaydet</button>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive" style="margin-top:20px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Seçili Ürün</th>
+                                    <th>Saat Aralığı</th>
+                                    <th>Puan / Bakiye</th>
+                                    <th>Anlık Durum</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTimedBonusTableBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -1675,12 +1744,12 @@
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-tag"></i> Yeni İndirim Kuponu Oluştur</h3>
                     <form id="adminCouponForm" class="inline-form">
-                        <input type="text" id="newCouponCode" placeholder="Kupon Kodu (Örn: HOSGELDIN75)" required>
+                        <input type="text" id="newCouponCode" placeholder="Kupon Kodu" required>
                         <select id="newCouponType">
                             <option value="fixed">Sabit Tutar İndirimi (₺)</option>
                             <option value="percent">Yüzde İndirim (%)</option>
                         </select>
-                        <input type="number" id="newCouponValue" step="0.01" placeholder="Değer (Örn: 75)" min="0.01" required>
+                        <input type="number" id="newCouponValue" step="0.01" placeholder="Değer" min="0.01" required>
                         <button type="submit" class="btn-primary">Kupon Ekle</button>
                     </form>
                     <div class="table-responsive" style="margin-top: 20px;">
@@ -1746,8 +1815,11 @@
 
         <!-- Kupon Uygulama Alanı -->
         <div class="cart-coupon-box">
+            <div style="font-size:11.5px; color:#15803d; font-weight:700; margin-bottom:6px;">
+                <i class="fa-solid fa-coins"></i> Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI
+            </div>
             <div class="coupon-input-group">
-                <input type="text" id="cartCouponInput" placeholder="İndirim Kuponu Girin (HOSGELDIN75)">
+                <input type="text" id="cartCouponInput" placeholder="İndirim Kuponu Girin">
                 <button id="applyCouponBtn" type="button">Uygula</button>
             </div>
             <small id="couponMessage" class="coupon-msg"></small>
@@ -1830,7 +1902,7 @@
         </div>
     </div>
 
-    <!-- MODAL 0B: ŞANSLI ÇARK MODALI (TEK KULLANIMLIK, HEP 50 TL) -->
+    <!-- MODAL 0B: ŞANSLI ÇARK MODALI (10 DİLİM, 50 TL YAN YANA DEĞİL, SADECE 50 TL VEYA 75 TL GELİR) -->
     <div class="modal-backdrop hidden" id="luckyWheelModal">
         <div class="modal-box lucky-wheel-modal-box">
             <div class="modal-header">
@@ -2133,6 +2205,9 @@
         <div class="container">
             <div class="legal-footer-inner">
                 <div class="legal-brand-line">TAN MEDYA TASARIM MARKASIDIR.2026</div>
+                <div style="font-size:12px; color:#15803d; font-weight:700;">
+                    Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI
+                </div>
                 <nav class="legal-links-group" aria-label="Politikalar">
                     <button type="button" class="legal-link-btn" onclick="openPolicyPopup('gizlilik')">Gizlilik Politikası</button>
                     <button type="button" class="legal-link-btn" onclick="openPolicyPopup('kvkk')">KVKK Aydınlatma Metni</button>
@@ -2200,10 +2275,9 @@
             customers: [],
             shopCustomers: [],
             products: [],
-            coupons: [
-                { code: 'HOSGELDIN75', type: 'fixed', value: 75 }
-            ],
-            orders: []
+            coupons: [],
+            orders: [],
+            timedBonusRules: []
         };
 
         const CACHE_KEYS = {
@@ -2350,11 +2424,9 @@
             shopCustomers: Array.isArray(cachedMain?.shopCustomers) && cachedMain.shopCustomers.length > 0
                 ? cachedMain.shopCustomers
                 : cachedShopCustomers,
-            products: Array.isArray(cachedProducts) ? cachedProducts : []
+            products: Array.isArray(cachedProducts) ? cachedProducts : [],
+            timedBonusRules: Array.isArray(cachedMain?.timedBonusRules) ? cachedMain.timedBonusRules : []
         };
-        if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
-            db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
-        }
 
         let isSaving = false;
         let firestoreReady = false;
@@ -2394,19 +2466,21 @@
         let isWheelSpinning = false;
         let currentWheelRotation = 0;
 
-        /* Şanslı Çark Dilimleri (8 dilim x 45 deg; 50 TL ağırlıklı, dönüş her zaman 50 TL diliminde durur) */
+        /* Şanslı Çark: 10 dilim (36 deg), iki 50 TL yan yana değil; çark sadece 50 TL veya 75 TL üzerine gelir */
         const WHEEL_SLICES = [
             { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' },
-            { label: '150 TL', amount: 150, color: '#1e293b', textColor: '#ffffff' },
-            { label: '50 TL', amount: 50, color: '#ea580c', textColor: '#ffffff' },
-            { label: '500 TL', amount: 500, color: '#312e81', textColor: '#fde047' },
-            { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' },
             { label: '1.000 TL', amount: 1000, color: '#0f172a', textColor: '#fde047' },
+            { label: '75 TL', amount: 75, color: '#16a34a', textColor: '#ffffff' },
+            { label: '500 TL', amount: 500, color: '#312e81', textColor: '#fde047' },
             { label: '50 TL', amount: 50, color: '#ea580c', textColor: '#ffffff' },
-            { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' }
+            { label: '150 TL', amount: 150, color: '#1e293b', textColor: '#ffffff' },
+            { label: '75 TL', amount: 75, color: '#15803d', textColor: '#ffffff' },
+            { label: '1.000 TL', amount: 1000, color: '#0f172a', textColor: '#fde047' },
+            { label: '500 TL', amount: 500, color: '#312e81', textColor: '#fde047' },
+            { label: '150 TL', amount: 150, color: '#1e293b', textColor: '#ffffff' }
         ];
-        const FIFTY_TL_INDICES = WHEEL_SLICES
-            .map((s, idx) => (s.amount === 50 ? idx : -1))
+        const ALLOWED_WIN_INDICES = WHEEL_SLICES
+            .map((s, idx) => ((s.amount === 50 || s.amount === 75) ? idx : -1))
             .filter(idx => idx !== -1);
 
         function buildLuckyWheelDisc() {
@@ -2431,19 +2505,99 @@
                         display:flex;
                         justify-content:center;
                         align-items:flex-start;
-                        padding-top:16px;
+                        padding-top:14px;
                         pointer-events:none;
                     ">
                         <span style="
                             color:${s.textColor};
                             font-weight:900;
-                            font-size:13px;
-                            text-shadow:0 1px 3px rgba(0,0,0,0.45);
+                            font-size:11.5px;
+                            text-shadow:0 1px 3px rgba(0,0,0,0.5);
                         ">${s.label}</span>
                     </div>
                 `;
             }).join('');
         }
+
+        function timeToMinutes(hhmm) {
+            if (!hhmm || typeof hhmm !== 'string' || !hhmm.includes(':')) return null;
+            const [h, m] = hhmm.split(':').map(Number);
+            if (Number.isNaN(h) || Number.isNaN(m)) return null;
+            return h * 60 + m;
+        }
+
+        function isRuleActiveNow(rule) {
+            if (!rule || rule.enabled === false) return false;
+            const startMin = timeToMinutes(rule.startTime);
+            const endMin = timeToMinutes(rule.endTime);
+            if (startMin === null || endMin === null) return true;
+            const now = new Date();
+            const nowMin = now.getHours() * 60 + now.getMinutes();
+            if (startMin <= endMin) {
+                return nowMin >= startMin && nowMin <= endMin;
+            }
+            return nowMin >= startMin || nowMin <= endMin;
+        }
+
+        function getActiveBonusRuleForProduct(productId) {
+            const rules = Array.isArray(db.timedBonusRules) ? db.timedBonusRules : [];
+            const matching = rules.filter(r => r.productId === productId && isRuleActiveNow(r));
+            if (!matching.length) return null;
+            return matching.reduce((best, cur) => (Number(cur.rewardAmount || 0) > Number(best.rewardAmount || 0) ? cur : best), matching[0]);
+        }
+
+        function getAllRulesForProduct(productId) {
+            const rules = Array.isArray(db.timedBonusRules) ? db.timedBonusRules : [];
+            return rules.filter(r => r.productId === productId && r.enabled !== false);
+        }
+
+        function renderAdminTimedBonusTab() {
+            const sel = $('bonusProductSelect');
+            const tbody = $('adminTimedBonusTableBody');
+            const prods = db.products || [];
+
+            if (sel) {
+                const prevVal = sel.value;
+                sel.innerHTML = prods.length
+                    ? prods.map(p => `<option value="${p.id}">${p.name} (${p.sellerName || getSellerDisplayName(p.sellerId)})</option>`).join('')
+                    : `<option value="">Önce ürün ekleyin</option>`;
+                if (prevVal && prods.some(p => p.id === prevVal)) sel.value = prevVal;
+            }
+
+            if (tbody) {
+                const rules = Array.isArray(db.timedBonusRules) ? db.timedBonusRules : [];
+                tbody.innerHTML = rules.length === 0
+                    ? `<tr><td colspan="5" style="text-align:center;">Henüz zamanlı seçili ürün puan kuralı eklenmemiş.</td></tr>`
+                    : rules.map(r => {
+                        const prod = prods.find(p => p.id === r.productId);
+                        const pName = prod ? prod.name : (r.productName || r.productId);
+                        const activeNow = isRuleActiveNow(r);
+                        return `
+                            <tr>
+                                <td><strong>${pName}</strong></td>
+                                <td><code>${r.startTime} - ${r.endTime}</code></td>
+                                <td style="color:#16a34a; font-weight:800;">+${formatMoney(r.rewardAmount)}</td>
+                                <td>
+                                    ${activeNow
+                                        ? '<span style="color:#16a34a; font-weight:700;">Şu An Aktif</span>'
+                                        : '<span style="color:#64748b; font-weight:600;">Saat Dışı / Beklemede</span>'}
+                                </td>
+                                <td>
+                                    <button type="button" class="btn-sm btn-danger" onclick="deleteTimedBonusRule('${r.id}')">Sil</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+            }
+        }
+
+        window.deleteTimedBonusRule = async function(ruleId) {
+            db.timedBonusRules = (db.timedBonusRules || []).filter(r => r.id !== ruleId);
+            await saveDB();
+            renderAdminTimedBonusTab();
+            renderProducts();
+            showToast('Zamanlı puan kuralı silindi.');
+        };
 
         let soundEnabled = loadSessionJson(SESSION_KEYS.soundEnabled, true);
         let audioCtx = null;
@@ -2965,7 +3119,8 @@
                 customers: db.customers || [],
                 shopCustomers: db.shopCustomers || [],
                 coupons: db.coupons || [],
-                orders: db.orders || []
+                orders: db.orders || [],
+                timedBonusRules: db.timedBonusRules || []
             });
             writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers || []);
             if (!firestoreReady || !storeDocRef) return true;
@@ -2980,6 +3135,7 @@
                     shopCustomers: db.shopCustomers || [],
                     coupons: db.coupons || [],
                     orders: db.orders || [],
+                    timedBonusRules: db.timedBonusRules || [],
                     products: includeProductsInMain ? (db.products || []) : []
                 };
                 await setDoc(storeDocRef, payload);
@@ -3167,6 +3323,7 @@
                     <strong>Alıcı:</strong> ${order.customerName} (${order.customerPhone})<br>
                     <strong>Ürünler:</strong> ${order.itemsText}<br>
                     <strong>Tutar:</strong> ${formatMoney(order.total)}<br>
+                    ${Number(order.earnedBonusPoints || 0) > 0 ? `<strong>Kazanılan Puan / Bakiye:</strong> +${formatMoney(order.earnedBonusPoints)}<br>` : ''}
                     <strong>Ödeme / EFT:</strong> ${order.paymentMethod || 'Havale / EFT'} — MUSTAFA TAN (EN PARA) • <code>TR08 0015 7000 0000 0143 0070 74</code><br>
                     ${order.carrierCargoNo ? `<strong>Bireysel Kargo Notu/No:</strong> ${order.carrierCargoNo}<br>` : ''}
                 </div>
@@ -3267,6 +3424,8 @@
                 const isEyewear = prodCat === 'Gözlük';
                 const optionLabel = isShoe ? 'Numara Seçin:' : (isEyewear ? 'Renk Seçin:' : 'Seçenek:');
                 const optionSummaryLabel = isShoe ? 'Numaralar' : (isEyewear ? 'Renkler' : 'Seçenek');
+                const activeBonus = getActiveBonusRuleForProduct(prod.id);
+                const scheduledRules = getAllRulesForProduct(prod.id);
 
                 return `
                     <div class="product-card">
@@ -3277,6 +3436,17 @@
                         </div>
                         <div class="product-body">
                             <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)}</span>
+                            ${activeBonus ? `
+                                <div class="bonus-chance-badge">
+                                    <i class="fa-solid fa-coins"></i>
+                                    <span>TRENDTAN BAKİYE KAZANMA ŞANSI (+${formatMoney(activeBonus.rewardAmount)} • ${activeBonus.startTime}-${activeBonus.endTime})</span>
+                                </div>
+                            ` : (scheduledRules.length > 0 ? `
+                                <div class="bonus-chance-badge" style="background:#fff7ed; border-color:#fdba74; color:#9a3412;">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span>Seçili Saatlerde TRENDTAN BAKİYE KAZANMA ŞANSI (${scheduledRules[0].startTime}-${scheduledRules[0].endTime})</span>
+                                </div>
+                            ` : '')}
                             <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
@@ -3352,6 +3522,8 @@
             const detailSelectLabel = isShoe
                 ? 'Ayakkabı Numaranızı Seçin (Tik İşareti ile Seçilir) *'
                 : (isEyewear ? 'Gözlük Rengini Seçin (Tik İşareti ile Seçilir) *' : 'Seçenek / Beden / Renk Seçin *');
+            const activeBonus = getActiveBonusRuleForProduct(prod.id);
+            const scheduledRules = getAllRulesForProduct(prod.id);
 
             body.innerHTML = `
                 <div class="detail-carousel-wrap">
@@ -3366,6 +3538,17 @@
                 </div>
                 <div style="margin-top:14px;">
                     <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)} • ${prodCat}</span>
+                    ${activeBonus ? `
+                        <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:8px;">
+                            <i class="fa-solid fa-coins"></i>
+                            <span>TRENDTAN BAKİYE KAZANMA ŞANSI — Bu ürün için ${activeBonus.startTime} - ${activeBonus.endTime} saatleri arasında sipariş verin, +${formatMoney(activeBonus.rewardAmount)} puan/bakiye kazanın! (Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI)</span>
+                        </div>
+                    ` : (scheduledRules.length > 0 ? `
+                        <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:8px; background:#fff7ed; border-color:#fdba74; color:#9a3412;">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>TRENDTAN BAKİYE KAZANMA ŞANSI — Seçili saat aralığı: ${scheduledRules[0].startTime} - ${scheduledRules[0].endTime} (+${formatMoney(scheduledRules[0].rewardAmount)})</span>
+                        </div>
+                    ` : '')}
                     <p style="margin-top:8px; color:#334155;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
                     <div class="price-block" style="margin-top:10px;">
                         ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
@@ -3459,11 +3642,13 @@
                         const key = item.cartKey || `${item.product.id}__${item.selectedVariant || ''}`;
                         const imgs = getProductImages(item.product);
                         const unitPrice = getEffectivePrice(item.product);
+                        const bonusRule = getActiveBonusRuleForProduct(item.product.id);
                         return `
                             <div class="cart-item">
                                 <img src="${imgs[0] || ''}" alt="${item.product.name}">
                                 <div class="cart-item-info">
                                     <div class="cart-item-title">${item.product.name} ${item.selectedVariant ? `<small>(${item.selectedVariant})</small>` : ''}</div>
+                                    ${bonusRule ? `<div style="font-size:10.5px; color:#15803d; font-weight:700;">TRENDTAN BAKİYE KAZANMA ŞANSI (+${formatMoney(bonusRule.rewardAmount)})</div>` : ''}
                                     <div class="cart-item-price">${formatMoney(unitPrice * item.qty)}</div>
                                     <div class="qty-controls">
                                         <button class="qty-btn" type="button" onclick="changeCartQty('${key.replace(/'/g, "\\'")}', -1)">-</button>
@@ -3555,8 +3740,10 @@
         window.deleteSellerProduct = async function(prodId) {
             if (!confirm('Bu ürünü kalıcı olarak silmek istediğinize emin misiniz?')) return;
             db.products = (db.products || []).filter(p => p.id !== prodId);
+            db.timedBonusRules = (db.timedBonusRules || []).filter(r => r.productId !== prodId);
             const ok = await deleteProductFromCollection(prodId);
             if (ok) {
+                await saveDB();
                 renderSellerDashboard();
                 renderProducts();
                 showToast('Ürün silindi.');
@@ -3677,6 +3864,7 @@
             if ($('adminActiveSellersCount')) $('adminActiveSellersCount').textContent = (db.sellers || []).length;
             if ($('adminCustomerCount')) $('adminCustomerCount').textContent = (db.customers || []).length;
 
+            renderAdminTimedBonusTab();
             renderAdminLiveSupportTab();
 
             if ($('adminAllOrdersBody')) {
@@ -3692,7 +3880,7 @@
                                 <td><strong><code>${tCode}</code></strong><br><small>${o.id} • ${o.date}</small><br><span style="font-weight:700; color:${isDone ? '#16a34a' : '#ea580c'};">${statusLabel}</span></td>
                                 <td><strong>${sellerLabel}</strong></td>
                                 <td><strong>${o.customerName}</strong><br><small>${o.customerPhone}</small><br><small>${o.customerAddress}</small></td>
-                                <td>${o.itemsText}</td>
+                                <td>${o.itemsText}${Number(o.earnedBonusPoints || 0) > 0 ? `<br><small style="color:#16a34a; font-weight:700;">Puan/Bakiye: +${formatMoney(o.earnedBonusPoints)}</small>` : ''}</td>
                                 <td><strong>${formatMoney(o.total)}</strong><br><small>${o.paymentMethod || 'Havale / EFT'}</small></td>
                                 <td>
                                     <input type="text" id="adminCargoInput_${o.id}" class="cargo-inline-input" value="${o.carrierCargoNo || ''}" placeholder="Kargo no / not">
@@ -3759,14 +3947,16 @@
             }
 
             if ($('adminCouponsBody')) {
-                $('adminCouponsBody').innerHTML = (db.coupons || []).map((c, idx) => `
-                    <tr>
-                        <td><strong>${c.code}</strong></td>
-                        <td>${c.type === 'percent' ? 'Yüzde (%)' : 'Sabit Tutar (₺)'}</td>
-                        <td>${c.type === 'percent' ? '%' + c.value : formatMoney(c.value)}</td>
-                        <td><button class="btn-sm btn-danger" type="button" onclick="deleteCoupon(${idx})">Sil</button></td>
-                    </tr>
-                `).join('');
+                $('adminCouponsBody').innerHTML = (db.coupons || []).length === 0
+                    ? `<tr><td colspan="4" style="text-align:center;">Tanımlı kupon bulunmuyor.</td></tr>`
+                    : (db.coupons || []).map((c, idx) => `
+                        <tr>
+                            <td><strong>${c.code}</strong></td>
+                            <td>${c.type === 'percent' ? 'Yüzde (%)' : 'Sabit Tutar (₺)'}</td>
+                            <td>${c.type === 'percent' ? '%' + c.value : formatMoney(c.value)}</td>
+                            <td><button class="btn-sm btn-danger" type="button" onclick="deleteCoupon(${idx})">Sil</button></td>
+                        </tr>
+                    `).join('');
             }
 
             if ($('posProvider')) $('posProvider').value = db.posConfig?.provider || 'paytr';
@@ -4000,7 +4190,7 @@
                 });
             }
 
-            /* Tek Kullanımlık Şanslı Çark Çevirme (Her zaman 50 TL diliminde durur) */
+            /* Tek Kullanımlık Şanslı Çark Çevirme (Yalnızca 50 TL veya 75 TL diliminde durur) */
             if ($('spinLuckyWheelBtn')) {
                 $('spinLuckyWheelBtn').addEventListener('click', async () => {
                     if (isWheelSpinning || !currentCustomer) return;
@@ -4017,10 +4207,10 @@
                     const btn = $('spinLuckyWheelBtn');
                     if (btn) btn.disabled = true;
 
-                    const sliceDeg = 360 / WHEEL_SLICES.length; // 45 derece
-                    const chosenIdx = FIFTY_TL_INDICES[Math.floor(Math.random() * FIFTY_TL_INDICES.length)];
+                    const sliceDeg = 360 / WHEEL_SLICES.length; // 36 derece
+                    const chosenIdx = ALLOWED_WIN_INDICES[Math.floor(Math.random() * ALLOWED_WIN_INDICES.length)];
+                    const wonAmount = Number(WHEEL_SLICES[chosenIdx].amount || 50);
                     const sliceCenter = chosenIdx * sliceDeg + sliceDeg / 2;
-                    // İşaretçi üstte (0 deg); dilim merkezinin üstte durması için 360 - sliceCenter
                     const targetMod = (360 - sliceCenter) % 360;
                     const currentMod = ((currentWheelRotation % 360) + 360) % 360;
                     let delta = targetMod - currentMod;
@@ -4032,7 +4222,6 @@
                         disc.style.transform = `rotate(${currentWheelRotation}deg)`;
                     }
 
-                    const wonAmount = 50;
                     setTimeout(async () => {
                         const latest = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
                         latest.wheelSpun = true;
@@ -4050,6 +4239,45 @@
                         isWheelSpinning = false;
                         showToast(`Tebrikler! Şanslı Çarktan ${wonAmount} TL puan bakiyesi kazandınız!`);
                     }, 4450);
+                });
+            }
+
+            /* Zamanlı Seçili Ürün & Puan Kuralı Formu */
+            if ($('adminTimedBonusForm')) {
+                $('adminTimedBonusForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const productId = $('bonusProductSelect')?.value;
+                    const rewardAmount = parseFloat($('bonusRewardAmount')?.value || '0');
+                    const startTime = $('bonusStartTime')?.value || '09:00';
+                    const endTime = $('bonusEndTime')?.value || '23:59';
+                    const enabled = Boolean($('bonusRuleEnabled')?.checked);
+
+                    if (!productId || rewardAmount <= 0) {
+                        showToast('Lütfen ürün ve geçerli bir puan/bakiye tutarı girin.');
+                        return;
+                    }
+
+                    const prod = (db.products || []).find(p => p.id === productId);
+                    if (!Array.isArray(db.timedBonusRules)) db.timedBonusRules = [];
+                    db.timedBonusRules.unshift({
+                        id: 'bonus_' + Date.now(),
+                        productId,
+                        productName: prod ? prod.name : productId,
+                        rewardAmount,
+                        startTime,
+                        endTime,
+                        enabled
+                    });
+
+                    await saveDB();
+                    $('adminTimedBonusForm').reset();
+                    if ($('bonusStartTime')) $('bonusStartTime').value = '09:00';
+                    if ($('bonusEndTime')) $('bonusEndTime').value = '23:59';
+                    if ($('bonusRuleEnabled')) $('bonusRuleEnabled').checked = true;
+                    renderAdminTimedBonusTab();
+                    renderProducts();
+                    updateCartUI();
+                    showToast('Zamanlı seçili ürün puan kuralı kaydedildi.');
                 });
             }
 
@@ -4240,17 +4468,15 @@
             if ($('applyCouponBtn')) {
                 $('applyCouponBtn').addEventListener('click', () => {
                     const code = ($('cartCouponInput') ? $('cartCouponInput').value : '').trim().toUpperCase();
-                    let found = (db.coupons || []).find(c => c.code === code);
-                    if (!found && code === 'HOSGELDIN75') {
-                        found = { code: 'HOSGELDIN75', type: 'fixed', value: 75 };
-                    }
+                    const found = (db.coupons || []).find(c => c.code === code);
                     const msgEl = $('couponMessage');
                     if (!found) {
                         appliedCoupon = null;
                         if (msgEl) { msgEl.style.color = '#dc2626'; msgEl.textContent = 'Geçersiz kupon kodu!'; }
                     } else {
                         appliedCoupon = found;
-                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı (75,00 ₺ İndirim).`; }
+                        const label = found.type === 'percent' ? `%${found.value} İndirim` : formatMoney(found.value) + ' İndirim';
+                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı (${label}).`; }
                     }
                     persistUiState();
                     updateCartUI();
@@ -4315,11 +4541,16 @@
                         : 'Puan / Cüzdan Bakiyesi ile Ödendi';
                     const today = new Date().toLocaleDateString('tr-TR');
 
-                    if (currentCustomer && walletUsed > 0) {
-                        const freshCust = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
-                        freshCust.walletPoints = Math.max(0, Number(freshCust.walletPoints || 0) - walletUsed);
-                        currentCustomer = freshCust;
-                        await saveShopCustomerRecord(freshCust);
+                    let targetShopCust = currentCustomer
+                        ? ((db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer)
+                        : ((db.shopCustomers || []).find(c =>
+                            (c.phone && c.phone.replace(/\s+/g, '') === custPhone.replace(/\s+/g, '')) ||
+                            (c.fullName && c.fullName.toLowerCase() === custName.toLowerCase())
+                        ) || null);
+
+                    let currentWalletBalance = targetShopCust ? Math.max(0, Number(targetShopCust.walletPoints || 0)) : 0;
+                    if (walletUsed > 0) {
+                        currentWalletBalance = Math.max(0, currentWalletBalance - walletUsed);
                     }
 
                     let customer = db.customers.find(c => c.phone === custPhone || c.name.toLowerCase() === custName.toLowerCase());
@@ -4334,6 +4565,8 @@
 
                     const sellerGroups = {};
                     const touchedProducts = [];
+                    let totalEarnedBonus = 0;
+
                     cart.forEach(item => {
                         const sId = item.product.sellerId;
                         if (!sellerGroups[sId]) sellerGroups[sId] = [];
@@ -4343,10 +4576,29 @@
                             dbProd.stock = Math.max(0, dbProd.stock - item.qty);
                             touchedProducts.push(dbProd);
                         }
+                        const bonusRule = getActiveBonusRuleForProduct(item.product.id);
+                        if (bonusRule) {
+                            totalEarnedBonus += Number(bonusRule.rewardAmount || 0);
+                        }
                     });
 
+                    if (totalEarnedBonus > 0 && targetShopCust) {
+                        currentWalletBalance += totalEarnedBonus;
+                        targetShopCust.walletPoints = currentWalletBalance;
+                        if (currentCustomer && currentCustomer.id === targetShopCust.id) {
+                            currentCustomer = targetShopCust;
+                        }
+                        await saveShopCustomerRecord(targetShopCust);
+                    } else if (walletUsed > 0 && targetShopCust) {
+                        targetShopCust.walletPoints = currentWalletBalance;
+                        if (currentCustomer && currentCustomer.id === targetShopCust.id) {
+                            currentCustomer = targetShopCust;
+                        }
+                        await saveShopCustomerRecord(targetShopCust);
+                    }
+
                     const createdCodes = [];
-                    Object.keys(sellerGroups).forEach(sId => {
+                    Object.keys(sellerGroups).forEach((sId, idx) => {
                         const groupItems = sellerGroups[sId];
                         const groupRaw = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
                         const groupTotal = Math.max(0, groupRaw - walletUsed);
@@ -4354,6 +4606,7 @@
                         const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
                         createdCodes.push(trackingCode);
                         const sellerName = groupItems[0]?.product?.sellerName || getSellerDisplayName(sId);
+                        const groupBonus = idx === 0 ? totalEarnedBonus : 0;
 
                         db.orders.unshift({
                             id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
@@ -4365,6 +4618,7 @@
                             customerAddress: custAddress,
                             itemsText,
                             total: groupTotal,
+                            earnedBonusPoints: groupBonus,
                             paymentMethod,
                             carrierCargoNo: '',
                             status: 'pending',
@@ -4392,7 +4646,11 @@
                         try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
                         runOrderTrackingSearch(createdCodes[0]);
                     }
-                    showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
+                    if (totalEarnedBonus > 0) {
+                        showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')} • Seçili üründen +${formatMoney(totalEarnedBonus)} puan/bakiye kazandınız!`);
+                    } else {
+                        showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
+                    }
                 });
             }
 
@@ -4644,6 +4902,9 @@
                         savedTabs[parent.id] = btn.dataset.tab;
                         saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
 
+                        if (btn.dataset.tab === 'admin-timed-bonus') {
+                            renderAdminTimedBonusTab();
+                        }
                         if (btn.dataset.tab === 'admin-live-support' && selectedAdminChatId) {
                             const target = liveChats.find(c => c.id === selectedAdminChatId);
                             if (target && Number(target.unreadForAdmin || 0) > 0) {
@@ -4723,11 +4984,9 @@
                             ? remoteData.shopCustomers
                             : (db.shopCustomers || []),
                         products: db.products || [],
+                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || []),
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
-                    if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
-                        db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
-                    }
                     writeLocalCache(CACHE_KEYS.mainState, {
                         adminPassword: db.adminPassword,
                         posConfig: db.posConfig,
@@ -4736,7 +4995,8 @@
                         customers: db.customers,
                         shopCustomers: db.shopCustomers,
                         coupons: db.coupons,
-                        orders: db.orders
+                        orders: db.orders,
+                        timedBonusRules: db.timedBonusRules
                     });
                     refreshAllViews();
                     const activeTrackQ = $('trackCodeInput') ? $('trackCodeInput').value.trim() : '';
@@ -4761,11 +5021,9 @@
                             ? remoteData.shopCustomers
                             : (db.shopCustomers || []),
                         products: (db.products && db.products.length > 0) ? db.products : legacyProducts,
+                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || []),
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
-                    if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
-                        db.coupons = [{ code: 'HOSGELDIN75', type: 'fixed', value: 75 }];
-                    }
                     if (legacyProducts.length > 0) {
                         for (const lp of legacyProducts) {
                             if (lp && lp.id) {
