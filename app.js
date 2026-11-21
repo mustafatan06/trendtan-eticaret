@@ -1,10 +1,30 @@
 // ==========================================
-// TRENDTAN E-TİCARET PLATFORMU - MERKEZİ SUNUCU SÜRÜMÜ
+// TRENDTAN E-TİCARET PLATFORMU - FIREBASE FIRESTORE SÜRÜMÜ
 // ==========================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const API_URL = window.location.origin;
+const firebaseConfig = {
+    apiKey: "AIzaSyAcpnR75lrd5j2CP9Vf5Fr6u60uhGfcNWs",
+    authDomain: "trendtan.firebaseapp.com",
+    projectId: "trendtan",
+    storageBucket: "trendtan.firebasestorage.app",
+    messagingSenderId: "125062583570",
+    appId: "1:125062583570:web:7ad48314a7f6864fbecfcb",
+    measurementId: "G-QP720WXC7P"
+};
 
-let db = {
+const firebaseApp = initializeApp(firebaseConfig);
+const firestoreDb = getFirestore(firebaseApp);
+const storeDocRef = doc(firestoreDb, "trendtan_store", "main_state");
+
+const DEFAULT_DB = {
     adminPassword: 'trendtan2026',
     posConfig: { provider: 'paytr', apiKey: '', secretKey: '', merchantSalt: '' },
     sellers: [],
@@ -18,33 +38,8 @@ let db = {
     orders: []
 };
 
-// Sunucudan Güncel Verileri Çek
-async function loadDB(silent = false) {
-    try {
-        const res = await fetch(`${API_URL}/api/db?t=${Date.now()}`);
-        if (!res.ok) throw new Error('Sunucu hatası');
-        db = await res.json();
-        renderProducts();
-        updateCartUI();
-        if (currentSeller) renderSellerDashboard();
-        if (!$('superAdminDashboardView').classList.contains('hidden')) renderAdminDashboard();
-    } catch (err) {
-        if (!silent) showToast('Sunucu bağlantısı bekleniyor (node server.js çalıştırın).');
-    }
-}
-
-// Tüm Değişiklikleri Merkezi Sunucuya Kaydet
-async function saveDB() {
-    try {
-        await fetch(`${API_URL}/api/db`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(db)
-        });
-    } catch (err) {
-        showToast('Veriler sunucuya kaydedilirken hata oluştu!');
-    }
-}
+let db = structuredClone(DEFAULT_DB);
+let isSaving = false;
 
 // Uygulama Durumu
 let cart = [];
@@ -64,6 +59,91 @@ function showToast(msg) {
     toast.classList.remove('hidden');
     clearTimeout(window.toastTimer);
     window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+}
+
+function refreshAllViews() {
+    if (currentSeller) {
+        const updatedSeller = db.sellers.find(s => s.id === currentSeller.id);
+        if (updatedSeller) currentSeller = updatedSeller;
+    }
+    renderProducts();
+    updateCartUI();
+    if (currentSeller) renderSellerDashboard();
+    if (!$('superAdminDashboardView').classList.contains('hidden')) renderAdminDashboard();
+}
+
+// Firestore'dan Verileri Çek ve Canlı Dinle
+async function initFirestoreSync() {
+    try {
+        const snap = await getDoc(storeDocRef);
+        if (snap.exists()) {
+            db = { ...structuredClone(DEFAULT_DB), ...snap.data() };
+        } else {
+            await setDoc(storeDocRef, DEFAULT_DB);
+            db = structuredClone(DEFAULT_DB);
+        }
+        refreshAllViews();
+
+        onSnapshot(storeDocRef, (docSnap) => {
+            if (isSaving || !docSnap.exists()) return;
+            db = { ...structuredClone(DEFAULT_DB), ...docSnap.data() };
+            refreshAllViews();
+        }, (err) => {
+            console.error('Firestore dinleme hatası:', err);
+        });
+    } catch (err) {
+        console.error('Firestore bağlantı hatası:', err);
+        showToast('Veritabanı bağlantısı kurulamadı. Firestore kurallarını kontrol edin.');
+    }
+}
+
+async function loadDB() {
+    try {
+        const snap = await getDoc(storeDocRef);
+        if (snap.exists()) {
+            db = { ...structuredClone(DEFAULT_DB), ...snap.data() };
+            refreshAllViews();
+        }
+    } catch (err) {
+        showToast('Veriler güncellenirken hata oluştu.');
+    }
+}
+
+// Tüm Değişiklikleri Firestore'a Kalıcı Kaydet
+async function saveDB() {
+    isSaving = true;
+    try {
+        await setDoc(storeDocRef, db);
+    } catch (err) {
+        console.error('Firestore kayıt hatası:', err);
+        showToast('Veriler veritabanına kaydedilirken hata oluştu (görsel boyutu büyük olabilir).');
+    } finally {
+        setTimeout(() => { isSaving = false; }, 300);
+    }
+}
+
+// PC veya Mobilden Seçilen Görseli Küçültüp Base64 Yap (Firestore 1MB sınırına uygun)
+function compressImageToBase64(file, maxWidth = 700, quality = 0.72) {
+    return new Promise((resolve, reject) => {
+        if (!file) return resolve('');
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const ratio = img.width > maxWidth ? maxWidth / img.width : 1;
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * ratio);
+                canvas.height = Math.round(img.height * ratio);
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 }
 
 // ==========================================
@@ -436,7 +516,7 @@ $('sellerApplyForm').addEventListener('submit', async (e) => {
 // Satıcı Girişi
 $('sellerLoginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    await loadDB(true);
+    await loadDB();
     const u = $('sellerLoginUser').value.trim();
     const p = $('sellerLoginPass').value.trim();
 
@@ -458,31 +538,25 @@ $('sellerLoginForm').addEventListener('submit', async (e) => {
     showToast(`${seller.companyName} paneline hoş geldiniz.`);
 });
 
-// PC / Telefon Görsel Seçimi -> Doğrudan Sunucuya Yükle
+// PC / Telefon Görsel Seçimi -> Sıkıştırıp Kalıcı Görsel Verisi Hazırla
 $('prodImageFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('image', file);
-
-    showToast('Görsel sunucuya yükleniyor...');
+    showToast('Görsel hazırlanıyor...');
     try {
-        const res = await fetch(`${API_URL}/api/upload`, {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        if (data.success && data.imageUrl) {
-            uploadedImageUrl = data.imageUrl;
-            $('prodImagePreview').src = uploadedImageUrl;
-            $('imagePreviewContainer').classList.remove('hidden');
-            showToast('Görsel sunucuya yüklendi, tüm cihazlarda görünecek.');
+        const base64Img = await compressImageToBase64(file, 700, 0.72);
+        if (base64Img.length > 750000) {
+            const smallerImg = await compressImageToBase64(file, 500, 0.6);
+            uploadedImageUrl = smallerImg;
         } else {
-            showToast('Görsel yüklenemedi!');
+            uploadedImageUrl = base64Img;
         }
+        $('prodImagePreview').src = uploadedImageUrl;
+        $('imagePreviewContainer').classList.remove('hidden');
+        showToast('Görsel hazır, ürünü kaydedince kalıcı yayınlanacak.');
     } catch (err) {
-        showToast('Sunucu bağlantı hatası! Görsel yüklenemedi.');
+        showToast('Görsel işlenemedi, farklı bir resim deneyin.');
     }
 });
 
@@ -501,7 +575,7 @@ $('sellerProductForm').addEventListener('submit', async (e) => {
     const desc = $('prodDesc').value.trim();
 
     if (!editId && !uploadedImageUrl) {
-        showToast('Lütfen ürün için bir görsel yükleyin.');
+        showToast('Lütfen ürün için bir görsel seçin.');
         return;
     }
 
@@ -532,7 +606,7 @@ $('sellerProductForm').addEventListener('submit', async (e) => {
             image: uploadedImageUrl,
             desc
         });
-        showToast('Yeni ürün anlık olarak tüm cihazlarda yayına alındı.');
+        showToast('Yeni ürün kalıcı olarak yayına alındı.');
     }
 
     await saveDB();
@@ -682,7 +756,7 @@ if (new URLSearchParams(window.location.search).get('admin') === 'trendtan') {
 
 $('adminLoginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    await loadDB(true);
+    await loadDB();
     if ($('superAdminPassInput').value === db.adminPassword) {
         $('adminLoginModal').classList.add('hidden');
         $('adminLoginForm').reset();
@@ -917,6 +991,5 @@ document.querySelectorAll('[data-close]').forEach(btn => {
     });
 });
 
-// İlk Yükleme ve 5 Saniyede Bir Otomatik Senkronizasyon
-loadDB();
-setInterval(() => loadDB(true), 5000);
+// Firestore Canlı Senkronizasyonu Başlat
+initFirestoreSync();
