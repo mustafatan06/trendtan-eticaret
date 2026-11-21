@@ -6,6 +6,191 @@
     <title>TRENDTAN | Çok Satıcılı Alışveriş Platformu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css?v=20261121">
+    <style>
+        /* Işıltılı Hero Banner */
+        .hero-banner.shimmer-hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(125deg, #1e1b4b 0%, #4338ca 42%, #f27a1a 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 14px 34px rgba(30, 27, 75, 0.22);
+        }
+        .hero-banner.shimmer-hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 45%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+            transform: rotate(22deg);
+            animation: trendtanShine 4.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes trendtanShine {
+            0% { left: -60%; }
+            55%, 100% { left: 130%; }
+        }
+        .hero-banner.shimmer-hero .hero-text,
+        .hero-banner.shimmer-hero .hero-stats {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-banner.shimmer-hero .hero-badge {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(4px);
+        }
+        .hero-banner.shimmer-hero .stat-box {
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(6px);
+        }
+
+        /* Sipariş Takip Butonu & Kartı */
+        .btn-track-order {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            color: #0f172a;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .tracking-result-box {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .tracking-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .track-step {
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .track-step.done {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .cargo-inline-input {
+            width: 125px;
+            padding: 5px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        /* Mobil Üst Üste Binme Koruması */
+        @media (max-width: 768px) {
+            .top-promo-bar {
+                height: auto !important;
+                min-height: 36px;
+                padding: 6px 10px;
+                line-height: 1.35;
+                font-size: 12px;
+                text-align: center;
+                position: relative !important;
+            }
+            .navbar {
+                position: relative !important;
+                height: auto !important;
+            }
+            .nav-content {
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+                padding: 10px 12px !important;
+                height: auto !important;
+            }
+            .brand-logo {
+                order: 1;
+                flex: 1 1 auto;
+            }
+            .nav-actions {
+                order: 2;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px !important;
+                justify-content: flex-end;
+            }
+            .nav-actions button,
+            .btn-track-order {
+                padding: 7px 10px !important;
+                font-size: 12px !important;
+            }
+            .search-box {
+                order: 3;
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                margin: 2px 0 0 0 !important;
+            }
+            .category-bar {
+                position: relative !important;
+                height: auto !important;
+                padding: 6px 0 !important;
+            }
+            .category-list {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 8px !important;
+                padding: 4px 12px !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            .cat-btn {
+                flex: 0 0 auto !important;
+                white-space: nowrap !important;
+            }
+            .main-store,
+            .dashboard-section {
+                margin-top: 12px !important;
+                padding-top: 8px !important;
+            }
+            .hero-banner {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 14px !important;
+                padding: 20px 16px !important;
+            }
+            .hero-stats {
+                width: 100%;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .filter-bar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+            }
+            .filter-right {
+                width: 100%;
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+            .tracking-steps {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -29,6 +214,10 @@
             </div>
 
             <div class="nav-actions">
+                <button class="btn-track-order" id="openTrackOrderBtn" type="button">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <span>Sipariş Takip</span>
+                </button>
                 <button class="btn-seller-portal" id="openSellerModalBtn" type="button">
                     <i class="fa-solid fa-store"></i>
                     <span>Satıcı Paneli</span>
@@ -57,15 +246,15 @@
     <!-- ANA VİTRİN (MÜŞTERİ EKRANI) -->
     <main class="container main-store" id="customerStoreView">
         <!-- Banner -->
-        <section class="hero-banner">
+        <section class="hero-banner shimmer-hero">
             <div class="hero-text">
-                <span class="hero-badge">TRENDTAN MAĞAZA</span>
+                <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> TRENDTAN MAĞAZA</span>
                 <h1>Güvenli ve Hızlı Alışveriş Platformu</h1>
-                <p>Onaylı satıcıların ürünleri, anında kupon indirimleri ve güvenli ödeme altyapısı.</p>
+                <p>Onaylı satıcıların ürünleri, anında kupon indirimleri, otomatik sipariş takip kodu ve güvenli ödeme altyapısı.</p>
             </div>
             <div class="hero-stats">
                 <div class="stat-box"><i class="fa-solid fa-shield-halved"></i><span>Güvenli Ödeme</span></div>
-                <div class="stat-box"><i class="fa-solid fa-truck-fast"></i><span>Hızlı Kargo</span></div>
+                <div class="stat-box"><i class="fa-solid fa-truck-fast"></i><span>Anlık Sipariş Takip</span></div>
             </div>
         </section>
 
@@ -234,17 +423,17 @@
             <!-- SEKME 2: GELEN SİPARİŞLER -->
             <div class="tab-content" id="seller-incoming-orders">
                 <div class="panel-card">
-                    <h3><i class="fa-solid fa-truck-ramp-box"></i> Hazırlanacak / Gelen Siparişler</h3>
+                    <h3><i class="fa-solid fa-truck-ramp-box"></i> Hazırlanacak / Gelen Siparişler & Kargo Durumu</h3>
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Sipariş No</th>
+                                    <th>Takip Kodu & No</th>
                                     <th>Müşteri & Adres</th>
                                     <th>Ürünler</th>
                                     <th>Tutar</th>
                                     <th>Ödeme Yöntemi</th>
-                                    <th>İşlem</th>
+                                    <th>Kargo & Durum İşlemi</th>
                                 </tr>
                             </thead>
                             <tbody id="sellerIncomingOrdersBody"></tbody>
@@ -261,7 +450,7 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Sipariş No</th>
+                                    <th>Takip Kodu</th>
                                     <th>Müşteri</th>
                                     <th>Ürünler</th>
                                     <th>Kazanç Tutarı</th>
@@ -672,6 +861,24 @@
         </div>
     </div>
 
+    <!-- MODAL 5: OTOMATİK SİPARİŞ TAKİP MODALI -->
+    <div class="modal-backdrop hidden" id="trackOrderModal">
+        <div class="modal-box small-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-truck-fast"></i> Sipariş Takip</h3>
+                <button class="close-btn" data-close="trackOrderModal" type="button"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-form active">
+                <div class="form-group">
+                    <label>Sipariş Takip Kodu (Örn: TRN-123456) veya Telefon</label>
+                    <input type="text" id="trackCodeInput" placeholder="TRN-XXXXXX veya 05XX...">
+                </div>
+                <button type="button" class="btn-primary full-btn" id="trackSearchSubmitBtn">Siparişi Sorgula</button>
+                <div id="trackOrderResult" class="tracking-result-box hidden"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- BİLDİRİM TOAST -->
     <div id="toastNotification" class="toast hidden"></div>
 
@@ -724,7 +931,7 @@
             toast.textContent = msg;
             toast.classList.remove('hidden');
             clearTimeout(window.toastTimer);
-            window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+            window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 3800);
         }
 
         function switchMainView(viewId) {
@@ -781,6 +988,35 @@
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
+        }
+
+        function getOrderStatusLabel(order) {
+            const st = order.status || 'pending';
+            if (st === 'completed') return 'Teslim Edildi / Tamamlandı';
+            if (st === 'shipped') return 'Kargoya Verildi';
+            return 'Hazırlanıyor';
+        }
+
+        function renderOrderTrackingCard(order) {
+            const st = order.status || 'pending';
+            const step1 = true;
+            const step2 = st === 'shipped' || st === 'completed';
+            const step3 = st === 'completed';
+            return `
+                <div>
+                    <strong>Takip Kodu:</strong> <code>${order.trackingCode || order.id}</code><br>
+                    <strong>Durum:</strong> ${getOrderStatusLabel(order)}<br>
+                    <strong>Alıcı:</strong> ${order.customerName} (${order.customerPhone})<br>
+                    <strong>Ürünler:</strong> ${order.itemsText}<br>
+                    <strong>Tutar:</strong> ${formatMoney(order.total)}<br>
+                    ${order.carrierCargoNo ? `<strong>Bireysel Kargo Notu/No:</strong> ${order.carrierCargoNo}<br>` : ''}
+                </div>
+                <div class="tracking-steps">
+                    <div class="track-step ${step1 ? 'done' : ''}">1. Sipariş Alındı / Hazırlanıyor</div>
+                    <div class="track-step ${step2 ? 'done' : ''}">2. Kargoya Verildi</div>
+                    <div class="track-step ${step3 ? 'done' : ''}">3. Teslim Edildi</div>
+                </div>
+            `;
         }
 
         function renderProducts() {
@@ -971,9 +1207,27 @@
             showToast('Ürün silindi.');
         };
 
+        window.markOrderShipped = async function(orderId) {
+            const order = db.orders.find(o => o.id === orderId);
+            if (!order) return;
+            const cargoInput = document.getElementById(`cargoInput_${orderId}`);
+            if (cargoInput && cargoInput.value.trim()) {
+                order.carrierCargoNo = cargoInput.value.trim();
+            }
+            order.status = 'shipped';
+            order.shippedAt = new Date().toLocaleDateString('tr-TR');
+            await saveDB();
+            renderSellerDashboard();
+            showToast(`Sipariş (${order.trackingCode || order.id}) kargoya verildi olarak güncellendi.`);
+        };
+
         window.completeSellerOrder = async function(orderId) {
             const order = db.orders.find(o => o.id === orderId);
             if (order) {
+                const cargoInput = document.getElementById(`cargoInput_${orderId}`);
+                if (cargoInput && cargoInput.value.trim()) {
+                    order.carrierCargoNo = cargoInput.value.trim();
+                }
                 order.status = 'completed';
                 await saveDB();
                 renderSellerDashboard();
@@ -986,12 +1240,12 @@
             if ($('sellerStoreTitle')) $('sellerStoreTitle').textContent = `${currentSeller.companyName} — ${currentSeller.fullName}`;
             const myProducts = (db.products || []).filter(p => p.sellerId === currentSeller.id);
             const myOrders = (db.orders || []).filter(o => o.sellerId === currentSeller.id);
-            const pendingOrders = myOrders.filter(o => o.status === 'pending');
+            const activeOrders = myOrders.filter(o => o.status !== 'completed');
             const completedOrders = myOrders.filter(o => o.status === 'completed');
             const totalRevenue = myOrders.reduce((sum, o) => sum + Number(o.total), 0);
 
             if ($('sellerTotalRevenue')) $('sellerTotalRevenue').textContent = formatMoney(totalRevenue);
-            if ($('sellerPendingOrdersCount')) $('sellerPendingOrdersCount').textContent = pendingOrders.length;
+            if ($('sellerPendingOrdersCount')) $('sellerPendingOrdersCount').textContent = activeOrders.length;
             if ($('sellerCompletedOrdersCount')) $('sellerCompletedOrdersCount').textContent = completedOrders.length;
             if ($('sellerProductCount')) $('sellerProductCount').textContent = myProducts.length;
 
@@ -1015,18 +1269,26 @@
             }
 
             if ($('sellerIncomingOrdersBody')) {
-                $('sellerIncomingOrdersBody').innerHTML = pendingOrders.length === 0
-                    ? `<tr><td colspan="6" style="text-align:center;">Gelen yeni sipariş bulunmuyor.</td></tr>`
-                    : pendingOrders.map(o => `
-                        <tr>
-                            <td><strong>${o.id}</strong><br><small>${o.date}</small></td>
-                            <td>${o.customerName}<br><small>${o.customerPhone} - ${o.customerAddress}</small></td>
-                            <td>${o.itemsText}</td>
-                            <td><strong>${formatMoney(o.total)}</strong></td>
-                            <td>${o.paymentMethod}</td>
-                            <td><button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}')"><i class="fa-solid fa-check"></i> Tamamla</button></td>
-                        </tr>
-                    `).join('');
+                $('sellerIncomingOrdersBody').innerHTML = activeOrders.length === 0
+                    ? `<tr><td colspan="6" style="text-align:center;">Hazırlanacak veya kargodaki sipariş bulunmuyor.</td></tr>`
+                    : activeOrders.map(o => {
+                        const tCode = o.trackingCode || o.id;
+                        const statusText = o.status === 'shipped' ? 'Kargoya Verildi' : 'Hazırlanıyor';
+                        return `
+                            <tr>
+                                <td><strong><code>${tCode}</code></strong><br><small>${o.id} • ${o.date}</small><br><small><strong>${statusText}</strong></small></td>
+                                <td>${o.customerName}<br><small>${o.customerPhone} - ${o.customerAddress}</small></td>
+                                <td>${o.itemsText}</td>
+                                <td><strong>${formatMoney(o.total)}</strong></td>
+                                <td>${o.paymentMethod}</td>
+                                <td>
+                                    <input type="text" id="cargoInput_${o.id}" class="cargo-inline-input" value="${o.carrierCargoNo || ''}" placeholder="İsteğe bağlı kargo no">
+                                    <button class="btn-sm btn-outline" type="button" onclick="markOrderShipped('${o.id}')"><i class="fa-solid fa-truck"></i> Kargoya Verildi</button>
+                                    <button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}')"><i class="fa-solid fa-check"></i> Tamamla</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
             }
 
             if ($('sellerCompletedOrdersBody')) {
@@ -1034,7 +1296,7 @@
                     ? `<tr><td colspan="6" style="text-align:center;">Tamamlanmış sipariş bulunmuyor.</td></tr>`
                     : completedOrders.map(o => `
                         <tr>
-                            <td><strong>${o.id}</strong></td>
+                            <td><strong><code>${o.trackingCode || o.id}</code></strong></td>
                             <td>${o.customerName}</td>
                             <td>${o.itemsText}</td>
                             <td style="color:#16a34a; font-weight:700;">${formatMoney(o.total)}</td>
@@ -1191,6 +1453,36 @@
         if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', renderProducts);
         if ($('sortSelect')) $('sortSelect').addEventListener('change', renderProducts);
 
+        if ($('openTrackOrderBtn')) {
+            $('openTrackOrderBtn').addEventListener('click', () => {
+                if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
+            });
+        }
+
+        if ($('trackSearchSubmitBtn')) {
+            $('trackSearchSubmitBtn').addEventListener('click', () => {
+                const q = ($('trackCodeInput') ? $('trackCodeInput').value : '').trim().toLowerCase();
+                const resBox = $('trackOrderResult');
+                if (!resBox) return;
+                if (!q) {
+                    resBox.classList.remove('hidden');
+                    resBox.innerHTML = 'Lütfen takip kodunu veya telefon numarasını girin.';
+                    return;
+                }
+                const found = (db.orders || []).find(o =>
+                    (o.trackingCode && o.trackingCode.toLowerCase() === q) ||
+                    (o.id && o.id.toLowerCase() === q) ||
+                    (o.customerPhone && o.customerPhone.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')))
+                );
+                resBox.classList.remove('hidden');
+                if (!found) {
+                    resBox.innerHTML = 'Bu kod veya telefon numarasına ait sipariş bulunamadı.';
+                } else {
+                    resBox.innerHTML = renderOrderTrackingCard(found);
+                }
+            });
+        }
+
         if ($('openCartBtn')) $('openCartBtn').addEventListener('click', () => {
             if ($('cartDrawer')) $('cartDrawer').classList.add('open');
             if ($('cartOverlay')) $('cartOverlay').classList.remove('hidden');
@@ -1262,11 +1554,28 @@
                     if (dbProd) dbProd.stock = Math.max(0, dbProd.stock - item.qty);
                 });
 
+                const createdCodes = [];
                 Object.keys(sellerGroups).forEach(sId => {
                     const groupItems = sellerGroups[sId];
                     const groupTotal = groupItems.reduce((sum, i) => sum + (i.product.price * i.qty) + Number(i.product.shipping), 0);
                     const itemsText = groupItems.map(i => `${i.product.name} (x${i.qty})`).join(', ');
-                    db.orders.unshift({ id: 'ORD-' + Math.floor(10000 + Math.random() * 90000), sellerId: sId, customerName: custName, customerPhone: custPhone, customerAddress: custAddress, itemsText, total: groupTotal, paymentMethod, status: 'pending', date: today });
+                    const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
+                    createdCodes.push(trackingCode);
+
+                    db.orders.unshift({
+                        id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
+                        trackingCode,
+                        sellerId: sId,
+                        customerName: custName,
+                        customerPhone: custPhone,
+                        customerAddress: custAddress,
+                        itemsText,
+                        total: groupTotal,
+                        paymentMethod,
+                        carrierCargoNo: '',
+                        status: 'pending',
+                        date: today
+                    });
                 });
 
                 await saveDB();
@@ -1274,7 +1583,13 @@
                 updateCartUI(); renderProducts();
                 if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
                 $('checkoutForm').reset();
-                showToast('Siparişiniz alındı ve merkeze iletildi.');
+
+                if ($('trackOrderModal') && $('trackCodeInput') && $('trackSearchSubmitBtn') && createdCodes[0]) {
+                    $('trackCodeInput').value = createdCodes[0];
+                    $('trackOrderModal').classList.remove('hidden');
+                    $('trackSearchSubmitBtn').click();
+                }
+                showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
             });
         }
 
