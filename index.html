@@ -447,8 +447,11 @@
             <div class="container category-list" id="categoryList">
                 <button class="cat-btn active" data-category="all" type="button">Tümü</button>
                 <button class="cat-btn" data-category="Elektronik" type="button">Elektronik</button>
-                <button class="cat-btn" data-category="Moda & Giyim" type="button">Moda & Giyim</button>
+                <button class="cat-btn" data-category="Kadın Giyim" type="button">Kadın Giyim</button>
+                <button class="cat-btn" data-category="Erkek Giyim" type="button">Erkek Giyim</button>
+                <button class="cat-btn" data-category="Çocuk Giyim" type="button">Çocuk Giyim</button>
                 <button class="cat-btn" data-category="Ayakkabı" type="button">Ayakkabı</button>
+                <button class="cat-btn" data-category="Gözlük" type="button">Gözlük</button>
                 <button class="cat-btn" data-category="Ev & Yaşam" type="button">Ev & Yaşam</button>
                 <button class="cat-btn" data-category="Oto & Aksesuar" type="button">Oto & Aksesuar</button>
                 <button class="cat-btn" data-category="Kozmetik" type="button">Kozmetik</button>
@@ -563,8 +566,11 @@
                             <label>Kategori *</label>
                             <select id="prodCategory" required>
                                 <option value="Elektronik">Elektronik</option>
-                                <option value="Moda & Giyim">Moda & Giyim</option>
+                                <option value="Kadın Giyim">Kadın Giyim</option>
+                                <option value="Erkek Giyim">Erkek Giyim</option>
+                                <option value="Çocuk Giyim">Çocuk Giyim</option>
                                 <option value="Ayakkabı">Ayakkabı</option>
+                                <option value="Gözlük">Gözlük</option>
                                 <option value="Ev & Yaşam">Ev & Yaşam</option>
                                 <option value="Oto & Aksesuar">Oto & Aksesuar</option>
                                 <option value="Kozmetik">Kozmetik</option>
@@ -1253,15 +1259,24 @@
         };
 
         const SHOE_NUMBERS_34_50 = Array.from({ length: 17 }, (_, i) => String(34 + i));
+        const EYEWEAR_COLORS = ['Siyah', 'Kahverengi', 'Gold', 'Gümüş', 'Leopar / Tortoise', 'Şeffaf', 'Füme', 'Lacivert', 'Yeşil', 'Kırmızı'];
 
         const CATALOG_VARIANTS_BY_CATEGORY = {
             'Ayakkabı': SHOE_NUMBERS_34_50,
-            'Moda & Giyim': ['Standart', 'XS', 'S', 'M', 'L', 'XL', 'XXL'],
+            'Gözlük': EYEWEAR_COLORS,
+            'Kadın Giyim': ['Standart', 'XS', 'S', 'M', 'L', 'XL', 'XXL'],
+            'Erkek Giyim': ['Standart', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
+            'Çocuk Giyim': ['Standart', '2-3 Yaş', '4-5 Yaş', '6-7 Yaş', '8-9 Yaş', '10-11 Yaş', '12-13 Yaş'],
             'Elektronik': ['Standart', 'Siyah', 'Beyaz', 'Gri', 'Mavi'],
             'Ev & Yaşam': ['Standart', 'Beyaz', 'Bej', 'Gri', 'Ceviz'],
             'Oto & Aksesuar': ['Standart', 'Siyah', 'Karbon', 'Krom'],
             'Kozmetik': ['Standart', 'Doğal', 'Klasik', 'Hassas']
         };
+
+        function normalizeCategoryName(cat) {
+            if (cat === 'Moda & Giyim') return 'Kadın Giyim';
+            return cat;
+        }
 
         const SESSION_KEYS = {
             view: 'trendtan_active_view',
@@ -1534,6 +1549,10 @@
                 const extras = selectedFormVariants.filter(x => !SHOE_NUMBERS_34_50.includes(x));
                 return [...SHOE_NUMBERS_34_50, ...extras];
             }
+            if (categoryName === 'Gözlük') {
+                const extras = selectedFormVariants.filter(x => !EYEWEAR_COLORS.includes(x));
+                return [...EYEWEAR_COLORS, ...extras];
+            }
             const extras = selectedFormVariants.filter(x => x !== 'Standart' && !baseOptions.includes(x));
             return ['Standart', ...baseOptions.filter(x => x !== 'Standart'), ...extras];
         }
@@ -1544,15 +1563,19 @@
 
             if (Array.isArray(keepSelected) && keepSelected.length > 0) {
                 selectedFormVariants = [...new Set(keepSelected)];
+            } else if (categoryName === 'Ayakkabı' || categoryName === 'Gözlük') {
+                selectedFormVariants = [];
             } else {
-                selectedFormVariants = categoryName === 'Ayakkabı' ? [] : ['Standart'];
+                selectedFormVariants = ['Standart'];
             }
 
             if (labelEl) {
                 if (categoryName === 'Ayakkabı') {
                     labelEl.textContent = 'Ayakkabı Numaraları (34 - 50 Arası İşaretleyin) *';
-                } else if (categoryName === 'Moda & Giyim') {
-                    labelEl.textContent = 'Katalog Seçenekleri (Standart + Beden Zorunlu) *';
+                } else if (categoryName === 'Gözlük') {
+                    labelEl.textContent = 'Gözlük Renk Seçenekleri (İşaretleyin) *';
+                } else if (categoryName === 'Kadın Giyim' || categoryName === 'Erkek Giyim' || categoryName === 'Çocuk Giyim') {
+                    labelEl.textContent = `${categoryName} Beden / Seçenekleri (İşaretleyin) *`;
                 } else {
                     labelEl.textContent = 'Katalog Seçenekleri (Standart + Renk/Özellik Zorunlu) *';
                 }
@@ -1573,7 +1596,7 @@
 
         window.toggleFormVariant = function(opt) {
             const cat = $('prodCategory') ? $('prodCategory').value : 'Elektronik';
-            if (cat === 'Ayakkabı') {
+            if (cat === 'Ayakkabı' || cat === 'Gözlük') {
                 if (selectedFormVariants.includes(opt)) {
                     selectedFormVariants = selectedFormVariants.filter(x => x !== opt);
                 } else {
@@ -1674,10 +1697,11 @@
             let filtered = (db.products || []).filter(p => {
                 const seller = (db.sellers || []).find(s => s.id === p.sellerId);
                 if (!seller || !seller.active) return false;
-                const matchCat = currentCategory === 'all' || p.category === currentCategory;
+                const prodCat = normalizeCategoryName(p.category);
+                const matchCat = currentCategory === 'all' || prodCat === currentCategory;
                 const matchSearch = (p.name || '').toLowerCase().includes(currentSearch.toLowerCase()) ||
                                     (p.sellerName || '').toLowerCase().includes(currentSearch.toLowerCase()) ||
-                                    (p.category || '').toLowerCase().includes(currentSearch.toLowerCase());
+                                    (prodCat || '').toLowerCase().includes(currentSearch.toLowerCase());
                 const matchShip = !onlyFreeShipping || Number(p.shipping) === 0;
                 return matchCat && matchSearch && matchShip;
             });
@@ -1709,7 +1733,11 @@
                 const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
                 const selectedVal = variants.includes(cardSelectedVariants[prod.id]) ? cardSelectedVariants[prod.id] : variants[0];
                 cardSelectedVariants[prod.id] = selectedVal;
-                const isShoe = prod.category === 'Ayakkabı';
+                const prodCat = normalizeCategoryName(prod.category);
+                const isShoe = prodCat === 'Ayakkabı';
+                const isEyewear = prodCat === 'Gözlük';
+                const optionLabel = isShoe ? 'Numara Seçin:' : (isEyewear ? 'Renk Seçin:' : 'Seçenek:');
+                const optionSummaryLabel = isShoe ? 'Numaralar' : (isEyewear ? 'Renkler' : 'Seçenek');
 
                 return `
                     <div class="product-card">
@@ -1723,10 +1751,10 @@
                             <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
-                                ${isShoe ? 'Numaralar' : 'Seçenek'}: <strong>${variants.join(', ')}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
+                                ${optionSummaryLabel}: <strong>${variants.join(', ')}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
                             </small>
                             <div class="card-size-select-row">
-                                <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${isShoe ? 'Numara Seçin:' : 'Seçenek:'}</span>
+                                <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${optionLabel}</span>
                                 <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)">
                                     ${variants.map(v => `<option value="${v.replace(/"/g, '&quot;')}" ${v === selectedVal ? 'selected' : ''}>${isShoe ? v + ' Numara' : v}</option>`).join('')}
                                 </select>
@@ -1787,7 +1815,12 @@
             const minQty = Math.max(1, Number(prod.minOrderQty || 1));
             const effPrice = getEffectivePrice(prod);
             const effOldPrice = getEffectiveOldPrice(prod);
-            const isShoe = prod.category === 'Ayakkabı';
+            const prodCat = normalizeCategoryName(prod.category);
+            const isShoe = prodCat === 'Ayakkabı';
+            const isEyewear = prodCat === 'Gözlük';
+            const detailSelectLabel = isShoe
+                ? 'Ayakkabı Numaranızı Seçin (Tik İşareti ile Seçilir) *'
+                : (isEyewear ? 'Gözlük Rengini Seçin (Tik İşareti ile Seçilir) *' : 'Seçenek / Beden / Renk Seçin *');
 
             body.innerHTML = `
                 <div class="detail-carousel-wrap">
@@ -1801,7 +1834,7 @@
                     ` : ''}
                 </div>
                 <div style="margin-top:14px;">
-                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName} • ${prod.category}</span>
+                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName} • ${prodCat}</span>
                     <p style="margin-top:8px; color:#334155;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
                     <div class="price-block" style="margin-top:10px;">
                         ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
@@ -1809,7 +1842,7 @@
                         <span class="shipping-info-text">Min. Sipariş: <strong>${minQty} adet</strong> • Stok: <strong>${prod.stock} adet</strong></span>
                     </div>
                     <div class="form-group" style="margin-top:10px;">
-                        <label>${isShoe ? 'Ayakkabı Numaranızı Seçin (Tik İşareti ile Seçilir) *' : 'Seçenek / Beden / Renk Seçin *'}</label>
+                        <label>${detailSelectLabel}</label>
                         <div class="variant-chips-wrap">
                             ${variants.map(v => {
                                 const active = v === activeDetailVariant;
@@ -1954,9 +1987,10 @@
         window.editSellerProduct = function(prodId) {
             const prod = (db.products || []).find(p => p.id === prodId);
             if (!prod) return;
+            const normCat = normalizeCategoryName(prod.category);
             $('editProductId').value = prod.id;
             $('prodName').value = prod.name;
-            $('prodCategory').value = prod.category;
+            $('prodCategory').value = normCat;
             $('prodOldPrice').value = prod.oldPrice || '';
             $('prodPrice').value = (prod.price && Number(prod.price) !== Number(prod.oldPrice)) ? prod.price : '';
             if ($('prodMinQty')) $('prodMinQty').value = prod.minOrderQty || 1;
@@ -1966,7 +2000,7 @@
             if ($('customVariantExtra')) $('customVariantExtra').value = '';
             uploadedImages = [...getProductImages(prod)].slice(0, 4);
             renderSellerImagePreviews();
-            renderCatalogVariantOptions(prod.category, prod.variants || (prod.category === 'Ayakkabı' ? [] : ['Standart']));
+            renderCatalogVariantOptions(normCat, prod.variants || ((normCat === 'Ayakkabı' || normCat === 'Gözlük') ? [] : ['Standart']));
             if ($('productFormHeading')) $('productFormHeading').innerHTML = `<i class="fa-solid fa-pen"></i> Ürünü Düzenle: ${prod.name}`;
             if ($('saveProductBtn')) $('saveProductBtn').innerHTML = `<i class="fa-solid fa-check"></i> Değişiklikleri Kaydet`;
             if ($('cancelEditProductBtn')) $('cancelEditProductBtn').classList.remove('hidden');
@@ -2033,10 +2067,11 @@
                         const imgs = getProductImages(p);
                         const effPrice = getEffectivePrice(p);
                         const effOld = getEffectiveOldPrice(p);
+                        const prodCat = normalizeCategoryName(p.category);
                         return `
                             <tr>
                                 <td><img src="${imgs[0] || ''}" class="table-thumb"></td>
-                                <td><strong>${p.name}</strong><br><small>${p.category} • ${(p.variants || ['Standart']).join(', ')}</small></td>
+                                <td><strong>${p.name}</strong><br><small>${prodCat} • ${(p.variants || ['Standart']).join(', ')}</small></td>
                                 <td>${effOld > 0 ? formatMoney(effOld) : formatMoney(effPrice)}</td>
                                 <td style="color:#f27a1a; font-weight:700;">${formatMoney(effPrice)}</td>
                                 <td>${Math.max(1, Number(p.minOrderQty || 1))} adet</td>
@@ -2472,12 +2507,14 @@
 
                 const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
                 const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
-                const variants = category === 'Ayakkabı'
+                const variants = (category === 'Ayakkabı' || category === 'Gözlük')
                     ? [...new Set([...selectedFormVariants, ...extraItems])]
                     : ['Standart', ...new Set([...selectedFormVariants.filter(x => x !== 'Standart'), ...extraItems])];
 
                 if (variants.length === 0) {
-                    showToast(category === 'Ayakkabı' ? 'Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.' : 'Lütfen en az bir seçenek belirleyin.');
+                    if (category === 'Ayakkabı') showToast('Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.');
+                    else if (category === 'Gözlük') showToast('Lütfen en az bir gözlük rengi işaretleyin.');
+                    else showToast('Lütfen en az bir seçenek belirleyin.');
                     return;
                 }
                 if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
