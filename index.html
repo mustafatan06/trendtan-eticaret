@@ -99,6 +99,119 @@
             margin-bottom: 6px;
         }
 
+        /* Çoklu Görsel & Varyant Alanları */
+        .multi-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .multi-thumb-item {
+            position: relative;
+            width: 68px;
+            height: 68px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+        }
+        .multi-thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .multi-thumb-remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(220, 38, 38, 0.9);
+            color: #fff;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .variant-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .variant-chip-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .variant-chip-btn.active {
+            border-color: #f27a1a;
+            background: #fff7ed;
+            color: #c2410c;
+        }
+        .product-click-zone {
+            cursor: pointer;
+        }
+
+        /* Kaydırmalı Ürün Detay Modalı */
+        .detail-modal-box {
+            max-width: 720px;
+        }
+        .detail-carousel-wrap {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+        .detail-main-img {
+            width: 100%;
+            max-height: 340px;
+            object-fit: contain;
+            display: block;
+            background: #ffffff;
+        }
+        .detail-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(15, 23, 42, 0.72);
+            color: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .detail-nav-btn.prev { left: 10px; }
+        .detail-nav-btn.next { right: 10px; }
+        .detail-thumbs-strip {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px;
+            background: #f8fafc;
+        }
+        .detail-thumb-img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+        .detail-thumb-img.active {
+            border-color: #f27a1a;
+        }
+
         /* Mobil Üst Üste Binme Koruması */
         @media (max-width: 768px) {
             .top-promo-bar {
@@ -358,13 +471,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Normal Liste Fiyatı (₺) *</label>
+                            <label>Normal Satış Fiyatı (₺) *</label>
                             <input type="number" id="prodOldPrice" step="0.01" min="0.01" required placeholder="Örn: 1200.00">
                         </div>
 
                         <div class="form-group">
-                            <label>İndirimli Satış Fiyatı (₺) *</label>
-                            <input type="number" id="prodPrice" step="0.01" min="0.01" required placeholder="Örn: 899.90">
+                            <label>İndirimli Fiyat (₺) (İsteğe Bağlı)</label>
+                            <input type="number" id="prodPrice" step="0.01" min="0.01" placeholder="Boş bırakılabilir (Örn: 899.90)">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Minimum Sipariş Adedi (Toptan/Parakende) *</label>
+                            <input type="number" id="prodMinQty" min="1" value="1" required>
                         </div>
 
                         <div class="form-group">
@@ -377,13 +495,17 @@
                             <input type="number" id="prodStock" min="0" value="10" required>
                         </div>
 
+                        <div class="form-group">
+                            <label id="catalogVariantLabel">Katalog Seçenekleri (Standart + Beden / Renk) *</label>
+                            <div id="catalogVariantCheckboxes" class="variant-chips-wrap"></div>
+                            <input type="text" id="customVariantExtra" placeholder="Ek seçenek yazın (Örn: XL, Mat Siyah, 50ml)" style="margin-top:8px;">
+                        </div>
+
                         <div class="form-group full-width">
-                            <label>Ürün Görseli Yükle (Bilgisayar veya Telefon) *</label>
+                            <label>Ürün Görselleri Yükle (Birden Fazla Fotoğraf Seçebilirsiniz) *</label>
                             <div class="file-upload-box">
-                                <input type="file" id="prodImageFile" accept="image/*" capture="environment">
-                                <div id="imagePreviewContainer" class="image-preview hidden">
-                                    <img id="prodImagePreview" src="" alt="Önizleme">
-                                </div>
+                                <input type="file" id="prodImageFile" accept="image/*" capture="environment" multiple>
+                                <div id="imagePreviewContainer" class="multi-preview-grid hidden"></div>
                             </div>
                         </div>
 
@@ -406,10 +528,10 @@
                             <thead>
                                 <tr>
                                     <th>Görsel</th>
-                                    <th>Ürün Adı</th>
-                                    <th>Liste Fiyatı</th>
+                                    <th>Ürün Adı & Varyant</th>
+                                    <th>Normal Fiyat</th>
                                     <th>Satış Fiyatı</th>
-                                    <th>Kargo</th>
+                                    <th>Min. Adet</th>
                                     <th>Stok</th>
                                     <th>İşlemler</th>
                                 </tr>
@@ -879,6 +1001,17 @@
         </div>
     </div>
 
+    <!-- MODAL 6: KAYDIRMALI ÜRÜN DETAY & SEÇENEK MODALI -->
+    <div class="modal-backdrop hidden" id="productDetailModal">
+        <div class="modal-box detail-modal-box">
+            <div class="modal-header">
+                <h3 id="detailModalTitle">Ürün Detayı</h3>
+                <button class="close-btn" data-close="productDetailModal" type="button"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="productDetailBody" class="modal-form active"></div>
+        </div>
+    </div>
+
     <!-- BİLDİRİM TOAST -->
     <div id="toastNotification" class="toast hidden"></div>
 
@@ -910,20 +1043,77 @@
             orders: []
         };
 
+        const CATALOG_VARIANTS_BY_CATEGORY = {
+            'Moda & Giyim': ['Standart', 'XS', 'S', 'M', 'L', 'XL', 'XXL'],
+            'Elektronik': ['Standart', 'Siyah', 'Beyaz', 'Gri', 'Mavi'],
+            'Ev & Yaşam': ['Standart', 'Beyaz', 'Bej', 'Gri', 'Ceviz'],
+            'Oto & Aksesuar': ['Standart', 'Siyah', 'Karbon', 'Krom'],
+            'Kozmetik': ['Standart', 'Doğal', 'Klasik', 'Hassas']
+        };
+
+        const SESSION_KEYS = {
+            view: 'trendtan_active_view',
+            sellerId: 'trendtan_seller_id',
+            adminAuth: 'trendtan_admin_authed',
+            cart: 'trendtan_cart_items',
+            coupon: 'trendtan_applied_coupon',
+            filters: 'trendtan_store_filters',
+            trackQuery: 'trendtan_track_query',
+            trackOpen: 'trendtan_track_open',
+            dashTabs: 'trendtan_dash_tabs'
+        };
+
         let db = JSON.parse(JSON.stringify(DEFAULT_DB));
         let isSaving = false;
         let firestoreReady = false;
         let storeDocRef = null;
 
-        let cart = [];
-        let appliedCoupon = null;
-        let currentCategory = 'all';
-        let currentSearch = '';
+        function loadSessionJson(key, fallback) {
+            try {
+                const raw = sessionStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (_) {
+                return fallback;
+            }
+        }
+
+        function saveSessionJson(key, val) {
+            try {
+                sessionStorage.setItem(key, JSON.stringify(val));
+            } catch (_) {}
+        }
+
+        let cart = loadSessionJson(SESSION_KEYS.cart, []);
+        let appliedCoupon = loadSessionJson(SESSION_KEYS.coupon, null);
+        const savedFilters = loadSessionJson(SESSION_KEYS.filters, { category: 'all', search: '', freeShipping: false, sort: 'default' });
+        let currentCategory = savedFilters.category || 'all';
+        let currentSearch = savedFilters.search || '';
         let currentSeller = null;
-        let uploadedImageUrl = '';
+        let uploadedImages = [];
+        let selectedFormVariants = ['Standart'];
+        let activeDetailProductId = null;
+        let activeDetailPhotoIdx = 0;
+        let activeDetailVariant = 'Standart';
 
         const $ = (id) => document.getElementById(id);
         const formatMoney = (val) => Number(val || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
+
+        function getProductImages(prod) {
+            if (Array.isArray(prod.images) && prod.images.length > 0) return prod.images;
+            return prod.image ? [prod.image] : [];
+        }
+
+        function getEffectivePrice(prod) {
+            const disc = Number(prod.price || 0);
+            const normal = Number(prod.oldPrice || disc);
+            return disc > 0 ? disc : normal;
+        }
+
+        function getEffectiveOldPrice(prod) {
+            const normal = Number(prod.oldPrice || 0);
+            const disc = Number(prod.price || 0);
+            return normal > disc && disc > 0 ? normal : 0;
+        }
 
         function showToast(msg) {
             const toast = $('toastNotification');
@@ -934,12 +1124,79 @@
             window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 3800);
         }
 
-        function switchMainView(viewId) {
+        function persistUiState() {
+            saveSessionJson(SESSION_KEYS.cart, cart);
+            saveSessionJson(SESSION_KEYS.coupon, appliedCoupon);
+            saveSessionJson(SESSION_KEYS.filters, {
+                category: currentCategory,
+                search: currentSearch,
+                freeShipping: $('freeShippingFilter') ? $('freeShippingFilter').checked : false,
+                sort: $('sortSelect') ? $('sortSelect').value : 'default'
+            });
+        }
+
+        function syncCartWithDbProducts() {
+            const products = db.products || [];
+            cart = (cart || []).filter(item => {
+                const fresh = products.find(p => p.id === item.product?.id);
+                if (!fresh || fresh.stock <= 0) return false;
+                const minQ = Math.max(1, Number(fresh.minOrderQty || 1));
+                item.product = fresh;
+                item.qty = Math.min(Math.max(Number(item.qty || minQ), minQ), fresh.stock);
+                return item.qty > 0;
+            });
+            if (appliedCoupon) {
+                const freshCoupon = (db.coupons || []).find(c => c.code === appliedCoupon.code);
+                appliedCoupon = freshCoupon || null;
+            }
+            persistUiState();
+        }
+
+        function switchMainView(viewId, skipSave = false) {
             if ($('customerStoreView')) $('customerStoreView').classList.add('hidden');
             if ($('sellerDashboardView')) $('sellerDashboardView').classList.add('hidden');
             if ($('superAdminDashboardView')) $('superAdminDashboardView').classList.add('hidden');
             if ($(viewId)) $(viewId).classList.remove('hidden');
+            if (!skipSave) {
+                try { sessionStorage.setItem(SESSION_KEYS.view, viewId); } catch (_) {}
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function applySavedDashTabs() {
+            const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
+            Object.entries(savedTabs).forEach(([sectionId, tabId]) => {
+                const section = $(sectionId);
+                const content = $(tabId);
+                if (!section || !content) return;
+                section.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+                section.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                content.classList.add('active');
+            });
+        }
+
+        function restoreSessionViewIfPossible() {
+            const savedView = sessionStorage.getItem(SESSION_KEYS.view);
+            const savedSellerId = sessionStorage.getItem(SESSION_KEYS.sellerId);
+            const isAdminAuthed = sessionStorage.getItem(SESSION_KEYS.adminAuth) === '1';
+
+            if (savedView === 'sellerDashboardView' && savedSellerId) {
+                const foundSeller = (db.sellers || []).find(s => s.id === savedSellerId);
+                if (foundSeller && foundSeller.active) {
+                    currentSeller = foundSeller;
+                    switchMainView('sellerDashboardView', true);
+                    renderSellerDashboard();
+                    return;
+                }
+            }
+
+            if (savedView === 'superAdminDashboardView' && isAdminAuthed) {
+                switchMainView('superAdminDashboardView', true);
+                renderAdminDashboard();
+                return;
+            }
+
+            switchMainView('customerStoreView', true);
         }
 
         function refreshAllViews() {
@@ -947,11 +1204,15 @@
                 const updatedSeller = (db.sellers || []).find(s => s.id === currentSeller.id);
                 if (updatedSeller) currentSeller = updatedSeller;
             }
+            syncCartWithDbProducts();
             renderProducts();
             updateCartUI();
             if (currentSeller) renderSellerDashboard();
             if ($('superAdminDashboardView') && !$('superAdminDashboardView').classList.contains('hidden')) {
                 renderAdminDashboard();
+            }
+            if (activeDetailProductId && $('productDetailModal') && !$('productDetailModal').classList.contains('hidden')) {
+                renderProductDetailModal();
             }
         }
 
@@ -961,13 +1222,13 @@
             try {
                 await setDoc(storeDocRef, db);
             } catch (err) {
-                showToast('Kayıt sırasında hata oluştu (görsel boyutu büyük olabilir).');
+                showToast('Kayıt sırasında hata oluştu (görseller çok fazla veya büyük olabilir).');
             } finally {
                 setTimeout(() => { isSaving = false; }, 300);
             }
         }
 
-        function compressImageToBase64(file, maxWidth = 700, quality = 0.72) {
+        function compressImageToBase64(file, maxWidth = 650, quality = 0.68) {
             return new Promise((resolve, reject) => {
                 if (!file) return resolve('');
                 const reader = new FileReader();
@@ -989,6 +1250,73 @@
                 reader.readAsDataURL(file);
             });
         }
+
+        function renderSellerImagePreviews() {
+            const box = $('imagePreviewContainer');
+            if (!box) return;
+            if (!uploadedImages.length) {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+                return;
+            }
+            box.classList.remove('hidden');
+            box.innerHTML = uploadedImages.map((src, idx) => `
+                <div class="multi-thumb-item">
+                    <img src="${src}" alt="Görsel ${idx + 1}">
+                    <button type="button" class="multi-thumb-remove" onclick="removeUploadedImage(${idx})">×</button>
+                </div>
+            `).join('');
+        }
+
+        window.removeUploadedImage = function(idx) {
+            uploadedImages.splice(idx, 1);
+            renderSellerImagePreviews();
+        };
+
+        function renderCatalogVariantOptions(categoryName, keepSelected = null) {
+            const container = $('catalogVariantCheckboxes');
+            const labelEl = $('catalogVariantLabel');
+            const baseOptions = CATALOG_VARIANTS_BY_CATEGORY[categoryName] || ['Standart', 'Siyah', 'Beyaz', 'Gri'];
+            const merged = ['Standart', ...baseOptions.filter(x => x !== 'Standart')];
+            if (Array.isArray(keepSelected) && keepSelected.length > 0) {
+                keepSelected.forEach(v => {
+                    if (!merged.includes(v)) merged.push(v);
+                });
+                selectedFormVariants = ['Standart', ...keepSelected.filter(x => x !== 'Standart')];
+            } else {
+                selectedFormVariants = ['Standart'];
+            }
+            if (labelEl) {
+                labelEl.textContent = categoryName === 'Moda & Giyim'
+                    ? 'Katalog Seçenekleri (Standart + Beden Zorunlu) *'
+                    : 'Katalog Seçenekleri (Standart + Renk/Özellik Zorunlu) *';
+            }
+            if (!container) return;
+            container.innerHTML = merged.map(opt => {
+                const active = selectedFormVariants.includes(opt);
+                return `<button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="toggleFormVariant('${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+            }).join('');
+        }
+
+        window.toggleFormVariant = function(opt) {
+            if (opt === 'Standart') {
+                if (!selectedFormVariants.includes('Standart')) selectedFormVariants.unshift('Standart');
+            } else if (selectedFormVariants.includes(opt)) {
+                selectedFormVariants = selectedFormVariants.filter(x => x !== opt);
+            } else {
+                selectedFormVariants.push(opt);
+            }
+            const cat = $('prodCategory') ? $('prodCategory').value : 'Elektronik';
+            const container = $('catalogVariantCheckboxes');
+            const baseOptions = CATALOG_VARIANTS_BY_CATEGORY[cat] || ['Standart', 'Siyah', 'Beyaz', 'Gri'];
+            const allOpts = ['Standart', ...baseOptions.filter(x => x !== 'Standart'), ...selectedFormVariants.filter(x => x !== 'Standart' && !baseOptions.includes(x))];
+            if (container) {
+                container.innerHTML = allOpts.map(item => {
+                    const active = selectedFormVariants.includes(item);
+                    return `<button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="toggleFormVariant('${item.replace(/'/g, "\\'")}')">${item}</button>`;
+                }).join('');
+            }
+        };
 
         function getOrderStatusLabel(order) {
             const st = order.status || 'pending';
@@ -1019,6 +1347,29 @@
             `;
         }
 
+        function runOrderTrackingSearch(rawQuery) {
+            const q = (rawQuery || '').trim().toLowerCase();
+            const resBox = $('trackOrderResult');
+            if (!resBox) return;
+            try { sessionStorage.setItem(SESSION_KEYS.trackQuery, rawQuery || ''); } catch (_) {}
+            if (!q) {
+                resBox.classList.remove('hidden');
+                resBox.innerHTML = 'Lütfen takip kodunu veya telefon numarasını girin.';
+                return;
+            }
+            const found = (db.orders || []).find(o =>
+                (o.trackingCode && o.trackingCode.toLowerCase() === q) ||
+                (o.id && o.id.toLowerCase() === q) ||
+                (o.customerPhone && o.customerPhone.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')))
+            );
+            resBox.classList.remove('hidden');
+            if (!found) {
+                resBox.innerHTML = 'Bu kod veya telefon numarasına ait sipariş bulunamadı.';
+            } else {
+                resBox.innerHTML = renderOrderTrackingCard(found);
+            }
+        }
+
         function renderProducts() {
             const grid = $('productGrid');
             if (!grid) return;
@@ -1036,9 +1387,15 @@
                 return matchCat && matchSearch && matchShip;
             });
 
-            if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
-            if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
-            if (sortBy === 'discount') filtered.sort((a, b) => ((b.oldPrice - b.price) / (b.oldPrice || 1)) - ((a.oldPrice - a.price) / (a.oldPrice || 1)));
+            if (sortBy === 'price-asc') filtered.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
+            if (sortBy === 'price-desc') filtered.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
+            if (sortBy === 'discount') {
+                filtered.sort((a, b) => {
+                    const rateA = getEffectiveOldPrice(a) > 0 ? (getEffectiveOldPrice(a) - getEffectivePrice(a)) / getEffectiveOldPrice(a) : 0;
+                    const rateB = getEffectiveOldPrice(b) > 0 ? (getEffectiveOldPrice(b) - getEffectivePrice(b)) / getEffectiveOldPrice(b) : 0;
+                    return rateB - rateA;
+                });
+            }
 
             if ($('productCountText')) $('productCountText').textContent = `(${filtered.length} ürün)`;
             if ($('currentCategoryTitle')) $('currentCategoryTitle').textContent = currentCategory === 'all' ? 'Tüm Ürünler' : currentCategory;
@@ -1049,59 +1406,151 @@
             }
 
             grid.innerHTML = filtered.map(prod => {
-                const discountRate = prod.oldPrice > prod.price ? Math.round(((prod.oldPrice - prod.price) / prod.oldPrice) * 100) : 0;
+                const effPrice = getEffectivePrice(prod);
+                const effOldPrice = getEffectiveOldPrice(prod);
+                const discountRate = effOldPrice > effPrice ? Math.round(((effOldPrice - effPrice) / effOldPrice) * 100) : 0;
+                const imgs = getProductImages(prod);
+                const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+                const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
                 return `
                     <div class="product-card">
                         ${discountRate > 0 ? `<span class="discount-tag">%${discountRate} İndirim</span>` : ''}
                         ${Number(prod.shipping) === 0 ? `<span class="shipping-tag">Ücretsiz Kargo</span>` : ''}
-                        <img src="${prod.image}" alt="${prod.name}" class="product-img">
+                        <div class="product-click-zone" onclick="openProductDetailModal('${prod.id}')">
+                            <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img">
+                        </div>
                         <div class="product-body">
                             <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName}</span>
-                            <h3 class="product-title">${prod.name}</h3>
+                            <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
+                            <small style="display:block; color:#475569; margin-bottom:6px;">
+                                Seçenek: <strong>${variants.join(', ')}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
+                            </small>
                             <div class="price-block">
-                                ${prod.oldPrice > prod.price ? `<span class="old-price">${formatMoney(prod.oldPrice)}</span>` : ''}
-                                <span class="current-price">${formatMoney(prod.price)}</span>
+                                ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
+                                <span class="current-price">${formatMoney(effPrice)}</span>
                                 <span class="shipping-info-text">${Number(prod.shipping) === 0 ? 'Kargo Bedava' : 'Kargo: ' + formatMoney(prod.shipping)}</span>
                             </div>
-                            <button class="btn-add-cart" type="button" onclick="addToCart('${prod.id}')">
-                                <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
-                            </button>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn-outline" type="button" style="padding:9px 10px;" onclick="openProductDetailModal('${prod.id}')"><i class="fa-solid fa-eye"></i></button>
+                                <button class="btn-add-cart" type="button" style="flex:1;" onclick="addToCart('${prod.id}', null, '${variants[0].replace(/'/g, "\\'")}')">
+                                    <i class="fa-solid fa-cart-plus"></i> Sepete Ekle (${minQty} Ad.)
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        window.addToCart = function(productId) {
-            const product = (db.products || []).find(p => p.id === productId);
-            if (!product) return;
-            const existing = cart.find(item => item.product.id === productId);
-            if (existing) {
-                if (existing.qty < product.stock) existing.qty++;
-                else { showToast('Stok adedine ulaştınız!'); return; }
-            } else {
-                if (product.stock <= 0) { showToast('Bu ürün stokta kalmadı.'); return; }
-                cart.push({ product, qty: 1 });
-            }
-            updateCartUI();
-            showToast('Ürün sepete eklendi.');
+        window.openProductDetailModal = function(prodId) {
+            activeDetailProductId = prodId;
+            activeDetailPhotoIdx = 0;
+            const prod = (db.products || []).find(p => p.id === prodId);
+            const variants = prod && Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
+            activeDetailVariant = variants[0];
+            renderProductDetailModal();
+            if ($('productDetailModal')) $('productDetailModal').classList.remove('hidden');
         };
 
-        window.changeCartQty = function(productId, delta) {
-            const idx = cart.findIndex(item => item.product.id === productId);
+        window.changeDetailPhoto = function(deltaOrIdx, isDirect = false) {
+            const prod = (db.products || []).find(p => p.id === activeDetailProductId);
+            if (!prod) return;
+            const imgs = getProductImages(prod);
+            if (!imgs.length) return;
+            if (isDirect) activeDetailPhotoIdx = Math.max(0, Math.min(imgs.length - 1, deltaOrIdx));
+            else activeDetailPhotoIdx = (activeDetailPhotoIdx + deltaOrIdx + imgs.length) % imgs.length;
+            renderProductDetailModal();
+        };
+
+        window.selectDetailVariant = function(v) {
+            activeDetailVariant = v;
+            renderProductDetailModal();
+        };
+
+        function renderProductDetailModal() {
+            const prod = (db.products || []).find(p => p.id === activeDetailProductId);
+            const body = $('productDetailBody');
+            if (!prod || !body) return;
+            if ($('detailModalTitle')) $('detailModalTitle').textContent = prod.name;
+            const imgs = getProductImages(prod);
+            if (activeDetailPhotoIdx >= imgs.length) activeDetailPhotoIdx = 0;
+            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
+            if (!variants.includes(activeDetailVariant)) activeDetailVariant = variants[0];
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            const effPrice = getEffectivePrice(prod);
+            const effOldPrice = getEffectiveOldPrice(prod);
+
+            body.innerHTML = `
+                <div class="detail-carousel-wrap">
+                    <img src="${imgs[activeDetailPhotoIdx] || ''}" alt="${prod.name}" class="detail-main-img">
+                    ${imgs.length > 1 ? `
+                        <button type="button" class="detail-nav-btn prev" onclick="changeDetailPhoto(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="detail-nav-btn next" onclick="changeDetailPhoto(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                        <div class="detail-thumbs-strip">
+                            ${imgs.map((src, i) => `<img src="${src}" class="detail-thumb-img ${i === activeDetailPhotoIdx ? 'active' : ''}" onclick="changeDetailPhoto(${i}, true)">`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                <div style="margin-top:14px;">
+                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName} • ${prod.category}</span>
+                    <p style="margin-top:8px; color:#334155;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
+                    <div class="price-block" style="margin-top:10px;">
+                        ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
+                        <span class="current-price">${formatMoney(effPrice)}</span>
+                        <span class="shipping-info-text">Min. Sipariş: <strong>${minQty} adet</strong> • Stok: <strong>${prod.stock} adet</strong></span>
+                    </div>
+                    <div class="form-group" style="margin-top:10px;">
+                        <label>Seçenek / Beden / Renk Seçin *</label>
+                        <div class="variant-chips-wrap">
+                            ${variants.map(v => `<button type="button" class="variant-chip-btn ${v === activeDetailVariant ? 'active' : ''}" onclick="selectDetailVariant('${v.replace(/'/g, "\\'")}')">${v}</button>`).join('')}
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary full-btn" onclick="addToCart('${prod.id}', ${minQty}, '${activeDetailVariant.replace(/'/g, "\\'")}'); if($('productDetailModal')) $('productDetailModal').classList.add('hidden');">
+                        <i class="fa-solid fa-cart-plus"></i> ${activeDetailVariant} Seçeneği ile Sepete Ekle (${minQty} Ad.)
+                    </button>
+                </div>
+            `;
+        }
+
+        window.addToCart = function(productId, customQty = null, chosenVariant = 'Standart') {
+            const product = (db.products || []).find(p => p.id === productId);
+            if (!product) return;
+            const minQty = Math.max(1, Number(product.minOrderQty || 1));
+            const addCount = customQty ? Math.max(minQty, Number(customQty)) : minQty;
+            const cartKey = `${productId}__${chosenVariant}`;
+            const existing = cart.find(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`) === cartKey);
+
+            if (existing) {
+                if (existing.qty + addCount <= product.stock) existing.qty += addCount;
+                else { showToast(`Stok adedine ulaştınız! (Max: ${product.stock})`); return; }
+            } else {
+                if (product.stock < addCount) { showToast(`Yeterli stok yok (Min. sipariş: ${minQty}, Stok: ${product.stock}).`); return; }
+                cart.push({ cartKey, product, selectedVariant: chosenVariant, qty: addCount });
+            }
+            persistUiState();
+            updateCartUI();
+            showToast(`${product.name} (${chosenVariant}) sepete eklendi.`);
+        };
+
+        window.changeCartQty = function(cartKey, delta) {
+            const idx = cart.findIndex(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`) === cartKey);
             if (idx === -1) return;
-            const newQty = cart[idx].qty + delta;
+            const minQty = Math.max(1, Number(cart[idx].product.minOrderQty || 1));
+            const step = delta > 0 ? minQty : -minQty;
+            const newQty = cart[idx].qty + step;
             if (newQty <= 0) cart.splice(idx, 1);
+            else if (newQty < minQty) { showToast(`Bu ürün için minimum sipariş adedi ${minQty}'dir.`); }
             else if (newQty <= cart[idx].product.stock) cart[idx].qty = newQty;
             else showToast('Stok sınırı aşılamaz.');
+            persistUiState();
             updateCartUI();
         };
 
         function calculateCartTotals() {
             let subtotal = 0, shippingTotal = 0, totalCount = 0;
             cart.forEach(item => {
-                subtotal += item.product.price * item.qty;
+                subtotal += getEffectivePrice(item.product) * item.qty;
                 shippingTotal += Number(item.product.shipping);
                 totalCount += item.qty;
             });
@@ -1120,20 +1569,25 @@
             if (container) {
                 container.innerHTML = cart.length === 0
                     ? `<p style="text-align:center; color:#64748b; margin-top:40px;">Sepetiniz boş.</p>`
-                    : cart.map(item => `
-                        <div class="cart-item">
-                            <img src="${item.product.image}" alt="${item.product.name}">
-                            <div class="cart-item-info">
-                                <div class="cart-item-title">${item.product.name}</div>
-                                <div class="cart-item-price">${formatMoney(item.product.price * item.qty)}</div>
-                                <div class="qty-controls">
-                                    <button class="qty-btn" type="button" onclick="changeCartQty('${item.product.id}', -1)">-</button>
-                                    <span><strong>${item.qty}</strong></span>
-                                    <button class="qty-btn" type="button" onclick="changeCartQty('${item.product.id}', 1)">+</button>
+                    : cart.map(item => {
+                        const key = item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`;
+                        const imgs = getProductImages(item.product);
+                        const unitPrice = getEffectivePrice(item.product);
+                        return `
+                            <div class="cart-item">
+                                <img src="${imgs[0] || ''}" alt="${item.product.name}">
+                                <div class="cart-item-info">
+                                    <div class="cart-item-title">${item.product.name} <small>(${item.selectedVariant || 'Standart'})</small></div>
+                                    <div class="cart-item-price">${formatMoney(unitPrice * item.qty)}</div>
+                                    <div class="qty-controls">
+                                        <button class="qty-btn" type="button" onclick="changeCartQty('${key.replace(/'/g, "\\'")}', -1)">-</button>
+                                        <span><strong>${item.qty}</strong></span>
+                                        <button class="qty-btn" type="button" onclick="changeCartQty('${key.replace(/'/g, "\\'")}', 1)">+</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
             }
             if ($('cartSubtotal')) $('cartSubtotal').textContent = formatMoney(subtotal);
             if ($('cartShippingTotal')) $('cartShippingTotal').textContent = formatMoney(shippingTotal);
@@ -1171,8 +1625,11 @@
         function resetSellerProductForm() {
             if ($('sellerProductForm')) $('sellerProductForm').reset();
             if ($('editProductId')) $('editProductId').value = '';
-            uploadedImageUrl = '';
-            if ($('imagePreviewContainer')) $('imagePreviewContainer').classList.add('hidden');
+            if ($('prodMinQty')) $('prodMinQty').value = '1';
+            if ($('customVariantExtra')) $('customVariantExtra').value = '';
+            uploadedImages = [];
+            renderSellerImagePreviews();
+            renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
             if ($('productFormHeading')) $('productFormHeading').innerHTML = `<i class="fa-solid fa-plus-circle"></i> Yeni Ürün Ekle`;
             if ($('saveProductBtn')) $('saveProductBtn').innerHTML = `<i class="fa-solid fa-save"></i> Ürünü Kaydet ve Yayınla`;
             if ($('cancelEditProductBtn')) $('cancelEditProductBtn').classList.add('hidden');
@@ -1184,14 +1641,16 @@
             $('editProductId').value = prod.id;
             $('prodName').value = prod.name;
             $('prodCategory').value = prod.category;
-            $('prodOldPrice').value = prod.oldPrice;
-            $('prodPrice').value = prod.price;
+            $('prodOldPrice').value = prod.oldPrice || '';
+            $('prodPrice').value = (prod.price && Number(prod.price) !== Number(prod.oldPrice)) ? prod.price : '';
+            if ($('prodMinQty')) $('prodMinQty').value = prod.minOrderQty || 1;
             $('prodShipping').value = prod.shipping;
             $('prodStock').value = prod.stock;
             $('prodDesc').value = prod.desc || '';
-            uploadedImageUrl = prod.image;
-            if ($('prodImagePreview')) $('prodImagePreview').src = prod.image;
-            if ($('imagePreviewContainer')) $('imagePreviewContainer').classList.remove('hidden');
+            if ($('customVariantExtra')) $('customVariantExtra').value = '';
+            uploadedImages = [...getProductImages(prod)];
+            renderSellerImagePreviews();
+            renderCatalogVariantOptions(prod.category, prod.variants || ['Standart']);
             if ($('productFormHeading')) $('productFormHeading').innerHTML = `<i class="fa-solid fa-pen"></i> Ürünü Düzenle: ${prod.name}`;
             if ($('saveProductBtn')) $('saveProductBtn').innerHTML = `<i class="fa-solid fa-check"></i> Değişiklikleri Kaydet`;
             if ($('cancelEditProductBtn')) $('cancelEditProductBtn').classList.remove('hidden');
@@ -1252,20 +1711,25 @@
             if ($('sellerProductsTableBody')) {
                 $('sellerProductsTableBody').innerHTML = myProducts.length === 0
                     ? `<tr><td colspan="7" style="text-align:center;">Henüz ürün eklenmemiş.</td></tr>`
-                    : myProducts.map(p => `
-                        <tr>
-                            <td><img src="${p.image}" class="table-thumb"></td>
-                            <td><strong>${p.name}</strong><br><small>${p.category}</small></td>
-                            <td>${formatMoney(p.oldPrice)}</td>
-                            <td style="color:#f27a1a; font-weight:700;">${formatMoney(p.price)}</td>
-                            <td>${Number(p.shipping) === 0 ? 'Ücretsiz' : formatMoney(p.shipping)}</td>
-                            <td>${p.stock} adet</td>
-                            <td>
-                                <button class="btn-sm btn-outline" type="button" onclick="editSellerProduct('${p.id}')"><i class="fa-solid fa-pen"></i> Düzenle</button>
-                                <button class="btn-sm btn-danger" type="button" onclick="deleteSellerProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `).join('');
+                    : myProducts.map(p => {
+                        const imgs = getProductImages(p);
+                        const effPrice = getEffectivePrice(p);
+                        const effOld = getEffectiveOldPrice(p);
+                        return `
+                            <tr>
+                                <td><img src="${imgs[0] || ''}" class="table-thumb"></td>
+                                <td><strong>${p.name}</strong><br><small>${p.category} • ${(p.variants || ['Standart']).join(', ')}</small></td>
+                                <td>${effOld > 0 ? formatMoney(effOld) : formatMoney(effPrice)}</td>
+                                <td style="color:#f27a1a; font-weight:700;">${formatMoney(effPrice)}</td>
+                                <td>${Math.max(1, Number(p.minOrderQty || 1))} adet</td>
+                                <td>${p.stock} adet</td>
+                                <td>
+                                    <button class="btn-sm btn-outline" type="button" onclick="editSellerProduct('${p.id}')"><i class="fa-solid fa-pen"></i> Düzenle</button>
+                                    <button class="btn-sm btn-danger" type="button" onclick="deleteSellerProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
             }
 
             if ($('sellerIncomingOrdersBody')) {
@@ -1438,48 +1902,45 @@
             renderAdminDashboard();
         };
 
+        // Kayıtlı filtre ve sıralama değerlerini geri yükle
+        if ($('searchInput')) $('searchInput').value = currentSearch;
+        if ($('freeShippingFilter')) $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
+        if ($('sortSelect')) $('sortSelect').value = savedFilters.sort || 'default';
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.category === currentCategory));
+        renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
+
+        if ($('prodCategory')) {
+            $('prodCategory').addEventListener('change', (e) => {
+                renderCatalogVariantOptions(e.target.value);
+            });
+        }
+
         // Olay Bağlantıları
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentCategory = btn.dataset.category;
+                persistUiState();
                 renderProducts();
             });
         });
 
-        if ($('searchInput')) $('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value; renderProducts(); });
-        if ($('searchBtn')) $('searchBtn').addEventListener('click', () => { currentSearch = $('searchInput') ? $('searchInput').value : ''; renderProducts(); });
-        if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', renderProducts);
-        if ($('sortSelect')) $('sortSelect').addEventListener('change', renderProducts);
+        if ($('searchInput')) $('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value; persistUiState(); renderProducts(); });
+        if ($('searchBtn')) $('searchBtn').addEventListener('click', () => { currentSearch = $('searchInput') ? $('searchInput').value : ''; persistUiState(); renderProducts(); });
+        if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', () => { persistUiState(); renderProducts(); });
+        if ($('sortSelect')) $('sortSelect').addEventListener('change', () => { persistUiState(); renderProducts(); });
 
         if ($('openTrackOrderBtn')) {
             $('openTrackOrderBtn').addEventListener('click', () => {
                 if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
+                try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
             });
         }
 
         if ($('trackSearchSubmitBtn')) {
             $('trackSearchSubmitBtn').addEventListener('click', () => {
-                const q = ($('trackCodeInput') ? $('trackCodeInput').value : '').trim().toLowerCase();
-                const resBox = $('trackOrderResult');
-                if (!resBox) return;
-                if (!q) {
-                    resBox.classList.remove('hidden');
-                    resBox.innerHTML = 'Lütfen takip kodunu veya telefon numarasını girin.';
-                    return;
-                }
-                const found = (db.orders || []).find(o =>
-                    (o.trackingCode && o.trackingCode.toLowerCase() === q) ||
-                    (o.id && o.id.toLowerCase() === q) ||
-                    (o.customerPhone && o.customerPhone.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')))
-                );
-                resBox.classList.remove('hidden');
-                if (!found) {
-                    resBox.innerHTML = 'Bu kod veya telefon numarasına ait sipariş bulunamadı.';
-                } else {
-                    resBox.innerHTML = renderOrderTrackingCard(found);
-                }
+                runOrderTrackingSearch($('trackCodeInput') ? $('trackCodeInput').value : '');
             });
         }
 
@@ -1502,6 +1963,7 @@
                     appliedCoupon = found;
                     if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı.`; }
                 }
+                persistUiState();
                 updateCartUI();
             });
         }
@@ -1557,8 +2019,8 @@
                 const createdCodes = [];
                 Object.keys(sellerGroups).forEach(sId => {
                     const groupItems = sellerGroups[sId];
-                    const groupTotal = groupItems.reduce((sum, i) => sum + (i.product.price * i.qty) + Number(i.product.shipping), 0);
-                    const itemsText = groupItems.map(i => `${i.product.name} (x${i.qty})`).join(', ');
+                    const groupTotal = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
+                    const itemsText = groupItems.map(i => `${i.product.name} [${i.selectedVariant || 'Standart'}] (x${i.qty})`).join(', ');
                     const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
                     createdCodes.push(trackingCode);
 
@@ -1580,14 +2042,16 @@
 
                 await saveDB();
                 cart = []; appliedCoupon = null;
+                persistUiState();
                 updateCartUI(); renderProducts();
                 if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
                 $('checkoutForm').reset();
 
-                if ($('trackOrderModal') && $('trackCodeInput') && $('trackSearchSubmitBtn') && createdCodes[0]) {
+                if ($('trackOrderModal') && $('trackCodeInput') && createdCodes[0]) {
                     $('trackCodeInput').value = createdCodes[0];
                     $('trackOrderModal').classList.remove('hidden');
-                    $('trackSearchSubmitBtn').click();
+                    try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
+                    runOrderTrackingSearch(createdCodes[0]);
                 }
                 showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
             });
@@ -1631,6 +2095,7 @@
                 if (!seller) { showToast('Kullanıcı adı veya şifre hatalı!'); return; }
                 if (!seller.active) { showToast('Satıcı hesabınız şu anda pasif durumda.'); return; }
                 currentSeller = seller;
+                try { sessionStorage.setItem(SESSION_KEYS.sellerId, seller.id); } catch (_) {}
                 if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
                 $('sellerLoginForm').reset();
                 switchMainView('sellerDashboardView');
@@ -1641,17 +2106,20 @@
 
         if ($('prodImageFile')) {
             $('prodImageFile').addEventListener('change', async function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                showToast('Görsel hazırlanıyor...');
+                const files = Array.from(e.target.files || []);
+                if (!files.length) return;
+                showToast(`${files.length} görsel hazırlanıyor...`);
                 try {
-                    const base64Img = await compressImageToBase64(file, 700, 0.72);
-                    uploadedImageUrl = base64Img.length > 750000 ? await compressImageToBase64(file, 500, 0.6) : base64Img;
-                    if ($('prodImagePreview')) $('prodImagePreview').src = uploadedImageUrl;
-                    if ($('imagePreviewContainer')) $('imagePreviewContainer').classList.remove('hidden');
-                    showToast('Görsel hazır, ürünü kaydedince kalıcı yayınlanacak.');
+                    for (const file of files) {
+                        if (uploadedImages.length >= 8) break;
+                        const base64Img = await compressImageToBase64(file, 620, 0.68);
+                        const finalImg = base64Img.length > 420000 ? await compressImageToBase64(file, 450, 0.55) : base64Img;
+                        if (finalImg) uploadedImages.push(finalImg);
+                    }
+                    renderSellerImagePreviews();
+                    showToast(`${uploadedImages.length} görsel hazır, ürünü kaydedince yayınlanacak.`);
                 } catch (err) {
-                    showToast('Görsel işlenemedi, farklı bir resim deneyin.');
+                    showToast('Görseller işlenemedi, farklı bir resim deneyin.');
                 }
             });
         }
@@ -1664,24 +2132,36 @@
                 const name = $('prodName').value.trim();
                 const category = $('prodCategory').value;
                 const oldPrice = parseFloat($('prodOldPrice').value);
-                const price = parseFloat($('prodPrice').value);
+                const rawDiscountPrice = $('prodPrice').value.trim();
+                const price = rawDiscountPrice ? parseFloat(rawDiscountPrice) : oldPrice;
+                const minOrderQty = Math.max(1, parseInt($('prodMinQty') ? $('prodMinQty').value : '1', 10) || 1);
                 const shipping = parseFloat($('prodShipping').value);
                 const stock = parseInt($('prodStock').value, 10);
                 const desc = $('prodDesc').value.trim();
-                if (!editId && !uploadedImageUrl) { showToast('Lütfen ürün için bir görsel seçin.'); return; }
+
+                const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
+                const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
+                const variants = ['Standart', ...new Set([...selectedFormVariants.filter(x => x !== 'Standart'), ...extraItems])];
+
+                if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
 
                 if (editId) {
                     const prod = db.products.find(p => p.id === editId);
                     if (prod) {
                         prod.name = name; prod.category = category; prod.oldPrice = oldPrice;
-                        prod.price = price; prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
-                        if (uploadedImageUrl) prod.image = uploadedImageUrl;
+                        prod.price = price; prod.minOrderQty = minOrderQty; prod.variants = variants;
+                        prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
+                        if (uploadedImages.length > 0) {
+                            prod.images = [...uploadedImages];
+                            prod.image = uploadedImages[0];
+                        }
                     }
                     showToast('Ürün güncellendi.');
                 } else {
                     db.products.unshift({
                         id: 'prod_' + Date.now(), sellerId: currentSeller.id, sellerName: currentSeller.companyName,
-                        name, category, oldPrice, price, shipping, stock, image: uploadedImageUrl, desc
+                        name, category, oldPrice, price, minOrderQty, variants, shipping, stock,
+                        image: uploadedImages[0], images: [...uploadedImages], desc
                     });
                     showToast('Yeni ürün kalıcı olarak yayına alındı.');
                 }
@@ -1718,6 +2198,7 @@
                 const enteredPass = ($('superAdminPassInput') ? $('superAdminPassInput').value : '').trim();
                 const expectedPass = (db.adminPassword || 'trendtan2026').trim();
                 if (enteredPass === expectedPass || enteredPass === 'trendtan2026') {
+                    try { sessionStorage.setItem(SESSION_KEYS.adminAuth, '1'); } catch (_) {}
                     if ($('adminLoginModal')) $('adminLoginModal').classList.add('hidden');
                     $('adminLoginForm').reset();
                     switchMainView('superAdminDashboardView');
@@ -1773,8 +2254,21 @@
 
         if ($('backToStoreFromSeller')) $('backToStoreFromSeller').addEventListener('click', () => switchMainView('customerStoreView'));
         if ($('backToStoreFromAdmin')) $('backToStoreFromAdmin').addEventListener('click', () => switchMainView('customerStoreView'));
-        if ($('sellerLogoutBtn')) $('sellerLogoutBtn').addEventListener('click', () => { currentSeller = null; switchMainView('customerStoreView'); showToast('Satıcı çıkışı yapıldı.'); });
-        if ($('adminLogoutBtn')) $('adminLogoutBtn').addEventListener('click', () => { switchMainView('customerStoreView'); showToast('Admin çıkışı yapıldı.'); });
+        if ($('sellerLogoutBtn')) {
+            $('sellerLogoutBtn').addEventListener('click', () => {
+                currentSeller = null;
+                try { sessionStorage.removeItem(SESSION_KEYS.sellerId); } catch (_) {}
+                switchMainView('customerStoreView');
+                showToast('Satıcı çıkışı yapıldı.');
+            });
+        }
+        if ($('adminLogoutBtn')) {
+            $('adminLogoutBtn').addEventListener('click', () => {
+                try { sessionStorage.removeItem(SESSION_KEYS.adminAuth); } catch (_) {}
+                switchMainView('customerStoreView');
+                showToast('Admin çıkışı yapıldı.');
+            });
+        }
 
         document.querySelectorAll('.dash-tabs').forEach(tabBar => {
             tabBar.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1786,6 +2280,9 @@
                     btn.classList.add('active');
                     const targetContent = $(btn.dataset.tab);
                     if (targetContent) targetContent.classList.add('active');
+                    const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
+                    savedTabs[parent.id] = btn.dataset.tab;
+                    saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
                 });
             });
         });
@@ -1794,9 +2291,13 @@
             btn.addEventListener('click', () => {
                 const modal = $(btn.dataset.close);
                 if (modal) modal.classList.add('hidden');
+                if (btn.dataset.close === 'trackOrderModal') {
+                    try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
+                }
             });
         });
 
+        applySavedDashTabs();
         refreshAllViews();
 
         (async () => {
@@ -1813,13 +2314,28 @@
                 } else {
                     await setDoc(storeDocRef, db);
                 }
+                restoreSessionViewIfPossible();
                 refreshAllViews();
+
+                const savedTrackQuery = sessionStorage.getItem(SESSION_KEYS.trackQuery);
+                const savedTrackOpen = sessionStorage.getItem(SESSION_KEYS.trackOpen) === '1';
+                if (savedTrackOpen && $('trackOrderModal')) {
+                    $('trackOrderModal').classList.remove('hidden');
+                    if (savedTrackQuery && $('trackCodeInput')) {
+                        $('trackCodeInput').value = savedTrackQuery;
+                        runOrderTrackingSearch(savedTrackQuery);
+                    }
+                }
 
                 onSnapshot(storeDocRef, (docSnap) => {
                     if (isSaving || !docSnap.exists()) return;
                     const remoteData = docSnap.data() || {};
                     db = { ...JSON.parse(JSON.stringify(DEFAULT_DB)), ...remoteData, adminPassword: remoteData.adminPassword || 'trendtan2026' };
                     refreshAllViews();
+                    const activeTrackQ = $('trackCodeInput') ? $('trackCodeInput').value.trim() : '';
+                    if (activeTrackQ && $('trackOrderResult') && !$('trackOrderResult').classList.contains('hidden')) {
+                        runOrderTrackingSearch(activeTrackQ);
+                    }
                 });
             } catch (err) {
                 console.error(err);
