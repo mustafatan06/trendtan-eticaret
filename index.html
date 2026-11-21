@@ -172,7 +172,7 @@
             background: #f8fafc;
         }
 
-        /* Site İçi Canlı Destek Widget (WhatsApp Köprülü) */
+        /* Site İçi Canlı Destek Widget (Tam Site İçi Canlı Hat) */
         .live-support-fab {
             position: fixed;
             right: 20px;
@@ -192,14 +192,14 @@
             cursor: pointer;
         }
         .live-support-fab i {
-            color: #22c55e;
+            color: #f27a1a;
             font-size: 16px;
         }
         .live-support-window {
             position: fixed;
             right: 20px;
             bottom: 76px;
-            width: 350px;
+            width: 355px;
             max-width: calc(100vw - 24px);
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -247,9 +247,20 @@
             font-size: 11px;
             cursor: pointer;
         }
+        .support-privacy-strip {
+            padding: 6px 12px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 11px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
         .support-messages {
             padding: 12px;
-            height: 270px;
+            height: 265px;
             overflow-y: auto;
             background: #f8fafc;
             display: flex;
@@ -270,6 +281,12 @@
             color: #0f172a;
             border: 1px solid #e2e8f0;
         }
+        .support-msg.agent {
+            align-self: flex-start;
+            background: #eff6ff;
+            color: #1e3a8a;
+            border: 1px solid #bfdbfe;
+        }
         .support-msg.user {
             align-self: flex-end;
             background: #f27a1a;
@@ -284,28 +301,11 @@
             font-weight: 600;
             text-align: center;
         }
-        .support-wa-bridge {
-            padding: 8px 12px;
-            background: #f0fdf4;
-            border-top: 1px solid #bbf7d0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 11.5px;
-            color: #166534;
-        }
-        .support-wa-send-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background: #16a34a;
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 700;
-            white-space: nowrap;
+        .support-msg-time {
+            display: block;
+            font-size: 10px;
+            opacity: 0.72;
+            margin-top: 3px;
         }
         .support-input-row {
             display: flex;
@@ -329,6 +329,90 @@
             color: #ffffff;
             font-weight: 700;
             cursor: pointer;
+        }
+
+        /* Admin Canlı Destek Konsolu */
+        .admin-chat-layout {
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            gap: 14px;
+            min-height: 410px;
+        }
+        .admin-chat-threads {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            overflow-y: auto;
+            max-height: 440px;
+        }
+        .admin-thread-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .admin-thread-item:hover {
+            background: #f1f5f9;
+        }
+        .admin-thread-item.active {
+            background: #fff7ed;
+            border-left: 3px solid #f27a1a;
+        }
+        .admin-unread-pill {
+            display: inline-block;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 999px;
+            margin-left: 6px;
+        }
+        .admin-chat-room {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .admin-chat-room-head {
+            padding: 10px 14px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .admin-chat-stream {
+            padding: 12px;
+            height: 290px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+        }
+        .admin-chat-reply-form {
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px;
+            border-top: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+        .admin-chat-reply-form input {
+            flex: 1;
+            padding: 9px 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        @media (max-width: 768px) {
+            .admin-chat-layout {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Çoklu Görsel & Varyant Alanları */
@@ -1089,6 +1173,7 @@
                     <h2>Platform Genel Yönetimi</h2>
                 </div>
                 <div class="dash-header-actions">
+                    <button class="btn-outline" id="soundToggleBtn" type="button" title="Sesli Bildirim Durumu"><i class="fa-solid fa-volume-high"></i> Ses: Açık</button>
                     <button class="btn-outline" id="backToStoreFromAdmin" type="button"><i class="fa-solid fa-shop"></i> Mağazaya Dön</button>
                     <button class="btn-danger" id="adminLogoutBtn" type="button"><i class="fa-solid fa-lock"></i> Admin Çıkışı</button>
                 </div>
@@ -1129,6 +1214,9 @@
             <!-- Admin Sekmeleri -->
             <div class="dash-tabs">
                 <button class="tab-btn active" data-tab="admin-all-orders" type="button">Tüm Platform Siparişleri</button>
+                <button class="tab-btn" data-tab="admin-live-support" type="button" id="adminLiveSupportTabBtn">
+                    Canlı Destek <span class="admin-unread-pill hidden" id="adminChatUnreadBadge">0</span>
+                </button>
                 <button class="tab-btn" data-tab="admin-applications" type="button">Satıcı Başvuruları & Onay</button>
                 <button class="tab-btn" data-tab="admin-sellers" type="button">Tüm Satıcılar</button>
                 <button class="tab-btn" data-tab="admin-customers" type="button">Müşteri Kayıtları & Siparişler</button>
@@ -1155,6 +1243,35 @@
                             </thead>
                             <tbody id="adminAllOrdersBody"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME: CANLI DESTEK MERKEZİ -->
+            <div class="tab-content" id="admin-live-support">
+                <div class="panel-card">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                        <div>
+                            <h3 style="margin:0;"><i class="fa-solid fa-headset"></i> Canlı Destek Konsolu (Sesli Bildirimli)</h3>
+                            <p class="helper-text" style="margin:4px 0 0 0;">Yeni müşteri mesajı geldiğinde sesli uyarı çalar. Gizlilik gereği konuşmaları istediğiniz zaman sohbet bazında veya tümünü silebilirsiniz.</p>
+                        </div>
+                        <button type="button" class="btn-sm btn-danger" id="adminClearAllChatsBtn">
+                            <i class="fa-solid fa-trash"></i> Tüm Sohbet Kayıtlarını Sil
+                        </button>
+                    </div>
+
+                    <div class="admin-chat-layout">
+                        <div class="admin-chat-threads" id="adminChatThreadsList"></div>
+                        <div class="admin-chat-room">
+                            <div class="admin-chat-room-head" id="adminChatRoomHeader">
+                                <span>Bir müşteri sohbeti seçin</span>
+                            </div>
+                            <div class="admin-chat-stream" id="adminChatStreamBox"></div>
+                            <form class="admin-chat-reply-form" id="adminChatReplyForm">
+                                <input type="text" id="adminChatReplyInput" placeholder="Müşteriye canlı yanıt yazın..." autocomplete="off">
+                                <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Yanıtla</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1567,7 +1684,7 @@
         </div>
     </div>
 
-    <!-- SİTE İÇİ CANLI DESTEK PENCERESİ (WHATSAPP 0501 090 17 22 KÖPRÜLÜ) -->
+    <!-- SİTE İÇİ CANLI DESTEK PENCERESİ -->
     <button type="button" class="live-support-fab" id="openLiveSupportBtn">
         <i class="fa-solid fa-headset"></i>
         <span>Canlı Destek</span>
@@ -1580,19 +1697,17 @@
                 <span>TRENDTAN Canlı Destek</span>
             </div>
             <div class="support-win-actions">
-                <button type="button" class="support-mini-btn" id="resetLiveSupportBtn" title="Sohbeti Sıfırla">Yeni</button>
+                <button type="button" class="support-mini-btn" id="clearMySupportChatBtn" title="Gizlilik: Sohbet Kaydını Sil">Kaydı Sil</button>
                 <button type="button" class="support-mini-btn" id="closeLiveSupportBtn" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
-        <div class="support-messages" id="supportMessagesBox"></div>
-        <div class="support-wa-bridge hidden" id="supportWaBridgeBar">
-            <span id="supportWaStatusText">Canlı desteğe bağlandınız</span>
-            <a id="supportWaDirectLink" href="https://wa.me/905010901722" target="_blank" rel="noopener noreferrer" class="support-wa-send-link">
-                <i class="fa-brands fa-whatsapp"></i> Gönder
-            </a>
+        <div class="support-privacy-strip">
+            <span><i class="fa-solid fa-lock"></i> Destek gizliliği kapsamında kayıtlıdır</span>
+            <span id="supportSessionBadge">AI Asistan</span>
         </div>
+        <div class="support-messages" id="supportMessagesBox"></div>
         <form class="support-input-row" id="liveSupportForm">
-            <input type="text" id="liveSupportInput" placeholder="Mesajınızı yazın..." autocomplete="off">
+            <input type="text" id="liveSupportInput" placeholder="İsim Soyisim yazın..." autocomplete="off">
             <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
         </form>
     </div>
@@ -1618,6 +1733,38 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const $ = (id) => document.getElementById(id);
+
+        const formatMoney = (amount) => {
+            const num = Number(amount || 0);
+            return num.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
+        };
+
+        window.copyTextValue = function(text, message = 'Kopyalandı') {
+            if (!text) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast(message)).catch(() => fallbackCopy(text, message));
+            } else {
+                fallbackCopy(text, message);
+            }
+        };
+
+        function fallbackCopy(text, message) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(message);
+            } catch (_) {
+                showToast(text);
+            }
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyAcpnR75lrd5j2CP9Vf5Fr6u60uhGfcNWs",
@@ -1647,17 +1794,17 @@
             gizlilik: {
                 title: 'Gizlilik Politikası',
                 html: `
-                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önemiyoruz. Bu politika; sipariş, satıcı başvurusu ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
+                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önemiyoruz. Bu politika; sipariş, satıcı başvurusu, canlı destek ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
                     <h4>1. Toplanan Veriler</h4>
                     <ul>
                         <li>Sipariş oluşturma sırasında paylaşılan ad-soyad, telefon numarası, teslimat adresi ve sipariş/takip bilgileri,</li>
-                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri,</li>
-                        <li>Site güvenliği ve performansını artırmaya yönelik teknik erişim kayıtları.</li>
+                        <li>Canlı destek hattında paylaşılan ad-soyad, adres ve destek mesajları (yalnızca destek talebinin yanıtlanması amacıyla kaydedilir ve istenildiğinde silinebilir),</li>
+                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri.</li>
                     </ul>
                     <h4>2. Ödeme Kartı Güvenliği</h4>
                     <p>Kartlı ödemelerde kart bilgileri Sanal POS altyapısı (PayTR / iyzico vb.) üzerinden işlenir; platformumuzda kart numarası veya güvenlik kodu saklanmaz.</p>
                     <h4>3. Verilerin Paylaşımı</h4>
-                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, ödeme doğrulaması veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz.</p>
+                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, canlı destek yanıtı veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz.</p>
                 `
             },
             kvkk: {
@@ -1667,11 +1814,11 @@
                     <h4>1. Kişisel Verilerin İşlenme Amaçları</h4>
                     <ul>
                         <li>Alışveriş işlemlerinin yürütülmesi, siparişlerin oluşturulması, takip kodu üretilmesi ve teslimat süreçlerinin yönetilmesi,</li>
-                        <li>Satıcı üyelik ve başvuru süreçlerinin değerlendirilmesi,</li>
-                        <li>Muhasebe, faturalandırma, iade/iptal yönetimi ve mevzuattan doğan yükümlülüklerin yerine getirilmesi.</li>
+                        <li>Canlı destek taleplerinin alınması ve yanıtlanması,</li>
+                        <li>Satıcı üyelik ve başvuru süreçlerinin değerlendirilmesi ve yasal yükümlülüklerin yerine getirilmesi.</li>
                     </ul>
                     <h4>2. Hukuki Sebepler ve Aktarım</h4>
-                    <p>Verileriniz KVKK m.5 ve m.6 kapsamında sözleşmenin kurulması/ifası, hukuki yükümlülüklerin yerine getirilmesi ve meşru menfaat hukuki sebeplerine dayanarak işlenir; kargo, ödeme kuruluşu ve yetkili kamu kurumlarıyla ilgili mevzuat sınırları içinde paylaşılabilir.</p>
+                    <p>Verileriniz KVKK m.5 ve m.6 kapsamında sözleşmenin kurulması/ifası, hukuki yükümlülüklerin yerine getirilmesi ve meşru menfaat hukuki sebeplerine dayanarak işlenir; ilgili mevzuat sınırları içinde korunur.</p>
                     <h4>3. İlgili Kişinin Hakları (KVKK m.11)</h4>
                     <p>Veri sahipleri; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve kanuni şartlar oluştuğunda silinmesini/yok edilmesini talep etme haklarına sahiptir. Başvurularınızı <strong>[E-Posta]</strong> veya <strong>[Adres]</strong> üzerinden iletebilirsiniz.</p>
                 `
@@ -1712,9 +1859,9 @@
         window.openPolicyPopup = function(key) {
             const item = POLICY_TEXTS[key];
             if (!item) return;
-            const modal = document.getElementById('policyPopupModal');
-            const titleEl = document.getElementById('policyPopupTitle');
-            const bodyEl = document.getElementById('policyPopupContent');
+            const modal = $('policyPopupModal');
+            const titleEl = $('policyPopupTitle');
+            const bodyEl = $('policyPopupContent');
             if (titleEl) titleEl.textContent = item.title;
             if (bodyEl) bodyEl.innerHTML = item.html;
             if (modal) modal.classList.remove('hidden');
@@ -1750,7 +1897,10 @@
             trackQuery: 'trendtan_track_query',
             trackOpen: 'trendtan_track_open',
             dashTabs: 'trendtan_dash_tabs',
-            supportChat: 'trendtan_support_chat_v1'
+            supportChatId: 'trendtan_support_chat_id_v1',
+            supportOpen: 'trendtan_support_open_v1',
+            adminSelectedChatId: 'trendtan_admin_selected_chat_v1',
+            soundEnabled: 'trendtan_sound_enabled_v1'
         };
 
         let db = JSON.parse(JSON.stringify(DEFAULT_DB));
@@ -1759,6 +1909,7 @@
         let firestoreDb = null;
         let storeDocRef = null;
         let productsColRef = null;
+        let liveChatsColRef = null;
 
         function loadSessionJson(key, fallback) {
             try {
@@ -1788,99 +1939,253 @@
         let activeDetailPhotoIdx = 0;
         let activeDetailVariant = '';
 
-        const SUPPORT_WHATSAPP_NUMBER = '905010901722';
-        let supportState = loadSessionJson(SESSION_KEYS.supportChat, {
-            open: false,
-            step: 'ask_name', // 'ask_name' -> 'ask_address' -> 'connected'
-            customerName: '',
-            customerAddress: '',
-            customerMessages: [],
-            messages: [
-                { sender: 'ai', text: 'Merhaba, TRENDTAN Canlı Destek hattına hoş geldiniz! Size yardımcı olabilmem için önce İsim Soyisim bilginizi paylaşır mısınız?' }
-            ]
-        });
+        // Canlı Destek (Tam Site İçi + Firestore + Sesli Bildirim)
+        let soundEnabled = loadSessionJson(SESSION_KEYS.soundEnabled, true);
+        let audioCtx = null;
+        let activeChatId = sessionStorage.getItem(SESSION_KEYS.supportChatId) || ('chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7));
+        try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+        let isSupportWindowOpen = loadSessionJson(SESSION_KEYS.supportOpen, false);
+        let liveChats = [];
+        let selectedAdminChatId = sessionStorage.getItem(SESSION_KEYS.adminSelectedChatId) || '';
+        let previousCustomerMsgCountByChat = {};
+        let liveChatsSnapshotInitialized = false;
 
-        const $ = (id) => document.getElementById(id);
-        const formatMoney = (val) => Number(val || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
-
-        window.copyTextValue = function(text, toastMsg = 'Kopyalandı') {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).catch(() => {});
-            }
-            showToast(toastMsg);
-        };
-
-        function buildWhatsAppBridgeUrl() {
-            const lines = [
-                'TRENDTAN Canlı Destek Talebi',
-                `Ad Soyad: ${supportState.customerName || '-'}`,
-                `Adres: ${supportState.customerAddress || '-'}`,
-                'Mesajlar:',
-                ...(supportState.customerMessages || []).map(m => `- ${m}`)
-            ];
-            return `https://wa.me/${SUPPORT_WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
-        }
-
-        function renderLiveSupportWidget() {
-            const win = $('liveSupportWindow');
-            const box = $('supportMessagesBox');
-            const bridgeBar = $('supportWaBridgeBar');
-            const waLink = $('supportWaDirectLink');
-            const statusText = $('supportWaStatusText');
-            const inputEl = $('liveSupportInput');
-
-            if (win) win.classList.toggle('hidden', !supportState.open);
-            if (box) {
-                box.innerHTML = (supportState.messages || []).map(m => {
-                    const cls = m.sender === 'user' ? 'user' : (m.sender === 'connected' ? 'connected-banner' : 'ai');
-                    return `<div class="support-msg ${cls}">${m.text}</div>`;
-                }).join('');
-                box.scrollTop = box.scrollHeight;
-            }
-            if (bridgeBar) {
-                const isConnected = supportState.step === 'connected';
-                bridgeBar.classList.toggle('hidden', !isConnected);
-                if (isConnected) {
-                    const msgCount = (supportState.customerMessages || []).length;
-                    if (statusText) {
-                        statusText.textContent = msgCount > 0
-                            ? `Canlı desteğe bağlandınız (${msgCount} mesaj hazır)`
-                            : 'Canlı desteğe bağlandınız';
-                    }
-                    if (waLink) waLink.href = buildWhatsAppBridgeUrl();
-                }
-            }
-            if (inputEl) {
-                if (supportState.step === 'ask_name') inputEl.placeholder = 'İsim Soyisim yazın...';
-                else if (supportState.step === 'ask_address') inputEl.placeholder = 'Açık adresinizi yazın...';
-                else inputEl.placeholder = 'Canlı desteğe mesajınızı yazın...';
-            }
-            saveSessionJson(SESSION_KEYS.supportChat, supportState);
-        }
-
-        function openWhatsAppLiveBridge(autoTrigger = false) {
-            const url = buildWhatsAppBridgeUrl();
-            if ($('supportWaDirectLink')) $('supportWaDirectLink').href = url;
-            if (autoTrigger) {
-                const opened = window.open(url, '_blank', 'noopener,noreferrer');
-                if (!opened) {
-                    showToast('Mesajınız hazırlandı; WhatsApp penceresi için Gönder butonuna basın.');
-                }
-            }
-        }
-
-        function resetLiveSupportChat() {
-            supportState = {
-                open: true,
+        function createDefaultCustomerChatObj(id) {
+            const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            return {
+                id,
                 step: 'ask_name',
                 customerName: '',
                 customerAddress: '',
-                customerMessages: [],
+                updatedAt: Date.now(),
+                unreadForAdmin: 0,
                 messages: [
-                    { sender: 'ai', text: 'Merhaba, TRENDTAN Canlı Destek hattına hoş geldiniz! Size yardımcı olabilmem için önce İsim Soyisim bilginizi paylaşır mısınız?' }
+                    { sender: 'ai', text: 'Merhaba, TRENDTAN Canlı Destek hattına hoş geldiniz! Size yardımcı olabilmem için önce İsim Soyisim bilginizi paylaşır mısınız?', time: nowStr }
                 ]
             };
-            renderLiveSupportWidget();
+        }
+
+        function getCurrentCustomerChat() {
+            const found = liveChats.find(c => c.id === activeChatId);
+            return found || createDefaultCustomerChatObj(activeChatId);
+        }
+
+        function playNotificationTone() {
+            if (!soundEnabled) return;
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                if (!audioCtx) audioCtx = new Ctx();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume().catch(() => {});
+                }
+                const now = audioCtx.currentTime;
+                const notes = [659.25, 880];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                    gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.14, now + idx * 0.12 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.24);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.12);
+                    osc.stop(now + idx * 0.12 + 0.26);
+                });
+            } catch (_) {}
+        }
+
+        function isSuperAdminVisible() {
+            const el = $('superAdminDashboardView');
+            return Boolean(el && !el.classList.contains('hidden'));
+        }
+
+        async function persistLiveChatDoc(chatObj) {
+            const idx = liveChats.findIndex(c => c.id === chatObj.id);
+            if (idx >= 0) liveChats[idx] = chatObj;
+            else liveChats.unshift(chatObj);
+            liveChats.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+            if (firestoreReady && firestoreDb) {
+                isSaving = true;
+                try {
+                    await setDoc(doc(firestoreDb, "trendtan_live_chats", chatObj.id), chatObj);
+                } catch (err) {
+                    showToast('Canlı destek kaydı güncellenemedi: ' + (err.message || 'Bağlantı hatası'));
+                } finally {
+                    setTimeout(() => { isSaving = false; }, 250);
+                }
+            }
+        }
+
+        function renderCustomerSupportWidget() {
+            const win = $('liveSupportWindow');
+            const box = $('supportMessagesBox');
+            const badge = $('supportSessionBadge');
+            const inputEl = $('liveSupportInput');
+            const chat = getCurrentCustomerChat();
+
+            if (win) win.classList.toggle('hidden', !isSupportWindowOpen);
+            if (badge) {
+                if (chat.step === 'connected') {
+                    badge.textContent = `Canlı Hatta Bağlı (${chat.customerName})`;
+                    badge.style.color = '#166534';
+                    badge.style.fontWeight = '700';
+                } else {
+                    badge.textContent = 'AI Asistan';
+                    badge.style.color = '#475569';
+                    badge.style.fontWeight = '600';
+                }
+            }
+            if (box) {
+                box.innerHTML = (chat.messages || []).map(m => {
+                    const cls = m.sender === 'user' ? 'user' : (m.sender === 'connected' ? 'connected-banner' : (m.sender === 'agent' ? 'agent' : 'ai'));
+                    const prefix = m.sender === 'agent' ? '<strong>Canlı Destek:</strong> ' : '';
+                    return `
+                        <div class="support-msg ${cls}">
+                            ${prefix}${m.text}
+                            ${m.time ? `<span class="support-msg-time">${m.time}</span>` : ''}
+                        </div>
+                    `;
+                }).join('');
+                box.scrollTop = box.scrollHeight;
+            }
+            if (inputEl) {
+                if (chat.step === 'ask_name') inputEl.placeholder = 'İsim Soyisim yazın...';
+                else if (chat.step === 'ask_address') inputEl.placeholder = 'Açık adresinizi yazın...';
+                else inputEl.placeholder = 'Mesajınızı yazın...';
+            }
+        }
+
+        function renderAdminLiveSupportTab() {
+            const threadsEl = $('adminChatThreadsList');
+            const headEl = $('adminChatRoomHeader');
+            const streamEl = $('adminChatStreamBox');
+            const unreadBadge = $('adminChatUnreadBadge');
+
+            const totalUnread = liveChats.reduce((acc, c) => acc + Number(c.unreadForAdmin || 0), 0);
+            if (unreadBadge) {
+                unreadBadge.textContent = String(totalUnread);
+                unreadBadge.classList.toggle('hidden', totalUnread <= 0);
+            }
+
+            if (!threadsEl || !headEl || !streamEl) return;
+
+            if (!liveChats.length) {
+                threadsEl.innerHTML = `<div style="padding:16px; font-size:12.5px; color:#64748b; text-align:center;">Henüz canlı destek konuşması bulunmuyor.</div>`;
+                headEl.innerHTML = `<span>Aktif konuşma yok</span>`;
+                streamEl.innerHTML = `<div style="text-align:center; color:#64748b; margin-top:40px; font-size:13px;">Müşteriler canlı destek penceresinden yazmaya başladığında burada görünecektir.</div>`;
+                return;
+            }
+
+            if (!selectedAdminChatId || !liveChats.some(c => c.id === selectedAdminChatId)) {
+                selectedAdminChatId = liveChats[0].id;
+            }
+
+            threadsEl.innerHTML = liveChats.map(c => {
+                const isSel = c.id === selectedAdminChatId;
+                const title = c.customerName ? `${c.customerName}` : `Ziyaretçi (${c.id.slice(-5)})`;
+                const lastMsg = (c.messages && c.messages.length) ? c.messages[c.messages.length - 1].text : '';
+                const unread = Number(c.unreadForAdmin || 0);
+                return `
+                    <div class="admin-thread-item ${isSel ? 'active' : ''}" onclick="selectAdminSupportChat('${c.id}')">
+                        <div style="font-weight:700; font-size:13px; color:#0f172a;">
+                            ${title}
+                            ${unread > 0 ? `<span class="admin-unread-pill">${unread} yeni</span>` : ''}
+                        </div>
+                        <div style="font-size:11px; color:#64748b; margin-top:2px;">${c.step === 'connected' ? 'Canlı Hatta Bağlı' : 'Bilgi Alınıyor'}</div>
+                        <div style="font-size:11.5px; color:#334155; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${lastMsg}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const activeChat = liveChats.find(c => c.id === selectedAdminChatId) || liveChats[0];
+            headEl.innerHTML = `
+                <div>
+                    <strong>${activeChat.customerName || 'İsim Bekleniyor'}</strong>
+                    <div style="font-size:11.5px; color:#475569;">Adres: ${activeChat.customerAddress || 'Adres bekleniyor'}</div>
+                </div>
+                <button type="button" class="btn-sm btn-danger" onclick="deleteSingleSupportChat('${activeChat.id}')">
+                    <i class="fa-solid fa-trash"></i> Bu Sohbeti Sil
+                </button>
+            `;
+
+            streamEl.innerHTML = (activeChat.messages || []).map(m => {
+                const cls = m.sender === 'user' ? 'user' : (m.sender === 'connected' ? 'connected-banner' : (m.sender === 'agent' ? 'agent' : 'ai'));
+                const label = m.sender === 'user' ? (activeChat.customerName || 'Müşteri') : (m.sender === 'agent' ? 'Siz (Canlı Destek)' : 'AI Asistan');
+                return `
+                    <div class="support-msg ${cls}">
+                        <small style="display:block; font-weight:700; margin-bottom:2px; opacity:0.85;">${label}</small>
+                        ${m.text}
+                        ${m.time ? `<span class="support-msg-time">${m.time}</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+            streamEl.scrollTop = streamEl.scrollHeight;
+        }
+
+        window.selectAdminSupportChat = async function(chatId) {
+            selectedAdminChatId = chatId;
+            try { sessionStorage.setItem(SESSION_KEYS.adminSelectedChatId, chatId); } catch (_) {}
+            const target = liveChats.find(c => c.id === chatId);
+            if (target && Number(target.unreadForAdmin || 0) > 0) {
+                target.unreadForAdmin = 0;
+                await persistLiveChatDoc(target);
+            }
+            renderAdminLiveSupportTab();
+        };
+
+        window.deleteSingleSupportChat = async function(chatId) {
+            if (!confirm('Gizlilik gereği bu sohbet kaydını kalıcı olarak silmek istiyor musunuz?')) return;
+            liveChats = liveChats.filter(c => c.id !== chatId);
+            if (selectedAdminChatId === chatId) {
+                selectedAdminChatId = liveChats[0] ? liveChats[0].id : '';
+            }
+            if (firestoreReady && firestoreDb) {
+                isSaving = true;
+                try {
+                    await deleteDoc(doc(firestoreDb, "trendtan_live_chats", chatId));
+                } catch (_) {}
+                finally { setTimeout(() => { isSaving = false; }, 250); }
+            }
+            if (chatId === activeChatId) {
+                activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                renderCustomerSupportWidget();
+            }
+            renderAdminLiveSupportTab();
+            showToast('Sohbet kaydı silindi.');
+        };
+
+        async function handleLiveChatsSnapshot(colSnap) {
+            const list = [];
+            colSnap.forEach((d) => {
+                const item = d.data() || {};
+                list.push({ id: item.id || d.id, ...item });
+            });
+            list.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+            let hasNewCustomerMessage = false;
+            list.forEach(c => {
+                const userMsgCount = (c.messages || []).filter(m => m.sender === 'user').length;
+                const prevCount = previousCustomerMsgCountByChat[c.id];
+                if (liveChatsSnapshotInitialized && typeof prevCount === 'number' && userMsgCount > prevCount) {
+                    hasNewCustomerMessage = true;
+                }
+                previousCustomerMsgCountByChat[c.id] = userMsgCount;
+            });
+            liveChatsSnapshotInitialized = true;
+
+            liveChats = list;
+            renderCustomerSupportWidget();
+            renderAdminLiveSupportTab();
+
+            if (hasNewCustomerMessage && isSuperAdminVisible()) {
+                playNotificationTone();
+                showToast('Canlı Destek: Yeni müşteri mesajı geldi!');
+            }
         }
 
         function getSellerDisplayName(sellerId) {
@@ -2257,9 +2562,13 @@
             const onlyFreeShipping = $('freeShippingFilter') ? $('freeShippingFilter').checked : false;
             const sortBy = $('sortSelect') ? $('sortSelect').value : 'default';
 
+            const hasActiveSellers = Array.isArray(db.sellers) && db.sellers.some(s => s.active);
+
             let filtered = (db.products || []).filter(p => {
-                const seller = (db.sellers || []).find(s => s.id === p.sellerId);
-                if (!seller || !seller.active) return false;
+                if (hasActiveSellers) {
+                    const seller = db.sellers.find(s => s.id === p.sellerId);
+                    if (seller && seller.active === false) return false;
+                }
                 const prodCat = normalizeCategoryName(p.category);
                 const matchCat = currentCategory === 'all' || prodCat === currentCategory;
                 const matchSearch = (p.name || '').toLowerCase().includes(currentSearch.toLowerCase()) ||
@@ -2310,7 +2619,7 @@
                             <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img">
                         </div>
                         <div class="product-body">
-                            <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName}</span>
+                            <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)}</span>
                             <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
@@ -2399,7 +2708,7 @@
                     ` : ''}
                 </div>
                 <div style="margin-top:14px;">
-                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName} • ${prodCat}</span>
+                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)} • ${prodCat}</span>
                     <p style="margin-top:8px; color:#334155;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
                     <div class="price-block" style="margin-top:10px;">
                         ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
@@ -2589,7 +2898,7 @@
         window.markOrderShipped = async function(orderId, inputPrefix = 'cargoInput_') {
             const order = db.orders.find(o => o.id === orderId);
             if (!order) return;
-            const cargoInput = document.getElementById(`${inputPrefix}${orderId}`);
+            const cargoInput = $(`${inputPrefix}${orderId}`);
             if (cargoInput && cargoInput.value.trim()) {
                 order.carrierCargoNo = cargoInput.value.trim();
             }
@@ -2603,7 +2912,7 @@
         window.completeSellerOrder = async function(orderId, inputPrefix = 'cargoInput_') {
             const order = db.orders.find(o => o.id === orderId);
             if (order) {
-                const cargoInput = document.getElementById(`${inputPrefix}${orderId}`);
+                const cargoInput = $(`${inputPrefix}${orderId}`);
                 if (cargoInput && cargoInput.value.trim()) {
                     order.carrierCargoNo = cargoInput.value.trim();
                 }
@@ -2699,6 +3008,8 @@
             if ($('adminPendingAppsCount')) $('adminPendingAppsCount').textContent = (db.sellerApplications || []).length;
             if ($('adminActiveSellersCount')) $('adminActiveSellersCount').textContent = (db.sellers || []).length;
             if ($('adminCustomerCount')) $('adminCustomerCount').textContent = (db.customers || []).length;
+
+            renderAdminLiveSupportTab();
 
             if ($('adminAllOrdersBody')) {
                 $('adminAllOrdersBody').innerHTML = allOrders.length === 0
@@ -2853,506 +3164,599 @@
             renderAdminDashboard();
         };
 
-        // Canlı Destek Olayları
-        if ($('openLiveSupportBtn')) {
-            $('openLiveSupportBtn').addEventListener('click', () => {
-                supportState.open = !supportState.open;
-                renderLiveSupportWidget();
-            });
-        }
-        if ($('closeLiveSupportBtn')) {
-            $('closeLiveSupportBtn').addEventListener('click', () => {
-                supportState.open = false;
-                renderLiveSupportWidget();
-            });
-        }
-        if ($('resetLiveSupportBtn')) {
-            $('resetLiveSupportBtn').addEventListener('click', resetLiveSupportChat);
-        }
-        if ($('liveSupportForm')) {
-            $('liveSupportForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const inp = $('liveSupportInput');
-                if (!inp) return;
-                const text = inp.value.trim();
-                if (!text) return;
-                inp.value = '';
-
-                supportState.messages.push({ sender: 'user', text });
-
-                if (supportState.step === 'ask_name') {
-                    supportState.customerName = text;
-                    supportState.step = 'ask_address';
-                    supportState.messages.push({
-                        sender: 'ai',
-                        text: `Teşekkürler ${text}. Şimdi teslimat/iletişim için açık adresinizi yazar mısınız?`
-                    });
-                    renderLiveSupportWidget();
-                    return;
-                }
-
-                if (supportState.step === 'ask_address') {
-                    supportState.customerAddress = text;
-                    supportState.step = 'connected';
-                    supportState.messages.push({
-                        sender: 'connected',
-                        text: `Canlı desteğe bağlandınız (${supportState.customerName}). Bundan sonraki mesajlarınız canlı destek hattımıza aktarılır.`
-                    });
-                    renderLiveSupportWidget();
-                    return;
-                }
-
-                supportState.customerMessages.push(text);
-                supportState.messages.push({
-                    sender: 'ai',
-                    text: 'Mesajınız canlı destek hattımıza (0501 090 17 22) aktarılmak üzere eklendi.'
+        function bindAllUIEvents() {
+            if ($('openLiveSupportBtn')) {
+                $('openLiveSupportBtn').addEventListener('click', () => {
+                    isSupportWindowOpen = !isSupportWindowOpen;
+                    saveSessionJson(SESSION_KEYS.supportOpen, isSupportWindowOpen);
+                    renderCustomerSupportWidget();
                 });
-                renderLiveSupportWidget();
-                openWhatsAppLiveBridge(true);
+            }
+            if ($('closeLiveSupportBtn')) {
+                $('closeLiveSupportBtn').addEventListener('click', () => {
+                    isSupportWindowOpen = false;
+                    saveSessionJson(SESSION_KEYS.supportOpen, false);
+                    renderCustomerSupportWidget();
+                });
+            }
+            if ($('clearMySupportChatBtn')) {
+                $('clearMySupportChatBtn').addEventListener('click', async () => {
+                    if (!confirm('Gizlilik gereği mevcut sohbet kaydınız silinsin mi?')) return;
+                    const oldId = activeChatId;
+                    liveChats = liveChats.filter(c => c.id !== oldId);
+                    if (firestoreReady && firestoreDb) {
+                        isSaving = true;
+                        try { await deleteDoc(doc(firestoreDb, "trendtan_live_chats", oldId)); } catch (_) {}
+                        finally { setTimeout(() => { isSaving = false; }, 250); }
+                    }
+                    activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                    try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                    renderCustomerSupportWidget();
+                    renderAdminLiveSupportTab();
+                    showToast('Sohbet kaydınız temizlendi.');
+                });
+            }
+            if ($('liveSupportForm')) {
+                $('liveSupportForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const inp = $('liveSupportInput');
+                    if (!inp) return;
+                    const text = inp.value.trim();
+                    if (!text) return;
+                    inp.value = '';
+
+                    const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    let chat = liveChats.find(c => c.id === activeChatId);
+                    if (!chat) chat = createDefaultCustomerChatObj(activeChatId);
+
+                    chat.messages.push({ sender: 'user', text, time: nowStr });
+                    chat.updatedAt = Date.now();
+                    chat.unreadForAdmin = Number(chat.unreadForAdmin || 0) + 1;
+
+                    if (chat.step === 'ask_name') {
+                        chat.customerName = text;
+                        chat.step = 'ask_address';
+                        chat.messages.push({
+                            sender: 'ai',
+                            text: `Teşekkürler ${text}. Şimdi açık adresinizi paylaşır mısınız?`,
+                            time: nowStr
+                        });
+                    } else if (chat.step === 'ask_address') {
+                        chat.customerAddress = text;
+                        chat.step = 'connected';
+                        chat.messages.push({
+                            sender: 'connected',
+                            text: `Canlı desteğe bağlandınız (${chat.customerName}). Destek ekibimizle buradan canlı yazışabilirsiniz.`,
+                            time: nowStr
+                        });
+                    }
+
+                    renderCustomerSupportWidget();
+                    await persistLiveChatDoc(chat);
+                    renderAdminLiveSupportTab();
+                });
+            }
+
+            if ($('adminChatReplyForm')) {
+                $('adminChatReplyForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const inp = $('adminChatReplyInput');
+                    if (!inp) return;
+                    const replyText = inp.value.trim();
+                    if (!replyText) return;
+                    const target = liveChats.find(c => c.id === selectedAdminChatId);
+                    if (!target) { showToast('Önce bir müşteri sohbeti seçin.'); return; }
+
+                    inp.value = '';
+                    const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    target.messages.push({ sender: 'agent', text: replyText, time: nowStr });
+                    target.updatedAt = Date.now();
+                    target.unreadForAdmin = 0;
+
+                    renderAdminLiveSupportTab();
+                    renderCustomerSupportWidget();
+                    await persistLiveChatDoc(target);
+                });
+            }
+
+            if ($('adminClearAllChatsBtn')) {
+                $('adminClearAllChatsBtn').addEventListener('click', async () => {
+                    if (!confirm('Gizlilik gereği tüm canlı destek konuşmaları kalıcı olarak silinsin mi?')) return;
+                    const idsToDelete = liveChats.map(c => c.id);
+                    liveChats = [];
+                    selectedAdminChatId = '';
+                    if (firestoreReady && firestoreDb) {
+                        isSaving = true;
+                        try {
+                            for (const cid of idsToDelete) {
+                                await deleteDoc(doc(firestoreDb, "trendtan_live_chats", cid));
+                            }
+                        } catch (_) {}
+                        finally { setTimeout(() => { isSaving = false; }, 250); }
+                    }
+                    activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                    try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                    renderCustomerSupportWidget();
+                    renderAdminLiveSupportTab();
+                    showToast('Tüm canlı destek kayıtları silindi.');
+                });
+            }
+
+            function updateSoundButtonLabel() {
+                const btn = $('soundToggleBtn');
+                if (!btn) return;
+                btn.innerHTML = soundEnabled
+                    ? `<i class="fa-solid fa-volume-high"></i> Ses: Açık`
+                    : `<i class="fa-solid fa-volume-xmark"></i> Ses: Kapalı`;
+            }
+            updateSoundButtonLabel();
+
+            if ($('soundToggleBtn')) {
+                $('soundToggleBtn').addEventListener('click', () => {
+                    soundEnabled = !soundEnabled;
+                    saveSessionJson(SESSION_KEYS.soundEnabled, soundEnabled);
+                    updateSoundButtonLabel();
+                    if (soundEnabled) playNotificationTone();
+                    showToast(soundEnabled ? 'Sesli bildirim açıldı.' : 'Sesli bildirim kapatıldı.');
+                });
+            }
+
+            if ($('searchInput')) $('searchInput').value = currentSearch;
+            if ($('freeShippingFilter')) $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
+            if ($('sortSelect')) $('sortSelect').value = savedFilters.sort || 'default';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.category === currentCategory));
+            renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
+            renderCustomerSupportWidget();
+
+            if ($('prodCategory')) {
+                $('prodCategory').addEventListener('change', (e) => {
+                    renderCatalogVariantOptions(e.target.value);
+                });
+            }
+
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    persistUiState();
+                    renderProducts();
+                });
             });
-        }
 
-        if ($('searchInput')) $('searchInput').value = currentSearch;
-        if ($('freeShippingFilter')) $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
-        if ($('sortSelect')) $('sortSelect').value = savedFilters.sort || 'default';
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.category === currentCategory));
-        renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
-        renderLiveSupportWidget();
+            if ($('searchInput')) $('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value; persistUiState(); renderProducts(); });
+            if ($('searchBtn')) $('searchBtn').addEventListener('click', () => { currentSearch = $('searchInput') ? $('searchInput').value : ''; persistUiState(); renderProducts(); });
+            if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', () => { persistUiState(); renderProducts(); });
+            if ($('sortSelect')) $('sortSelect').addEventListener('change', () => { persistUiState(); renderProducts(); });
 
-        if ($('prodCategory')) {
-            $('prodCategory').addEventListener('change', (e) => {
-                renderCatalogVariantOptions(e.target.value);
+            if ($('openTrackOrderBtn')) {
+                $('openTrackOrderBtn').addEventListener('click', () => {
+                    if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
+                    try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
+                });
+            }
+
+            if ($('trackSearchSubmitBtn')) {
+                $('trackSearchSubmitBtn').addEventListener('click', () => {
+                    runOrderTrackingSearch($('trackCodeInput') ? $('trackCodeInput').value : '');
+                });
+            }
+
+            if ($('openCartBtn')) $('openCartBtn').addEventListener('click', () => {
+                if ($('cartDrawer')) $('cartDrawer').classList.add('open');
+                if ($('cartOverlay')) $('cartOverlay').classList.remove('hidden');
             });
-        }
+            if ($('closeCartBtn')) $('closeCartBtn').addEventListener('click', closeCart);
+            if ($('cartOverlay')) $('cartOverlay').addEventListener('click', closeCart);
 
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentCategory = btn.dataset.category;
-                persistUiState();
-                renderProducts();
-            });
-        });
+            if ($('applyCouponBtn')) {
+                $('applyCouponBtn').addEventListener('click', () => {
+                    const code = ($('cartCouponInput') ? $('cartCouponInput').value : '').trim().toUpperCase();
+                    const found = (db.coupons || []).find(c => c.code === code);
+                    const msgEl = $('couponMessage');
+                    if (!found) {
+                        appliedCoupon = null;
+                        if (msgEl) { msgEl.style.color = '#dc2626'; msgEl.textContent = 'Geçersiz kupon kodu!'; }
+                    } else {
+                        appliedCoupon = found;
+                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı.`; }
+                    }
+                    persistUiState();
+                    updateCartUI();
+                });
+            }
 
-        if ($('searchInput')) $('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value; persistUiState(); renderProducts(); });
-        if ($('searchBtn')) $('searchBtn').addEventListener('click', () => { currentSearch = $('searchInput') ? $('searchInput').value : ''; persistUiState(); renderProducts(); });
-        if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', () => { persistUiState(); renderProducts(); });
-        if ($('sortSelect')) $('sortSelect').addEventListener('change', () => { persistUiState(); renderProducts(); });
-
-        if ($('openTrackOrderBtn')) {
-            $('openTrackOrderBtn').addEventListener('click', () => {
-                if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
-                try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
-            });
-        }
-
-        if ($('trackSearchSubmitBtn')) {
-            $('trackSearchSubmitBtn').addEventListener('click', () => {
-                runOrderTrackingSearch($('trackCodeInput') ? $('trackCodeInput').value : '');
-            });
-        }
-
-        if ($('openCartBtn')) $('openCartBtn').addEventListener('click', () => {
-            if ($('cartDrawer')) $('cartDrawer').classList.add('open');
-            if ($('cartOverlay')) $('cartOverlay').classList.remove('hidden');
-        });
-        if ($('closeCartBtn')) $('closeCartBtn').addEventListener('click', closeCart);
-        if ($('cartOverlay')) $('cartOverlay').addEventListener('click', closeCart);
-
-        if ($('applyCouponBtn')) {
-            $('applyCouponBtn').addEventListener('click', () => {
-                const code = ($('cartCouponInput') ? $('cartCouponInput').value : '').trim().toUpperCase();
-                const found = (db.coupons || []).find(c => c.code === code);
-                const msgEl = $('couponMessage');
-                if (!found) {
-                    appliedCoupon = null;
-                    if (msgEl) { msgEl.style.color = '#dc2626'; msgEl.textContent = 'Geçersiz kupon kodu!'; }
-                } else {
-                    appliedCoupon = found;
-                    if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı.`; }
-                }
-                persistUiState();
-                updateCartUI();
-            });
-        }
-
-        if ($('proceedCheckoutBtn')) {
-            $('proceedCheckoutBtn').addEventListener('click', () => {
-                if (cart.length === 0) { showToast('Sepetiniz boş.'); return; }
-                closeCart();
-                const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
-                if (eftRadio) eftRadio.checked = true;
-                if ($('eftPaymentOption')) $('eftPaymentOption').classList.add('selected');
-                if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
-                if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
-                const { grandTotal } = calculateCartTotals();
-                if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
-                if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
-            });
-        }
-
-        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                if (e.target.disabled) {
+            if ($('proceedCheckoutBtn')) {
+                $('proceedCheckoutBtn').addEventListener('click', () => {
+                    if (cart.length === 0) { showToast('Sepetiniz boş.'); return; }
+                    closeCart();
                     const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
                     if (eftRadio) eftRadio.checked = true;
-                    return;
-                }
-                if ($('eftPaymentOption')) $('eftPaymentOption').classList.toggle('selected', e.target.value === 'Havale / EFT');
-                if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
-                if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
-            });
-        });
+                    if ($('eftPaymentOption')) $('eftPaymentOption').classList.add('selected');
+                    if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
+                    if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
+                    const { grandTotal } = calculateCartTotals();
+                    if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
+                    if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
+                });
+            }
 
-        if ($('checkoutForm')) {
-            $('checkoutForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const custName = $('custName').value.trim();
-                const custPhone = $('custPhone').value.trim();
-                const custAddress = $('custAddress').value.trim();
-                const paymentMethod = 'Havale / EFT (MUSTAFA TAN - EN PARA)';
-                const today = new Date().toLocaleDateString('tr-TR');
-                const { grandTotal } = calculateCartTotals();
-
-                let customer = db.customers.find(c => c.phone === custPhone || c.name.toLowerCase() === custName.toLowerCase());
-                if (customer) {
-                    customer.name = custName; customer.phone = custPhone; customer.address = custAddress;
-                    customer.totalSpent = Number(customer.totalSpent) + grandTotal;
-                    customer.orderCount = Number(customer.orderCount) + 1;
-                    customer.lastOrderDate = today;
-                } else {
-                    db.customers.unshift({ id: 'cust_' + Date.now(), name: custName, phone: custPhone, address: custAddress, totalSpent: grandTotal, orderCount: 1, lastOrderDate: today });
-                }
-
-                const sellerGroups = {};
-                const touchedProducts = [];
-                cart.forEach(item => {
-                    const sId = item.product.sellerId;
-                    if (!sellerGroups[sId]) sellerGroups[sId] = [];
-                    sellerGroups[sId].push(item);
-                    const dbProd = db.products.find(p => p.id === item.product.id);
-                    if (dbProd) {
-                        dbProd.stock = Math.max(0, dbProd.stock - item.qty);
-                        touchedProducts.push(dbProd);
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.disabled) {
+                        const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
+                        if (eftRadio) eftRadio.checked = true;
+                        return;
                     }
+                    if ($('eftPaymentOption')) $('eftPaymentOption').classList.toggle('selected', e.target.value === 'Havale / EFT');
+                    if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
+                    if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
                 });
-
-                const createdCodes = [];
-                Object.keys(sellerGroups).forEach(sId => {
-                    const groupItems = sellerGroups[sId];
-                    const groupTotal = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
-                    const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
-                    const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
-                    createdCodes.push(trackingCode);
-                    const sellerName = groupItems[0]?.product?.sellerName || getSellerDisplayName(sId);
-
-                    db.orders.unshift({
-                        id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
-                        trackingCode,
-                        sellerId: sId,
-                        sellerName,
-                        customerName: custName,
-                        customerPhone: custPhone,
-                        customerAddress: custAddress,
-                        itemsText,
-                        total: groupTotal,
-                        paymentMethod,
-                        carrierCargoNo: '',
-                        status: 'pending',
-                        date: today
-                    });
-                });
-
-                for (const tp of touchedProducts) {
-                    await saveProductToCollection(tp);
-                }
-                await saveDB();
-                cart = []; appliedCoupon = null;
-                persistUiState();
-                updateCartUI(); renderProducts();
-                if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
-                $('checkoutForm').reset();
-
-                if ($('trackOrderModal') && $('trackCodeInput') && createdCodes[0]) {
-                    $('trackCodeInput').value = createdCodes[0];
-                    $('trackOrderModal').classList.remove('hidden');
-                    try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
-                    runOrderTrackingSearch(createdCodes[0]);
-                }
-                showToast(`Havale / EFT siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')} • IBAN: TR08 0015 7000 0000 0143 0070 74`);
             });
-        }
 
-        if ($('openSellerModalBtn')) {
-            $('openSellerModalBtn').addEventListener('click', () => {
-                if (currentSeller) { switchMainView('sellerDashboardView'); renderSellerDashboard(); }
-                else if ($('sellerAuthModal')) { $('sellerAuthModal').classList.remove('hidden'); switchSellerAuthTab('sellerLoginTab'); }
-            });
-        }
+            if ($('checkoutForm')) {
+                $('checkoutForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const custName = $('custName').value.trim();
+                    const custPhone = $('custPhone').value.trim();
+                    const custAddress = $('custAddress').value.trim();
+                    const paymentMethod = 'Havale / EFT (MUSTAFA TAN - EN PARA)';
+                    const today = new Date().toLocaleDateString('tr-TR');
+                    const { grandTotal } = calculateCartTotals();
 
-        document.querySelectorAll('#sellerAuthModal .m-tab').forEach(tab => {
-            tab.addEventListener('click', () => switchSellerAuthTab(tab.dataset.mtab));
-        });
-
-        if ($('sellerApplyForm')) {
-            $('sellerApplyForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const firstName = $('applyFirstName').value.trim();
-                const lastName = $('applyLastName').value.trim();
-                db.sellerApplications.unshift({
-                    id: 'app_' + Date.now(), firstName, lastName, fullName: `${firstName} ${lastName}`,
-                    phone: $('applyPhone').value.trim(), email: $('applyEmail').value.trim(),
-                    companyName: $('applyCompanyName').value.trim(), taxOrTc: $('applyTaxOrTc').value.trim(),
-                    address: $('applyAddress').value.trim(), date: new Date().toLocaleDateString('tr-TR')
-                });
-                await saveDB();
-                $('sellerApplyForm').reset();
-                if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
-                showToast('Kurumsal satıcı başvurunuz alındı ve yönetim paneline kaydedildi.');
-            });
-        }
-
-        if ($('sellerLoginForm')) {
-            $('sellerLoginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const u = $('sellerLoginUser').value.trim();
-                const p = $('sellerLoginPass').value.trim();
-                const seller = (db.sellers || []).find(s => s.username === u && s.password === p);
-                if (!seller) { showToast('Kullanıcı adı veya şifre hatalı!'); return; }
-                if (!seller.active) { showToast('Satıcı hesabınız şu anda pasif durumda.'); return; }
-                currentSeller = seller;
-                try { sessionStorage.setItem(SESSION_KEYS.sellerId, seller.id); } catch (_) {}
-                if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
-                $('sellerLoginForm').reset();
-                switchMainView('sellerDashboardView');
-                renderSellerDashboard();
-                showToast(`${seller.companyName} paneline hoş geldiniz.`);
-            });
-        }
-
-        if ($('prodImageFile')) {
-            $('prodImageFile').addEventListener('change', async function(e) {
-                const files = Array.from(e.target.files || []);
-                if (!files.length) return;
-                if (uploadedImages.length >= 4) {
-                    showToast('1000+ ürün kapasitesi için ürün başına en fazla 4 görsel eklenebilir.');
-                    return;
-                }
-                showToast(`${files.length} görsel sıkıştırılıyor...`);
-                try {
-                    for (const file of files) {
-                        if (uploadedImages.length >= 4) break;
-                        const base64Img = await compressImageToBase64(file, 520, 0.62);
-                        const finalImg = base64Img.length > 230000 ? await compressImageToBase64(file, 420, 0.52) : base64Img;
-                        if (finalImg) uploadedImages.push(finalImg);
+                    let customer = db.customers.find(c => c.phone === custPhone || c.name.toLowerCase() === custName.toLowerCase());
+                    if (customer) {
+                        customer.name = custName; customer.phone = custPhone; customer.address = custAddress;
+                        customer.totalSpent = Number(customer.totalSpent) + grandTotal;
+                        customer.orderCount = Number(customer.orderCount) + 1;
+                        customer.lastOrderDate = today;
+                    } else {
+                        db.customers.unshift({ id: 'cust_' + Date.now(), name: custName, phone: custPhone, address: custAddress, totalSpent: grandTotal, orderCount: 1, lastOrderDate: today });
                     }
-                    renderSellerImagePreviews();
-                    showToast(`${uploadedImages.length} görsel hazır, ürünü kaydedince yayınlanacak.`);
-                } catch (err) {
-                    showToast('Görseller işlenemedi, farklı bir resim deneyin.');
-                }
-            });
-        }
 
-        if ($('sellerProductForm')) {
-            $('sellerProductForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!currentSeller) return;
-                const editId = $('editProductId').value;
-                const name = $('prodName').value.trim();
-                const category = $('prodCategory').value;
-                const oldPrice = parseFloat($('prodOldPrice').value);
-                const rawDiscountPrice = $('prodPrice').value.trim();
-                const price = rawDiscountPrice ? parseFloat(rawDiscountPrice) : oldPrice;
-                const minOrderQty = Math.max(1, parseInt($('prodMinQty') ? $('prodMinQty').value : '1', 10) || 1);
-                const shipping = parseFloat($('prodShipping').value);
-                const stock = parseInt($('prodStock').value, 10);
-                const desc = $('prodDesc').value.trim();
-
-                const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
-                const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
-                const variants = [...new Set([...selectedFormVariants, ...extraItems])];
-
-                if (variants.length === 0) {
-                    if (category === 'Ayakkabı') showToast('Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.');
-                    else if (category === 'Gözlük') showToast('Lütfen en az bir gözlük rengi işaretleyin.');
-                    else showToast('Lütfen en az bir seçenek işaretleyin veya yazın.');
-                    return;
-                }
-                if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
-
-                if (editId) {
-                    const prod = db.products.find(p => p.id === editId);
-                    if (prod) {
-                        prod.name = name; prod.category = category; prod.oldPrice = oldPrice;
-                        prod.price = price; prod.minOrderQty = minOrderQty; prod.variants = variants;
-                        prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
-                        if (uploadedImages.length > 0) {
-                            prod.images = [...uploadedImages].slice(0, 4);
-                            prod.image = prod.images[0];
+                    const sellerGroups = {};
+                    const touchedProducts = [];
+                    cart.forEach(item => {
+                        const sId = item.product.sellerId;
+                        if (!sellerGroups[sId]) sellerGroups[sId] = [];
+                        sellerGroups[sId].push(item);
+                        const dbProd = db.products.find(p => p.id === item.product.id);
+                        if (dbProd) {
+                            dbProd.stock = Math.max(0, dbProd.stock - item.qty);
+                            touchedProducts.push(dbProd);
                         }
-                        const ok = await saveProductToCollection(prod);
+                    });
+
+                    const createdCodes = [];
+                    Object.keys(sellerGroups).forEach(sId => {
+                        const groupItems = sellerGroups[sId];
+                        const groupTotal = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
+                        const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
+                        const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
+                        createdCodes.push(trackingCode);
+                        const sellerName = groupItems[0]?.product?.sellerName || getSellerDisplayName(sId);
+
+                        db.orders.unshift({
+                            id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
+                            trackingCode,
+                            sellerId: sId,
+                            sellerName,
+                            customerName: custName,
+                            customerPhone: custPhone,
+                            customerAddress: custAddress,
+                            itemsText,
+                            total: groupTotal,
+                            paymentMethod,
+                            carrierCargoNo: '',
+                            status: 'pending',
+                            date: today
+                        });
+                    });
+
+                    for (const tp of touchedProducts) {
+                        await saveProductToCollection(tp);
+                    }
+                    await saveDB();
+                    cart = []; appliedCoupon = null;
+                    persistUiState();
+                    updateCartUI(); renderProducts();
+                    if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
+                    $('checkoutForm').reset();
+
+                    if ($('trackOrderModal') && $('trackCodeInput') && createdCodes[0]) {
+                        $('trackCodeInput').value = createdCodes[0];
+                        $('trackOrderModal').classList.remove('hidden');
+                        try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
+                        runOrderTrackingSearch(createdCodes[0]);
+                    }
+                    showToast(`Havale / EFT siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')} • IBAN: TR08 0015 7000 0000 0143 0070 74`);
+                });
+            }
+
+            if ($('openSellerModalBtn')) {
+                $('openSellerModalBtn').addEventListener('click', () => {
+                    if (currentSeller) { switchMainView('sellerDashboardView'); renderSellerDashboard(); }
+                    else if ($('sellerAuthModal')) { $('sellerAuthModal').classList.remove('hidden'); switchSellerAuthTab('sellerLoginTab'); }
+                });
+            }
+
+            document.querySelectorAll('#sellerAuthModal .m-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchSellerAuthTab(tab.dataset.mtab));
+            });
+
+            if ($('sellerApplyForm')) {
+                $('sellerApplyForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const firstName = $('applyFirstName').value.trim();
+                    const lastName = $('applyLastName').value.trim();
+                    db.sellerApplications.unshift({
+                        id: 'app_' + Date.now(), firstName, lastName, fullName: `${firstName} ${lastName}`,
+                        phone: $('applyPhone').value.trim(), email: $('applyEmail').value.trim(),
+                        companyName: $('applyCompanyName').value.trim(), taxOrTc: $('applyTaxOrTc').value.trim(),
+                        address: $('applyAddress').value.trim(), date: new Date().toLocaleDateString('tr-TR')
+                    });
+                    await saveDB();
+                    $('sellerApplyForm').reset();
+                    if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
+                    showToast('Kurumsal satıcı başvurunuz alındı ve yönetim paneline kaydedildi.');
+                });
+            }
+
+            if ($('sellerLoginForm')) {
+                $('sellerLoginForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const u = $('sellerLoginUser').value.trim();
+                    const p = $('sellerLoginPass').value.trim();
+                    const seller = (db.sellers || []).find(s => s.username === u && s.password === p);
+                    if (!seller) { showToast('Kullanıcı adı veya şifre hatalı!'); return; }
+                    if (!seller.active) { showToast('Satıcı hesabınız şu anda pasif durumda.'); return; }
+                    currentSeller = seller;
+                    try { sessionStorage.setItem(SESSION_KEYS.sellerId, seller.id); } catch (_) {}
+                    if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
+                    $('sellerLoginForm').reset();
+                    switchMainView('sellerDashboardView');
+                    renderSellerDashboard();
+                    showToast(`${seller.companyName} paneline hoş geldiniz.`);
+                });
+            }
+
+            if ($('prodImageFile')) {
+                $('prodImageFile').addEventListener('change', async function(e) {
+                    const files = Array.from(e.target.files || []);
+                    if (!files.length) return;
+                    if (uploadedImages.length >= 4) {
+                        showToast('1000+ ürün kapasitesi için ürün başına en fazla 4 görsel eklenebilir.');
+                        return;
+                    }
+                    showToast(`${files.length} görsel sıkıştırılıyor...`);
+                    try {
+                        for (const file of files) {
+                            if (uploadedImages.length >= 4) break;
+                            const base64Img = await compressImageToBase64(file, 520, 0.62);
+                            const finalImg = base64Img.length > 230000 ? await compressImageToBase64(file, 420, 0.52) : base64Img;
+                            if (finalImg) uploadedImages.push(finalImg);
+                        }
+                        renderSellerImagePreviews();
+                        showToast(`${uploadedImages.length} görsel hazır, ürünü kaydedince yayınlanacak.`);
+                    } catch (err) {
+                        showToast('Görseller işlenemedi, farklı bir resim deneyin.');
+                    }
+                });
+            }
+
+            if ($('sellerProductForm')) {
+                $('sellerProductForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!currentSeller) return;
+                    const editId = $('editProductId').value;
+                    const name = $('prodName').value.trim();
+                    const category = $('prodCategory').value;
+                    const oldPrice = parseFloat($('prodOldPrice').value);
+                    const rawDiscountPrice = $('prodPrice').value.trim();
+                    const price = rawDiscountPrice ? parseFloat(rawDiscountPrice) : oldPrice;
+                    const minOrderQty = Math.max(1, parseInt($('prodMinQty') ? $('prodMinQty').value : '1', 10) || 1);
+                    const shipping = parseFloat($('prodShipping').value);
+                    const stock = parseInt($('prodStock').value, 10);
+                    const desc = $('prodDesc').value.trim();
+
+                    const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
+                    const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
+                    const variants = [...new Set([...selectedFormVariants, ...extraItems])];
+
+                    if (variants.length === 0) {
+                        if (category === 'Ayakkabı') showToast('Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.');
+                        else if (category === 'Gözlük') showToast('Lütfen en az bir gözlük rengi işaretleyin.');
+                        else showToast('Lütfen en az bir seçenek işaretleyin veya yazın.');
+                        return;
+                    }
+                    if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
+
+                    if (editId) {
+                        const prod = db.products.find(p => p.id === editId);
+                        if (prod) {
+                            prod.name = name; prod.category = category; prod.oldPrice = oldPrice;
+                            prod.price = price; prod.minOrderQty = minOrderQty; prod.variants = variants;
+                            prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
+                            if (uploadedImages.length > 0) {
+                                prod.images = [...uploadedImages].slice(0, 4);
+                                prod.image = prod.images[0];
+                            }
+                            const ok = await saveProductToCollection(prod);
+                            if (ok) {
+                                showToast('Ürün güncellendi.');
+                                resetSellerProductForm();
+                                renderSellerDashboard();
+                                renderProducts();
+                            }
+                        }
+                    } else {
+                        const imgs = [...uploadedImages].slice(0, 4);
+                        const newProd = {
+                            id: 'prod_' + Date.now(), sellerId: currentSeller.id, sellerName: currentSeller.companyName,
+                            name, category, oldPrice, price, minOrderQty, variants, shipping, stock,
+                            image: imgs[0], images: imgs, desc
+                        };
+                        const ok = await saveProductToCollection(newProd);
                         if (ok) {
-                            showToast('Ürün güncellendi.');
+                            if (!db.products.some(x => x.id === newProd.id)) db.products.unshift(newProd);
+                            showToast('Yeni ürün koleksiyona kaydedildi ve yayına alındı.');
                             resetSellerProductForm();
                             renderSellerDashboard();
                             renderProducts();
                         }
                     }
-                } else {
-                    const imgs = [...uploadedImages].slice(0, 4);
-                    const newProd = {
-                        id: 'prod_' + Date.now(), sellerId: currentSeller.id, sellerName: currentSeller.companyName,
-                        name, category, oldPrice, price, minOrderQty, variants, shipping, stock,
-                        image: imgs[0], images: imgs, desc
-                    };
-                    const ok = await saveProductToCollection(newProd);
-                    if (ok) {
-                        if (!db.products.some(x => x.id === newProd.id)) db.products.unshift(newProd);
-                        showToast('Yeni ürün koleksiyona kaydedildi ve yayına alındı.');
-                        resetSellerProductForm();
-                        renderSellerDashboard();
-                        renderProducts();
+                });
+            }
+
+            if ($('cancelEditProductBtn')) $('cancelEditProductBtn').addEventListener('click', resetSellerProductForm);
+
+            let logoClickCount = 0;
+            let logoClickTimer = null;
+            function openAdminModal() {
+                if ($('adminLoginModal')) $('adminLoginModal').classList.remove('hidden');
+            }
+            if ($('secretAdminTrigger')) {
+                $('secretAdminTrigger').addEventListener('click', () => {
+                    logoClickCount++;
+                    clearTimeout(logoClickTimer);
+                    logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1500);
+                    if (logoClickCount >= 5) { logoClickCount = 0; openAdminModal(); }
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'A') { e.preventDefault(); openAdminModal(); }
+            });
+            if (new URLSearchParams(window.location.search).get('admin') === 'trendtan') openAdminModal();
+
+            if ($('adminLoginForm')) {
+                $('adminLoginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const enteredPass = ($('superAdminPassInput') ? $('superAdminPassInput').value : '').trim();
+                    const expectedPass = (db.adminPassword || 'trendtan2026').trim();
+                    if (enteredPass === expectedPass || enteredPass === 'trendtan2026') {
+                        try { sessionStorage.setItem(SESSION_KEYS.adminAuth, '1'); } catch (_) {}
+                        if ($('adminLoginModal')) $('adminLoginModal').classList.add('hidden');
+                        $('adminLoginForm').reset();
+                        switchMainView('superAdminDashboardView');
+                        renderAdminDashboard();
+                        if (soundEnabled) playNotificationTone();
+                        showToast('Süper Admin Paneli açıldı.');
+                    } else {
+                        showToast('Yönetici şifresi hatalı!');
                     }
-                }
-            });
-        }
+                });
+            }
 
-        if ($('cancelEditProductBtn')) $('cancelEditProductBtn').addEventListener('click', resetSellerProductForm);
-
-        let logoClickCount = 0;
-        let logoClickTimer = null;
-        function openAdminModal() {
-            if ($('adminLoginModal')) $('adminLoginModal').classList.remove('hidden');
-        }
-        if ($('secretAdminTrigger')) {
-            $('secretAdminTrigger').addEventListener('click', () => {
-                logoClickCount++;
-                clearTimeout(logoClickTimer);
-                logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1500);
-                if (logoClickCount >= 5) { logoClickCount = 0; openAdminModal(); }
-            });
-        }
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'A') { e.preventDefault(); openAdminModal(); }
-        });
-        if (new URLSearchParams(window.location.search).get('admin') === 'trendtan') openAdminModal();
-
-        if ($('adminLoginForm')) {
-            $('adminLoginForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const enteredPass = ($('superAdminPassInput') ? $('superAdminPassInput').value : '').trim();
-                const expectedPass = (db.adminPassword || 'trendtan2026').trim();
-                if (enteredPass === expectedPass || enteredPass === 'trendtan2026') {
-                    try { sessionStorage.setItem(SESSION_KEYS.adminAuth, '1'); } catch (_) {}
-                    if ($('adminLoginModal')) $('adminLoginModal').classList.add('hidden');
-                    $('adminLoginForm').reset();
-                    switchMainView('superAdminDashboardView');
+            if ($('approveSellerForm')) {
+                $('approveSellerForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const appId = $('approveAppId').value;
+                    const app = (db.sellerApplications || []).find(a => a.id === appId);
+                    if (!app) return;
+                    db.sellers.push({
+                        id: 'seller_' + Date.now(), firstName: app.firstName, lastName: app.lastName,
+                        fullName: app.fullName, companyName: app.companyName, taxOrTc: app.taxOrTc,
+                        address: app.address, phone: app.phone, email: app.email,
+                        username: $('assignSellerUsername').value.trim(),
+                        password: $('assignSellerPassword').value.trim(),
+                        active: true
+                    });
+                    db.sellerApplications = db.sellerApplications.filter(a => a.id !== appId);
+                    await saveDB();
+                    if ($('approveSellerModal')) $('approveSellerModal').classList.add('hidden');
                     renderAdminDashboard();
-                    showToast('Süper Admin Paneli açıldı.');
-                } else {
-                    showToast('Yönetici şifresi hatalı!');
-                }
-            });
-        }
-
-        if ($('approveSellerForm')) {
-            $('approveSellerForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const appId = $('approveAppId').value;
-                const app = (db.sellerApplications || []).find(a => a.id === appId);
-                if (!app) return;
-                db.sellers.push({
-                    id: 'seller_' + Date.now(), firstName: app.firstName, lastName: app.lastName,
-                    fullName: app.fullName, companyName: app.companyName, taxOrTc: app.taxOrTc,
-                    address: app.address, phone: app.phone, email: app.email,
-                    username: $('assignSellerUsername').value.trim(),
-                    password: $('assignSellerPassword').value.trim(),
-                    active: true
+                    showToast('Satıcı başvurusu onaylandı ve hesap oluşturuldu.');
                 });
-                db.sellerApplications = db.sellerApplications.filter(a => a.id !== appId);
-                await saveDB();
-                if ($('approveSellerModal')) $('approveSellerModal').classList.add('hidden');
-                renderAdminDashboard();
-                showToast('Satıcı başvurusu onaylandı ve hesap oluşturuldu.');
-            });
-        }
+            }
 
-        if ($('adminCouponForm')) {
-            $('adminCouponForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                db.coupons.push({ code: $('newCouponCode').value.trim().toUpperCase(), type: $('newCouponType').value, value: parseFloat($('newCouponValue').value) });
-                await saveDB();
-                $('adminCouponForm').reset();
-                renderAdminDashboard();
-                showToast('Kupon eklendi.');
-            });
-        }
+            if ($('adminCouponForm')) {
+                $('adminCouponForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    db.coupons.push({ code: $('newCouponCode').value.trim().toUpperCase(), type: $('newCouponType').value, value: parseFloat($('newCouponValue').value) });
+                    await saveDB();
+                    $('adminCouponForm').reset();
+                    renderAdminDashboard();
+                    showToast('Kupon eklendi.');
+                });
+            }
 
-        if ($('posSettingsForm')) {
-            $('posSettingsForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                db.posConfig = { provider: $('posProvider').value, apiKey: $('posApiKey').value.trim(), secretKey: $('posSecretKey').value.trim(), merchantSalt: $('posMerchantSalt').value.trim() };
-                await saveDB();
-                showToast('Sanal POS bilgileri kaydedildi.');
-            });
-        }
+            if ($('posSettingsForm')) {
+                $('posSettingsForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    db.posConfig = { provider: $('posProvider').value, apiKey: $('posApiKey').value.trim(), secretKey: $('posSecretKey').value.trim(), merchantSalt: $('posMerchantSalt').value.trim() };
+                    await saveDB();
+                    showToast('Sanal POS bilgileri kaydedildi.');
+                });
+            }
 
-        if ($('backToStoreFromSeller')) $('backToStoreFromSeller').addEventListener('click', () => switchMainView('customerStoreView'));
-        if ($('backToStoreFromAdmin')) $('backToStoreFromAdmin').addEventListener('click', () => switchMainView('customerStoreView'));
-        if ($('sellerLogoutBtn')) {
-            $('sellerLogoutBtn').addEventListener('click', () => {
-                currentSeller = null;
-                try { sessionStorage.removeItem(SESSION_KEYS.sellerId); } catch (_) {}
-                switchMainView('customerStoreView');
-                showToast('Satıcı çıkışı yapıldı.');
-            });
-        }
-        if ($('adminLogoutBtn')) {
-            $('adminLogoutBtn').addEventListener('click', () => {
-                try { sessionStorage.removeItem(SESSION_KEYS.adminAuth); } catch (_) {}
-                switchMainView('customerStoreView');
-                showToast('Admin çıkışı yapıldı.');
-            });
-        }
+            if ($('backToStoreFromSeller')) $('backToStoreFromSeller').addEventListener('click', () => switchMainView('customerStoreView'));
+            if ($('backToStoreFromAdmin')) $('backToStoreFromAdmin').addEventListener('click', () => switchMainView('customerStoreView'));
+            if ($('sellerLogoutBtn')) {
+                $('sellerLogoutBtn').addEventListener('click', () => {
+                    currentSeller = null;
+                    try { sessionStorage.removeItem(SESSION_KEYS.sellerId); } catch (_) {}
+                    switchMainView('customerStoreView');
+                    showToast('Satıcı çıkışı yapıldı.');
+                });
+            }
+            if ($('adminLogoutBtn')) {
+                $('adminLogoutBtn').addEventListener('click', () => {
+                    try { sessionStorage.removeItem(SESSION_KEYS.adminAuth); } catch (_) {}
+                    switchMainView('customerStoreView');
+                    showToast('Admin çıkışı yapıldı.');
+                });
+            }
 
-        document.querySelectorAll('.dash-tabs').forEach(tabBar => {
-            tabBar.querySelectorAll('.tab-btn').forEach(btn => {
+            document.querySelectorAll('.dash-tabs').forEach(tabBar => {
+                tabBar.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const parent = btn.closest('.dashboard-section');
+                        if (!parent) return;
+                        parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        btn.classList.add('active');
+                        const targetContent = $(btn.dataset.tab);
+                        if (targetContent) targetContent.classList.add('active');
+                        const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
+                        savedTabs[parent.id] = btn.dataset.tab;
+                        saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
+
+                        if (btn.dataset.tab === 'admin-live-support' && selectedAdminChatId) {
+                            const target = liveChats.find(c => c.id === selectedAdminChatId);
+                            if (target && Number(target.unreadForAdmin || 0) > 0) {
+                                target.unreadForAdmin = 0;
+                                await persistLiveChatDoc(target);
+                            }
+                            renderAdminLiveSupportTab();
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('[data-close]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const parent = btn.closest('.dashboard-section');
-                    if (!parent) return;
-                    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    btn.classList.add('active');
-                    const targetContent = $(btn.dataset.tab);
-                    if (targetContent) targetContent.classList.add('active');
-                    const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
-                    savedTabs[parent.id] = btn.dataset.tab;
-                    saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
+                    const modal = $(btn.dataset.close);
+                    if (modal) modal.classList.add('hidden');
+                    if (btn.dataset.close === 'trackOrderModal') {
+                        try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
+                    }
                 });
             });
-        });
+        }
 
-        document.querySelectorAll('[data-close]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = $(btn.dataset.close);
-                if (modal) modal.classList.add('hidden');
-                if (btn.dataset.close === 'trackOrderModal') {
-                    try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
-                }
-            });
-        });
-
+        // İlk olarak arayüzü ve butonları hemen aktif et (Firestore beklerken kilitlenmesin)
+        bindAllUIEvents();
         applySavedDashTabs();
         refreshAllViews();
 
+        // Ardından Firestore gerçek zamanlı bağlantısını kur
         (async () => {
             try {
                 const firebaseApp = initializeApp(firebaseConfig);
                 firestoreDb = getFirestore(firebaseApp);
                 storeDocRef = doc(firestoreDb, "trendtan_store", "main_state");
                 productsColRef = collection(firestoreDb, "trendtan_products");
+                liveChatsColRef = collection(firestoreDb, "trendtan_live_chats");
                 firestoreReady = true;
 
                 const snap = await getDoc(storeDocRef);
@@ -3422,9 +3826,14 @@
                     db.products = list;
                     refreshAllViews();
                 });
+
+                onSnapshot(liveChatsColRef, (colSnap) => {
+                    if (isSaving) return;
+                    handleLiveChatsSnapshot(colSnap);
+                });
             } catch (err) {
                 console.error(err);
-                showToast('Bağlantı hatası: ' + (err.message || 'Firestore başlatılamadı.'));
+                showToast('Bağlantı uyarısı: ' + (err.message || 'Firestore başlatılamadı.'));
             }
         })();
     </script>
