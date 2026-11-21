@@ -116,6 +116,31 @@
             margin-bottom: 6px;
         }
 
+        /* EFT Bilgilendirme Kutusu & Pasif Kart Seçeneği */
+        .eft-friendly-notice {
+            margin-top: 10px;
+            padding: 11px 13px;
+            border-radius: 10px;
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            color: #9a3412;
+            font-size: 12.5px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+        }
+        .eft-friendly-notice i {
+            margin-top: 2px;
+            color: #ea580c;
+            flex-shrink: 0;
+        }
+        .payment-option.disabled-pos {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background: #f8fafc;
+        }
+
         /* Çoklu Görsel & Varyant Alanları */
         .multi-preview-grid {
             display: flex;
@@ -328,14 +353,21 @@
             color: #9a3412;
         }
 
-        /* Mobil Üst Üste Binme Koruması */
+        /* Mobil Daha Uzaktan / Sıkıştırılmış Görünüm & Üst Üste Binme Koruması */
         @media (max-width: 768px) {
+            html {
+                font-size: 13.5px;
+            }
+            .container {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
             .top-promo-bar {
                 height: auto !important;
-                min-height: 36px;
-                padding: 6px 10px;
-                line-height: 1.35;
-                font-size: 12px;
+                min-height: 30px;
+                padding: 5px 8px;
+                line-height: 1.3;
+                font-size: 11px;
                 text-align: center;
                 position: relative !important;
             }
@@ -345,75 +377,210 @@
             }
             .nav-content {
                 flex-wrap: wrap !important;
-                gap: 10px !important;
-                padding: 10px 12px !important;
+                gap: 7px !important;
+                padding: 8px 10px !important;
                 height: auto !important;
             }
             .brand-logo {
                 order: 1;
                 flex: 1 1 auto;
+                font-size: 17px !important;
             }
             .nav-actions {
                 order: 2;
                 display: flex;
                 flex-wrap: wrap;
-                gap: 6px !important;
+                gap: 5px !important;
                 justify-content: flex-end;
             }
             .nav-actions button,
             .btn-track-order {
-                padding: 7px 10px !important;
-                font-size: 12px !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+                border-radius: 7px !important;
             }
             .search-box {
                 order: 3;
                 width: 100% !important;
                 flex: 1 1 100% !important;
-                margin: 2px 0 0 0 !important;
+                margin: 0 !important;
+            }
+            .search-box input {
+                padding: 7px 10px !important;
+                font-size: 12px !important;
+            }
+            .search-box button {
+                padding: 7px 11px !important;
+                font-size: 12px !important;
             }
             .category-bar {
                 position: relative !important;
                 height: auto !important;
-                padding: 6px 0 !important;
+                padding: 4px 0 !important;
             }
             .category-list {
                 display: flex !important;
                 flex-wrap: nowrap !important;
                 overflow-x: auto !important;
-                gap: 8px !important;
-                padding: 4px 12px !important;
+                gap: 6px !important;
+                padding: 3px 10px !important;
                 -webkit-overflow-scrolling: touch;
             }
             .cat-btn {
                 flex: 0 0 auto !important;
                 white-space: nowrap !important;
+                padding: 5px 10px !important;
+                font-size: 11.5px !important;
             }
             .main-store,
             .dashboard-section {
-                margin-top: 12px !important;
-                padding-top: 8px !important;
+                margin-top: 10px !important;
+                padding-top: 4px !important;
             }
             .hero-banner {
                 flex-direction: column !important;
                 align-items: flex-start !important;
-                gap: 14px !important;
-                padding: 20px 16px !important;
+                gap: 10px !important;
+                padding: 14px 12px !important;
+                border-radius: 12px !important;
+            }
+            .hero-banner h1 {
+                font-size: 17px !important;
+                line-height: 1.25 !important;
+            }
+            .hero-banner p {
+                font-size: 12px !important;
+                line-height: 1.4 !important;
             }
             .hero-stats {
                 width: 100%;
                 display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
-                gap: 10px !important;
+                gap: 7px !important;
+            }
+            .hero-stats .stat-box {
+                padding: 7px 9px !important;
+                font-size: 11px !important;
             }
             .filter-bar {
                 flex-direction: column !important;
                 align-items: flex-start !important;
-                gap: 10px !important;
+                gap: 7px !important;
+                padding: 8px 10px !important;
+                margin-bottom: 10px !important;
+            }
+            .filter-left h2 {
+                font-size: 15px !important;
+            }
+            .filter-left span {
+                font-size: 11.5px !important;
             }
             .filter-right {
                 width: 100%;
                 flex-wrap: wrap !important;
+                gap: 6px !important;
+                font-size: 11.5px !important;
+            }
+            .filter-right select {
+                padding: 5px 8px !important;
+                font-size: 11.5px !important;
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 gap: 8px !important;
+            }
+            .product-card {
+                border-radius: 10px !important;
+            }
+            .product-card .product-img {
+                height: 145px !important;
+                padding: 4px !important;
+            }
+            .product-body {
+                padding: 8px !important;
+            }
+            .seller-chip {
+                font-size: 10px !important;
+                padding: 2px 6px !important;
+            }
+            .product-title {
+                font-size: 12.5px !important;
+                line-height: 1.3 !important;
+                margin: 4px 0 !important;
+            }
+            .product-desc {
+                font-size: 11px !important;
+                line-height: 1.35 !important;
+                margin-bottom: 5px !important;
+            }
+            .current-price {
+                font-size: 13.5px !important;
+            }
+            .old-price,
+            .shipping-info-text {
+                font-size: 10.5px !important;
+            }
+            .card-size-select-row {
+                padding: 4px 6px !important;
+                font-size: 10.5px !important;
+                margin-bottom: 6px !important;
+            }
+            .card-size-select {
+                padding: 2px 5px !important;
+                font-size: 10.5px !important;
+                max-width: 92px;
+            }
+            .btn-add-cart {
+                padding: 6px 7px !important;
+                font-size: 11px !important;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+            }
+            .kpi-card {
+                padding: 10px !important;
+                gap: 8px !important;
+            }
+            .kpi-card h3 {
+                font-size: 14px !important;
+            }
+            .kpi-card span {
+                font-size: 10.5px !important;
+            }
+            .dash-tabs {
+                gap: 5px !important;
+                overflow-x: auto;
+                flex-wrap: nowrap !important;
+                padding-bottom: 4px;
+            }
+            .tab-btn {
+                padding: 6px 10px !important;
+                font-size: 11.5px !important;
+                white-space: nowrap;
+            }
+            .panel-card {
+                padding: 12px 10px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 7px 6px !important;
+                font-size: 11.5px !important;
+            }
+            .modal-box {
+                padding: 14px 12px !important;
+                width: 95% !important;
+            }
+            .modal-header h3 {
+                font-size: 15px !important;
+            }
+            .legal-footer-bar {
+                margin-top: 24px !important;
+                padding: 14px 8px !important;
+            }
+            .legal-brand-line,
+            .legal-link-btn {
+                font-size: 11.5px !important;
             }
             .tracking-steps {
                 grid-template-columns: 1fr !important;
@@ -760,15 +927,39 @@
 
             <!-- Admin Sekmeleri -->
             <div class="dash-tabs">
-                <button class="tab-btn active" data-tab="admin-applications" type="button">Satıcı Başvuruları & Onay</button>
+                <button class="tab-btn active" data-tab="admin-all-orders" type="button">Tüm Platform Siparişleri</button>
+                <button class="tab-btn" data-tab="admin-applications" type="button">Satıcı Başvuruları & Onay</button>
                 <button class="tab-btn" data-tab="admin-sellers" type="button">Tüm Satıcılar</button>
                 <button class="tab-btn" data-tab="admin-customers" type="button">Müşteri Kayıtları & Siparişler</button>
                 <button class="tab-btn" data-tab="admin-coupons" type="button">Kupon Yönetimi</button>
                 <button class="tab-btn" data-tab="admin-pos" type="button">PayTR / iyzico Sanal POS</button>
             </div>
 
+            <!-- ADMIN SEKME 0 (VARSAYILAN): TÜM PLATFORM SİPARİŞLERİ -->
+            <div class="tab-content active" id="admin-all-orders">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-boxes-packing"></i> Tüm Bayi & Mağaza Siparişleri (Merkezi Takip)</h3>
+                    <p class="helper-text">Site üzerinden verilen tüm siparişler satıcı paneliyle eş zamanlı olarak burada listelenir. Ayrı satıcı panellerine girmeden kargo ve teslimat durumunu buradan yönetebilirsiniz.</p>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Takip Kodu & Tarih</th>
+                                    <th>İlgili Bayi / Mağaza</th>
+                                    <th>Müşteri & Adres</th>
+                                    <th>Ürünler</th>
+                                    <th>Tutar & Ödeme</th>
+                                    <th>Kargo & Durum İşlemi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminAllOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- ADMIN SEKME 1: SATICI BAŞVURULARI -->
-            <div class="tab-content active" id="admin-applications">
+            <div class="tab-content" id="admin-applications">
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-file-signature"></i> Kurumsal Satıcı Başvuru Kayıtları</h3>
                     <p class="helper-text">Başvuran firmaların tüm iletişim, vergi/TC kimlik ve adres bilgilerini inceleyip kullanıcı adı ve şifre atayarak onaylayabilirsiniz.</p>
@@ -1040,28 +1231,34 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Ödeme Yöntemi Seçin *</label>
+                    <label>Ödeme Yöntemi *</label>
                     <div class="payment-methods-grid">
-                        <label class="payment-option selected">
-                            <input type="radio" name="paymentMethod" value="Kredi / Banka Kartı (PayTR / iyzico)" checked>
-                            <i class="fa-solid fa-credit-card"></i>
-                            <div>
-                                <strong>Kredi / Banka Kartı</strong>
-                                <small id="activePosLabel">PayTR / iyzico Sanal POS Altyapısı</small>
-                            </div>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="paymentMethod" value="Havale / EFT">
+                        <label class="payment-option selected" id="eftPaymentOption">
+                            <input type="radio" name="paymentMethod" value="Havale / EFT" checked>
                             <i class="fa-solid fa-building-columns"></i>
                             <div>
                                 <strong>Havale / EFT</strong>
-                                <small>Banka Hesabına Transfer</small>
+                                <small>Banka Hesabına Transfer (Aktif)</small>
+                            </div>
+                        </label>
+                        <label class="payment-option disabled-pos" id="cardPaymentOption" title="Sanal POS onayı bekleniyor">
+                            <input type="radio" name="paymentMethod" value="Kredi / Banka Kartı (PayTR / iyzico)" disabled>
+                            <i class="fa-solid fa-credit-card"></i>
+                            <div>
+                                <strong>Kredi / Banka Kartı</strong>
+                                <small id="activePosLabel">Sanal POS Onayı Bekleniyor</small>
                             </div>
                         </label>
                     </div>
+                    <div class="eft-friendly-notice">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>
+                            Sanal POS onay sürecimiz henüz tamamlanmadığı için şu an yalnızca <strong>Havale / EFT</strong> ile ödeme kabul ediyoruz. Siparişinizi tamamladığınızda oluşan takip kodu ile ödeme detayları/siparişiniz hızla işleme alınacaktır; anlayışınız için teşekkür ederiz.
+                        </div>
+                    </div>
                 </div>
 
-                <div id="cardFieldsBox" class="card-box">
+                <div id="cardFieldsBox" class="card-box hidden">
                     <div class="form-group">
                         <label>Kart Üzerindeki İsim</label>
                         <input type="text" placeholder="AD SOYAD">
@@ -1078,7 +1275,7 @@
 
                 <div class="checkout-final-bar">
                     <span>Ödenecek Tutar: <strong id="modalFinalPrice">0,00 ₺</strong></span>
-                    <button type="submit" class="btn-primary">Siparişi Onayla</button>
+                    <button type="submit" class="btn-primary">Siparişi Onayla (Havale / EFT)</button>
                 </div>
             </form>
         </div>
@@ -1202,7 +1399,7 @@
             gizlilik: {
                 title: 'Gizlilik Politikası',
                 html: `
-                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önem veriyoruz. Bu politika; sipariş, satıcı başvurusu ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
+                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önemiyoruz. Bu politika; sipariş, satıcı başvurusu ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
                     <h4>1. Toplanan Veriler</h4>
                     <ul>
                         <li>Sipariş oluşturma sırasında paylaşılan ad-soyad, telefon numarası, teslimat adresi ve sipariş/takip bilgileri,</li>
@@ -1344,6 +1541,13 @@
 
         const $ = (id) => document.getElementById(id);
         const formatMoney = (val) => Number(val || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
+
+        function getSellerDisplayName(sellerId) {
+            const found = (db.sellers || []).find(s => s.id === sellerId);
+            if (found) return found.companyName || found.fullName || sellerId;
+            const orderMatch = (db.orders || []).find(o => o.sellerId === sellerId && o.sellerName);
+            return orderMatch ? orderMatch.sellerName : (sellerId || 'TRENDTAN Mağaza');
+        }
 
         function getProductImages(prod) {
             if (Array.isArray(prod.images) && prod.images.length > 0) return prod.images;
@@ -2040,30 +2244,30 @@
             }
         };
 
-        window.markOrderShipped = async function(orderId) {
+        window.markOrderShipped = async function(orderId, inputPrefix = 'cargoInput_') {
             const order = db.orders.find(o => o.id === orderId);
             if (!order) return;
-            const cargoInput = document.getElementById(`cargoInput_${orderId}`);
+            const cargoInput = document.getElementById(`${inputPrefix}${orderId}`);
             if (cargoInput && cargoInput.value.trim()) {
                 order.carrierCargoNo = cargoInput.value.trim();
             }
             order.status = 'shipped';
             order.shippedAt = new Date().toLocaleDateString('tr-TR');
             await saveDB();
-            renderSellerDashboard();
+            refreshAllViews();
             showToast(`Sipariş (${order.trackingCode || order.id}) kargoya verildi olarak güncellendi.`);
         };
 
-        window.completeSellerOrder = async function(orderId) {
+        window.completeSellerOrder = async function(orderId, inputPrefix = 'cargoInput_') {
             const order = db.orders.find(o => o.id === orderId);
             if (order) {
-                const cargoInput = document.getElementById(`cargoInput_${orderId}`);
+                const cargoInput = document.getElementById(`${inputPrefix}${orderId}`);
                 if (cargoInput && cargoInput.value.trim()) {
                     order.carrierCargoNo = cargoInput.value.trim();
                 }
                 order.status = 'completed';
                 await saveDB();
-                renderSellerDashboard();
+                refreshAllViews();
                 showToast('Sipariş tamamlandı olarak işaretlendi.');
             }
         };
@@ -2122,8 +2326,8 @@
                                 <td>${o.paymentMethod}</td>
                                 <td>
                                     <input type="text" id="cargoInput_${o.id}" class="cargo-inline-input" value="${o.carrierCargoNo || ''}" placeholder="İsteğe bağlı kargo no">
-                                    <button class="btn-sm btn-outline" type="button" onclick="markOrderShipped('${o.id}')"><i class="fa-solid fa-truck"></i> Kargoya Verildi</button>
-                                    <button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}')"><i class="fa-solid fa-check"></i> Tamamla</button>
+                                    <button class="btn-sm btn-outline" type="button" onclick="markOrderShipped('${o.id}', 'cargoInput_')"><i class="fa-solid fa-truck"></i> Kargoya Verildi</button>
+                                    <button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}', 'cargoInput_')"><i class="fa-solid fa-check"></i> Tamamla</button>
                                 </td>
                             </tr>
                         `;
@@ -2147,11 +2351,37 @@
         }
 
         function renderAdminDashboard() {
-            const platformRev = (db.orders || []).reduce((s, o) => s + Number(o.total), 0);
+            const allOrders = db.orders || [];
+            const platformRev = allOrders.reduce((s, o) => s + Number(o.total), 0);
             if ($('adminTotalPlatformRevenue')) $('adminTotalPlatformRevenue').textContent = formatMoney(platformRev);
             if ($('adminPendingAppsCount')) $('adminPendingAppsCount').textContent = (db.sellerApplications || []).length;
             if ($('adminActiveSellersCount')) $('adminActiveSellersCount').textContent = (db.sellers || []).length;
             if ($('adminCustomerCount')) $('adminCustomerCount').textContent = (db.customers || []).length;
+
+            if ($('adminAllOrdersBody')) {
+                $('adminAllOrdersBody').innerHTML = allOrders.length === 0
+                    ? `<tr><td colspan="6" style="text-align:center;">Henüz verilmiş bir sipariş bulunmuyor.</td></tr>`
+                    : allOrders.map(o => {
+                        const tCode = o.trackingCode || o.id;
+                        const sellerLabel = o.sellerName || getSellerDisplayName(o.sellerId);
+                        const statusLabel = getOrderStatusLabel(o);
+                        const isDone = o.status === 'completed';
+                        return `
+                            <tr>
+                                <td><strong><code>${tCode}</code></strong><br><small>${o.id} • ${o.date}</small><br><span style="font-weight:700; color:${isDone ? '#16a34a' : '#ea580c'};">${statusLabel}</span></td>
+                                <td><strong>${sellerLabel}</strong></td>
+                                <td><strong>${o.customerName}</strong><br><small>${o.customerPhone}</small><br><small>${o.customerAddress}</small></td>
+                                <td>${o.itemsText}</td>
+                                <td><strong>${formatMoney(o.total)}</strong><br><small>${o.paymentMethod || 'Havale / EFT'}</small></td>
+                                <td>
+                                    <input type="text" id="adminCargoInput_${o.id}" class="cargo-inline-input" value="${o.carrierCargoNo || ''}" placeholder="Kargo no / not">
+                                    ${!isDone ? `<button class="btn-sm btn-outline" type="button" onclick="markOrderShipped('${o.id}', 'adminCargoInput_')"><i class="fa-solid fa-truck"></i> Kargoya Verildi</button>` : ''}
+                                    ${!isDone ? `<button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}', 'adminCargoInput_')"><i class="fa-solid fa-check"></i> Tamamla</button>` : `<span style="color:#16a34a; font-weight:700; font-size:12px;">Teslim Edildi</span>`}
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+            }
 
             if ($('adminApplicationsBody')) {
                 $('adminApplicationsBody').innerHTML = (db.sellerApplications || []).length === 0
@@ -2349,6 +2579,11 @@
             $('proceedCheckoutBtn').addEventListener('click', () => {
                 if (cart.length === 0) { showToast('Sepetiniz boş.'); return; }
                 closeCart();
+                const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
+                if (eftRadio) eftRadio.checked = true;
+                if ($('eftPaymentOption')) $('eftPaymentOption').classList.add('selected');
+                if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
+                if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
                 const { grandTotal } = calculateCartTotals();
                 if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
                 if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
@@ -2357,10 +2592,14 @@
 
         document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-                if ($('cardFieldsBox')) {
-                    if (e.target.value.includes('Kart')) $('cardFieldsBox').classList.remove('hidden');
-                    else $('cardFieldsBox').classList.add('hidden');
+                if (e.target.disabled) {
+                    const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
+                    if (eftRadio) eftRadio.checked = true;
+                    return;
                 }
+                if ($('eftPaymentOption')) $('eftPaymentOption').classList.toggle('selected', e.target.value === 'Havale / EFT');
+                if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
+                if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
             });
         });
 
@@ -2370,7 +2609,7 @@
                 const custName = $('custName').value.trim();
                 const custPhone = $('custPhone').value.trim();
                 const custAddress = $('custAddress').value.trim();
-                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Havale / EFT';
+                const paymentMethod = 'Havale / EFT';
                 const today = new Date().toLocaleDateString('tr-TR');
                 const { grandTotal } = calculateCartTotals();
 
@@ -2404,11 +2643,13 @@
                     const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
                     const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
                     createdCodes.push(trackingCode);
+                    const sellerName = groupItems[0]?.product?.sellerName || getSellerDisplayName(sId);
 
                     db.orders.unshift({
                         id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
                         trackingCode,
                         sellerId: sId,
+                        sellerName,
                         customerName: custName,
                         customerPhone: custPhone,
                         customerAddress: custAddress,
@@ -2437,7 +2678,7 @@
                     try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
                     runOrderTrackingSearch(createdCodes[0]);
                 }
-                showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
+                showToast(`Havale / EFT siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
             });
         }
 
