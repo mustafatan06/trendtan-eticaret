@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yasal Bilgilendirmeler | TRENDTAN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=20261121">
+    <style>
+        body {
+            background: #f8fafc;
+            color: #0f172a;
+            margin: 0;
+        }
+        .legal-page-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+        }
+        .legal-page-header-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .legal-page-brand {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legal-page-brand span strong {
+            color: #f27a1a;
+        }
+        .legal-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .legal-back-btn:hover {
+            background: #f27a1a;
+        }
+        .legal-page-main {
+            padding: 28px 0 40px 0;
+        }
+        .legal-nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .legal-pill {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .legal-pill.active,
+        .legal-pill:hover {
+            background: #f27a1a;
+            border-color: #f27a1a;
+            color: #ffffff;
+        }
+        .legal-paper-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+        }
+        .legal-paper-card h1 {
+            margin: 0 0 16px 0;
+            font-size: 24px;
+            color: #0f172a;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .legal-paper-body {
+            line-height: 1.7;
+            font-size: 14px;
+            color: #1e293b;
+        }
+        .legal-paper-body h3 {
+            margin: 18px 0 8px 0;
+            font-size: 16px;
+            color: #0f172a;
+        }
+        .legal-paper-body ul {
+            padding-left: 20px;
+            margin: 8px 0 14px 0;
+        }
+        .legal-notice-box {
+            margin-top: 20px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            font-size: 13px;
+            color: #9a3412;
+        }
+        .legal-page-footer {
+            text-align: center;
+            padding: 18px 12px 28px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+        }
+        @media (max-width: 768px) {
+            .legal-paper-card {
+                padding: 18px;
+            }
+            .legal-paper-card h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="legal-page-header">
+        <div class="container legal-page-header-inner">
+            <a href="index.html" class="legal-page-brand">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>TREND<strong>TAN</strong></span>
+            </a>
+            <a href="index.html" class="legal-back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Mağazaya Dön</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container legal-page-main">
+        <div class="legal-nav-pills" id="legalPills">
+            <a href="yasal.html?doc=gizlilik" class="legal-pill" data-doc="gizlilik">Gizlilik Politikası</a>
+            <a href="yasal.html?doc=kvkk" class="legal-pill" data-doc="kvkk">KVKK Aydınlatma Metni</a>
+            <a href="yasal.html?doc=iade" class="legal-pill" data-doc="iade">İptal ve İade Politikası</a>
+            <a href="yasal.html?doc=mesafeli" class="legal-pill" data-doc="mesafeli">Mesafeli Satış Sözleşmesi</a>
+            <a href="yasal.html?doc=pos-evrak" class="legal-pill" data-doc="pos-evrak">Sanal POS Başvuru Evrak &amp; Kontrol Listesi</a>
+        </div>
+
+        <article class="legal-paper-card">
+            <h1 id="legalDocTitle">Gizlilik Politikası</h1>
+            <div id="legalDocContent" class="legal-paper-body"></div>
+            <div class="legal-notice-box">
+                <strong>Bilgilendirme:</strong> Metinlerde yer alan <em>[Firma/Şahıs Ünvanı]</em>, <em>[Vergi/T.C. Kimlik No]</em>, <em>[Adres]</em>, <em>[Telefon]</em> ve <em>[E-Posta]</em> alanlarını resmi Sanal POS başvurusu öncesinde güncel bilgilerinizle doldurunuz.
+            </div>
+        </article>
+    </main>
+
+    <footer class="legal-page-footer">
+        TAN MEDYA TASARIM MARKASIDIR.2026
+    </footer>
+
+    <script>
+        const LEGAL_DOCS = {
+            gizlilik: {
+                title: 'Gizlilik Politikası',
+                html: `
+                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önem veriyoruz. Bu politika; sipariş, satıcı başvurusu ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
+                    <h3>1. Toplanan Veriler</h3>
+                    <ul>
+                        <li>Sipariş oluşturma sırasında paylaşılan ad-soyad, telefon numarası, teslimat adresi ve sipariş/takip bilgileri,</li>
+                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri,</li>
+                        <li>Site güvenliği ve performansını artırmaya yönelik teknik erişim kayıtları.</li>
+                    </ul>
+                    <h3>2. Ödeme Kartı Güvenliği</h3>
+                    <p>Kartlı ödemelerde kart bilgileri Sanal POS altyapısı (PayTR / iyzico vb.) üzerinden işlenir; platformumuzda kart numarası veya güvenlik kodu saklanmaz.</p>
+                    <h3>3. Verilerin Paylaşımı</h3>
+                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, ödeme doğrulaması veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz.</p>
+                `
+            },
+            kvkk: {
+                title: 'KVKK Aydınlatma Metni',
+                html: `
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu <strong>[Firma/Şahıs Ünvanı]</strong> sıfatıyla kişisel verilerinizi aşağıda belirtilen kapsamda işliyoruz.</p>
+                    <h3>1. Kişisel Verilerin İşlenme Amaçları</h3>
+                    <ul>
+                        <li>Alışveriş işlemlerinin yürütülmesi, siparişlerin oluşturulması, takip kodu üretilmesi ve teslimat süreçlerinin yönetilmesi,</li>
+                        <li>Satıcı üyelik ve başvuru süreçlerinin değerlendirilmesi,</li>
+                        <li>Muhasebe, faturalandırma, iade/iptal yönetimi ve mevzuattan doğan yükümlülüklerin yerine getirilmesi.</li>
+                    </ul>
+                    <h3>2. Hukuki Sebepler ve Aktarım</h3>
+                    <p>Verileriniz KVKK m.5 ve m.6 kapsamında sözleşmenin kurulması/ifası, hukuki yükümlülüklerin yerine getirilmesi ve meşru menfaat hukuki sebeplerine dayanarak işlenir; kargo, ödeme kuruluşu ve yetkili kamu kurumlarıyla ilgili mevzuat sınırları içinde paylaşılabilir.</p>
+                    <h3>3. İlgili Kişinin Hakları (KVKK m.11)</h3>
+                    <p>Veri sahipleri; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve kanuni şartlar oluştuğunda silinmesini/yok edilmesini talep etme haklarına sahiptir. Başvurularınızı <strong>[E-Posta]</strong> veya <strong>[Adres]</strong> üzerinden iletebilirsiniz.</p>
+                `
+            },
+            iade: {
+                title: 'İptal ve İade Politikası',
+                html: `
+                    <p>TRENDTAN üzerinden verilen siparişlerde iptal ve iade süreçleri, ilgili ürünün niteliğine ve yürürlükteki tüketici mevzuatına göre yürütülür.</p>
+                    <h3>1. Sipariş İptali</h3>
+                    <p>Henüz kargoya verilmemiş siparişler için <strong>[Telefon]</strong> veya <strong>[E-Posta]</strong> üzerinden sipariş/takip kodu ile iptal talebi oluşturulabilir.</p>
+                    <h3>2. Cayma ve İade Koşulları</h3>
+                    <ul>
+                        <li>Teslim alınan ürünlerde cayma hakkı ve iade talepleri, ilgili mevzuatta öngörülen süreler içinde ve ürünün kullanılmamış, hasar görmemiş, orijinal ambalajı ve aksesuarlarıyla eksiksiz olması kaydıyla değerlendirilir.</li>
+                        <li>Hijyenik açıdan iadesi uygun olmayan ürünler, tek kullanımlık ürünler, çabuk bozulabilen ürünler veya alıcının özel talebiyle hazırlanan ürünlerde mevzuat istisnaları geçerlidir.</li>
+                        <li>Toptan / minimum sipariş adediyle alınan ticari nitelikli ürünlerde satıcı ve anlaşma koşulları ayrıca dikkate alınır.</li>
+                    </ul>
+                    <h3>3. İade Geri Ödemesi</h3>
+                    <p>İade edilen ürünün satıcı/platform tarafından incelenip onaylanmasının ardından ödeme tutarı, ödemenin yapıldığı yöntemle alıcıya iade edilir; bankaya yansıma süresi banka süreçlerine bağlıdır.</p>
+                `
+            },
+            mesafeli: {
+                title: 'Mesafeli Satış Sözleşmesi',
+                html: `
+                    <p>İşbu bilgilendirme metni, elektronik ortamda sipariş oluşturan alıcı ile satıcı/platform arasındaki mesafeli satış süreçlerinin temel esaslarını özetler.</p>
+                    <h3>1. Taraflar</h3>
+                    <ul>
+                        <li><strong>Satıcı / Sağlayıcı:</strong> [Firma/Şahıs Ünvanı] — Adres: [Adres] — Tel: [Telefon] — E-Posta: [E-Posta] — VKN/T.C.: [Vergi/T.C. Kimlik No]</li>
+                        <li><strong>Alıcı:</strong> Sipariş formunda ad-soyad, telefon ve teslimat adresi bilgilerini beyan eden kişi.</li>
+                    </ul>
+                    <h3>2. Ürün, Fiyat ve Ödeme</h3>
+                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli ve uygulanan kupon indirimi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği kartlı ödeme veya havale/EFT yöntemiyle tamamlanır.</p>
+                    <h3>3. Teslimat ve Sorumluluk</h3>
+                    <p>Siparişler, sipariş takip kodu ile takip edilecek şekilde alıcının belirttiği teslimat adresine gönderilir. Teslimat sırasında paketin hasarlı olması halinde tutanak tutulması önerilir.</p>
+                `
+            },
+            'pos-evrak': {
+                title: 'Sanal POS Başvuru Evrak & Kontrol Listesi',
+                html: `
+                    <p>PayTR, iyzico veya banka Sanal POS başvurularında inceleme ekiplerinin kontrol ettiği temel evrak ve site gereksinimleri aşağıdadır:</p>
+                    <h3>1. Kurumsal / Ticari Evraklar</h3>
+                    <ul>
+                        <li><strong>Vergi Levhası</strong> (güncel, faaliyet konusu ile satış yapılan ürünlerin uyumlu olması önemlidir),</li>
+                        <li><strong>Kimlik Belgesi</strong> (şahıs işletmelerinde işletme sahibinin, şirketlerde imza yetkilisinin kimlik fotokopisi/bilgileri),</li>
+                        <li><strong>İmza Sirküleri veya İmza Beyannamesi</strong> (şirketlerde yetki belgesi/ticaret sicil gazetesi ile birlikte),</li>
+                        <li><strong>Faaliyet Belgesi</strong> (kurumun talep etmesi halinde güncel tarihli),</li>
+                        <li><strong>Banka IBAN Bilgisi</strong> (başvuran firma veya şahıs adına kayıtlı).</li>
+                    </ul>
+                    <h3>2. Web Sitesi İnceleme Kontrol Listesi</h3>
+                    <ul>
+                        <li>SSL sertifikasının aktif olması ve alan adının açıkça görünmesi,</li>
+                        <li>Gizlilik Politikası, KVKK Aydınlatma Metni, İptal/İade Politikası ve Mesafeli Satış Sözleşmesi sayfalarının erişilebilir olması,</li>
+                        <li>İletişim bilgileri (firma ünvanı, adres, telefon, e-posta) ve ürün fiyat/kargo/iptal-iade koşullarının şeffaf biçimde yer alması.</li>
+                    </ul>
+                `
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const docKey = LEGAL_DOCS[params.get('doc')] ? params.get('doc') : 'gizlilik';
+        const activeDoc = LEGAL_DOCS[docKey];
+
+        document.title = `${activeDoc.title} | TRENDTAN`;
+        document.getElementById('legalDocTitle').textContent = activeDoc.title;
+        document.getElementById('legalDocContent').innerHTML = activeDoc.html;
+
+        document.querySelectorAll('#legalPills .legal-pill').forEach(pill => {
+            pill.classList.toggle('active', pill.dataset.doc === docKey);
+        });
+    </script>
+</body>
+</html>

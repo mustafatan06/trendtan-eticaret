@@ -212,6 +212,45 @@
             border-color: #f27a1a;
         }
 
+        /* En Alt Marka & Politika Bağlantıları */
+        .legal-footer-bar {
+            margin-top: 40px;
+            padding: 22px 0;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+        .legal-footer-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+        }
+        .legal-brand-line {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            color: #0f172a;
+        }
+        .legal-links-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+        }
+        .legal-link-btn {
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .legal-link-btn:hover {
+            color: #f27a1a;
+            background: #fff7ed;
+        }
+
         /* Mobil Üst Üste Binme Koruması */
         @media (max-width: 768px) {
             .top-promo-bar {
@@ -1011,6 +1050,22 @@
             <div id="productDetailBody" class="modal-form active"></div>
         </div>
     </div>
+
+    <!-- EN ALT MARKA & POLITIKA SAYFA BAĞLANTILARI -->
+    <footer class="legal-footer-bar" id="siteLegalFooter">
+        <div class="container">
+            <div class="legal-footer-inner">
+                <div class="legal-brand-line">TAN MEDYA TASARIM MARKASIDIR.2026</div>
+                <nav class="legal-links-group" aria-label="Yasal ve Başvuru Politikaları">
+                    <a href="yasal.html?doc=gizlilik" class="legal-link-btn">Gizlilik Politikası</a>
+                    <a href="yasal.html?doc=kvkk" class="legal-link-btn">KVKK Aydınlatma Metni</a>
+                    <a href="yasal.html?doc=iade" class="legal-link-btn">İptal ve İade Politikası</a>
+                    <a href="yasal.html?doc=mesafeli" class="legal-link-btn">Mesafeli Satış Sözleşmesi</a>
+                    <a href="yasal.html?doc=pos-evrak" class="legal-link-btn">Sanal POS Başvuru Evrak &amp; Kontrol Listesi</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
 
     <!-- BİLDİRİM TOAST -->
     <div id="toastNotification" class="toast hidden"></div>
