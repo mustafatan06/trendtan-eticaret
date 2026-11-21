@@ -50,6 +50,23 @@
             backdrop-filter: blur(6px);
         }
 
+        /* Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
+        .product-card .product-img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain !important;
+            background: #f8fafc;
+            padding: 6px;
+            display: block;
+        }
+        .multi-thumb-item img,
+        .detail-thumb-img,
+        .table-thumb,
+        .cart-item img {
+            object-fit: contain !important;
+            background: #f8fafc;
+        }
+
         /* Sipariş Takip Butonu & Kartı */
         .btn-track-order {
             display: inline-flex;
@@ -603,7 +620,7 @@
                         </div>
 
                         <div class="form-group full-width">
-                            <label id="catalogVariantLabel">Katalog Seçenekleri (Standart + Beden / Renk / Numara) *</label>
+                            <label id="catalogVariantLabel">Katalog Seçenekleri (İstediğinizi İşaretleyin veya Kaldırın) *</label>
                             <div id="catalogVariantCheckboxes" class="variant-chips-wrap"></div>
                             <input type="text" id="customVariantExtra" placeholder="Ek seçenek yazın (Örn: XL, Mat Siyah, 50ml)" style="margin-top:8px;">
                         </div>
@@ -1319,11 +1336,11 @@
         let currentSearch = savedFilters.search || '';
         let currentSeller = null;
         let uploadedImages = [];
-        let selectedFormVariants = ['Standart'];
+        let selectedFormVariants = [];
         let cardSelectedVariants = {};
         let activeDetailProductId = null;
         let activeDetailPhotoIdx = 0;
-        let activeDetailVariant = 'Standart';
+        let activeDetailVariant = '';
 
         const $ = (id) => document.getElementById(id);
         const formatMoney = (val) => Number(val || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
@@ -1498,17 +1515,27 @@
             }
         }
 
-        function compressImageToBase64(file, maxWidth = 480, quality = 0.58) {
+        function compressImageToBase64(file, maxWidth = 520, quality = 0.62) {
             return new Promise((resolve, reject) => {
                 if (!file) return resolve('');
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
-                        const ratio = img.width > maxWidth ? maxWidth / img.width : 1;
+                        const isPortrait = img.height > img.width;
+                        const maxDim = isPortrait ? 640 : maxWidth;
+                        let targetW = img.width;
+                        let targetH = img.height;
+                        if (img.width > img.height && img.width > maxDim) {
+                            targetW = maxDim;
+                            targetH = Math.round((img.height * maxDim) / img.width);
+                        } else if (img.height >= img.width && img.height > maxDim) {
+                            targetH = maxDim;
+                            targetW = Math.round((img.width * maxDim) / img.height);
+                        }
                         const canvas = document.createElement('canvas');
-                        canvas.width = Math.round(img.width * ratio);
-                        canvas.height = Math.round(img.height * ratio);
+                        canvas.width = Math.max(1, targetW);
+                        canvas.height = Math.max(1, targetH);
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         resolve(canvas.toDataURL('image/jpeg', quality));
@@ -1553,8 +1580,8 @@
                 const extras = selectedFormVariants.filter(x => !EYEWEAR_COLORS.includes(x));
                 return [...EYEWEAR_COLORS, ...extras];
             }
-            const extras = selectedFormVariants.filter(x => x !== 'Standart' && !baseOptions.includes(x));
-            return ['Standart', ...baseOptions.filter(x => x !== 'Standart'), ...extras];
+            const extras = selectedFormVariants.filter(x => !baseOptions.includes(x));
+            return [...baseOptions, ...extras];
         }
 
         function renderCatalogVariantOptions(categoryName, keepSelected = null) {
@@ -1563,10 +1590,8 @@
 
             if (Array.isArray(keepSelected) && keepSelected.length > 0) {
                 selectedFormVariants = [...new Set(keepSelected)];
-            } else if (categoryName === 'Ayakkabı' || categoryName === 'Gözlük') {
-                selectedFormVariants = [];
             } else {
-                selectedFormVariants = ['Standart'];
+                selectedFormVariants = [];
             }
 
             if (labelEl) {
@@ -1575,9 +1600,9 @@
                 } else if (categoryName === 'Gözlük') {
                     labelEl.textContent = 'Gözlük Renk Seçenekleri (İşaretleyin) *';
                 } else if (categoryName === 'Kadın Giyim' || categoryName === 'Erkek Giyim' || categoryName === 'Çocuk Giyim') {
-                    labelEl.textContent = `${categoryName} Beden / Seçenekleri (İşaretleyin) *`;
+                    labelEl.textContent = `${categoryName} Seçenekleri (Standart dahil istediğiniz seçeneği işaretleyip kaldırabilirsiniz) *`;
                 } else {
-                    labelEl.textContent = 'Katalog Seçenekleri (Standart + Renk/Özellik Zorunlu) *';
+                    labelEl.textContent = 'Katalog Seçenekleri (Standart dahil istediğiniz seçeneği işaretleyip kaldırabilirsiniz) *';
                 }
             }
 
@@ -1596,15 +1621,7 @@
 
         window.toggleFormVariant = function(opt) {
             const cat = $('prodCategory') ? $('prodCategory').value : 'Elektronik';
-            if (cat === 'Ayakkabı' || cat === 'Gözlük') {
-                if (selectedFormVariants.includes(opt)) {
-                    selectedFormVariants = selectedFormVariants.filter(x => x !== opt);
-                } else {
-                    selectedFormVariants.push(opt);
-                }
-            } else if (opt === 'Standart') {
-                if (!selectedFormVariants.includes('Standart')) selectedFormVariants.unshift('Standart');
-            } else if (selectedFormVariants.includes(opt)) {
+            if (selectedFormVariants.includes(opt)) {
                 selectedFormVariants = selectedFormVariants.filter(x => x !== opt);
             } else {
                 selectedFormVariants.push(opt);
@@ -1683,8 +1700,8 @@
         window.addFromProductCard = function(prodId) {
             const prod = (db.products || []).find(p => p.id === prodId);
             if (!prod) return;
-            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
-            const chosen = cardSelectedVariants[prodId] || variants[0];
+            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
+            const chosen = cardSelectedVariants[prodId] || variants[0] || '';
             addToCart(prodId, null, chosen);
         };
 
@@ -1730,8 +1747,8 @@
                 const discountRate = effOldPrice > effPrice ? Math.round(((effOldPrice - effPrice) / effOldPrice) * 100) : 0;
                 const imgs = getProductImages(prod);
                 const minQty = Math.max(1, Number(prod.minOrderQty || 1));
-                const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
-                const selectedVal = variants.includes(cardSelectedVariants[prod.id]) ? cardSelectedVariants[prod.id] : variants[0];
+                const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
+                const selectedVal = variants.includes(cardSelectedVariants[prod.id]) ? cardSelectedVariants[prod.id] : (variants[0] || '');
                 cardSelectedVariants[prod.id] = selectedVal;
                 const prodCat = normalizeCategoryName(prod.category);
                 const isShoe = prodCat === 'Ayakkabı';
@@ -1751,14 +1768,16 @@
                             <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
-                                ${optionSummaryLabel}: <strong>${variants.join(', ')}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
+                                ${optionSummaryLabel}: <strong>${variants.length ? variants.join(', ') : 'Belirtilmemiş'}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
                             </small>
-                            <div class="card-size-select-row">
-                                <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${optionLabel}</span>
-                                <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)">
-                                    ${variants.map(v => `<option value="${v.replace(/"/g, '&quot;')}" ${v === selectedVal ? 'selected' : ''}>${isShoe ? v + ' Numara' : v}</option>`).join('')}
-                                </select>
-                            </div>
+                            ${variants.length > 0 ? `
+                                <div class="card-size-select-row">
+                                    <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${optionLabel}</span>
+                                    <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)">
+                                        ${variants.map(v => `<option value="${v.replace(/"/g, '&quot;')}" ${v === selectedVal ? 'selected' : ''}>${isShoe ? v + ' Numara' : v}</option>`).join('')}
+                                    </select>
+                                </div>
+                            ` : ''}
                             <div class="price-block">
                                 ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
                                 <span class="current-price">${formatMoney(effPrice)}</span>
@@ -1780,8 +1799,8 @@
             activeDetailProductId = prodId;
             activeDetailPhotoIdx = 0;
             const prod = (db.products || []).find(p => p.id === prodId);
-            const variants = prod && Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
-            activeDetailVariant = variants.includes(cardSelectedVariants[prodId]) ? cardSelectedVariants[prodId] : variants[0];
+            const variants = prod && Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
+            activeDetailVariant = variants.includes(cardSelectedVariants[prodId]) ? cardSelectedVariants[prodId] : (variants[0] || '');
             renderProductDetailModal();
             if ($('productDetailModal')) $('productDetailModal').classList.remove('hidden');
         };
@@ -1810,8 +1829,8 @@
             if ($('detailModalTitle')) $('detailModalTitle').textContent = prod.name;
             const imgs = getProductImages(prod);
             if (activeDetailPhotoIdx >= imgs.length) activeDetailPhotoIdx = 0;
-            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : ['Standart'];
-            if (!variants.includes(activeDetailVariant)) activeDetailVariant = variants[0];
+            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
+            if (variants.length && !variants.includes(activeDetailVariant)) activeDetailVariant = variants[0];
             const minQty = Math.max(1, Number(prod.minOrderQty || 1));
             const effPrice = getEffectivePrice(prod);
             const effOldPrice = getEffectiveOldPrice(prod);
@@ -1841,49 +1860,52 @@
                         <span class="current-price">${formatMoney(effPrice)}</span>
                         <span class="shipping-info-text">Min. Sipariş: <strong>${minQty} adet</strong> • Stok: <strong>${prod.stock} adet</strong></span>
                     </div>
-                    <div class="form-group" style="margin-top:10px;">
-                        <label>${detailSelectLabel}</label>
-                        <div class="variant-chips-wrap">
-                            ${variants.map(v => {
-                                const active = v === activeDetailVariant;
-                                return `
-                                    <button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="selectDetailVariant('${v.replace(/'/g, "\\'")}')">
-                                        <i class="fa-solid ${active ? 'fa-square-check' : 'fa-square'}"></i>
-                                        <span>${v}</span>
-                                    </button>
-                                `;
-                            }).join('')}
+                    ${variants.length > 0 ? `
+                        <div class="form-group" style="margin-top:10px;">
+                            <label>${detailSelectLabel}</label>
+                            <div class="variant-chips-wrap">
+                                ${variants.map(v => {
+                                    const active = v === activeDetailVariant;
+                                    return `
+                                        <button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="selectDetailVariant('${v.replace(/'/g, "\\'")}')">
+                                            <i class="fa-solid ${active ? 'fa-square-check' : 'fa-square'}"></i>
+                                            <span>${v}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
-                    </div>
+                    ` : ''}
                     <button type="button" class="btn-primary full-btn" onclick="addToCart('${prod.id}', ${minQty}, '${activeDetailVariant.replace(/'/g, "\\'")}'); if($('productDetailModal')) $('productDetailModal').classList.add('hidden');">
-                        <i class="fa-solid fa-cart-plus"></i> ${activeDetailVariant} Seçeneği ile Sepete Ekle (${minQty} Ad.)
+                        <i class="fa-solid fa-cart-plus"></i> ${activeDetailVariant ? activeDetailVariant + ' Seçeneği ile ' : ''}Sepete Ekle (${minQty} Ad.)
                     </button>
                 </div>
             `;
         }
 
-        window.addToCart = function(productId, customQty = null, chosenVariant = 'Standart') {
+        window.addToCart = function(productId, customQty = null, chosenVariant = '') {
             const product = (db.products || []).find(p => p.id === productId);
             if (!product) return;
             const minQty = Math.max(1, Number(product.minOrderQty || 1));
             const addCount = customQty ? Math.max(minQty, Number(customQty)) : minQty;
-            const cartKey = `${productId}__${chosenVariant}`;
-            const existing = cart.find(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`) === cartKey);
+            const variantLabel = chosenVariant || '';
+            const cartKey = `${productId}__${variantLabel}`;
+            const existing = cart.find(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || ''}`) === cartKey);
 
             if (existing) {
                 if (existing.qty + addCount <= product.stock) existing.qty += addCount;
                 else { showToast(`Stok adedine ulaştınız! (Max: ${product.stock})`); return; }
             } else {
                 if (product.stock < addCount) { showToast(`Yeterli stok yok (Min. sipariş: ${minQty}, Stok: ${product.stock}).`); return; }
-                cart.push({ cartKey, product, selectedVariant: chosenVariant, qty: addCount });
+                cart.push({ cartKey, product, selectedVariant: variantLabel, qty: addCount });
             }
             persistUiState();
             updateCartUI();
-            showToast(`${product.name} (${chosenVariant}) sepete eklendi.`);
+            showToast(`${product.name}${variantLabel ? ` (${variantLabel})` : ''} sepete eklendi.`);
         };
 
         window.changeCartQty = function(cartKey, delta) {
-            const idx = cart.findIndex(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`) === cartKey);
+            const idx = cart.findIndex(item => (item.cartKey || `${item.product.id}__${item.selectedVariant || ''}`) === cartKey);
             if (idx === -1) return;
             const minQty = Math.max(1, Number(cart[idx].product.minOrderQty || 1));
             const step = delta > 0 ? minQty : -minQty;
@@ -1919,14 +1941,14 @@
                 container.innerHTML = cart.length === 0
                     ? `<p style="text-align:center; color:#64748b; margin-top:40px;">Sepetiniz boş.</p>`
                     : cart.map(item => {
-                        const key = item.cartKey || `${item.product.id}__${item.selectedVariant || 'Standart'}`;
+                        const key = item.cartKey || `${item.product.id}__${item.selectedVariant || ''}`;
                         const imgs = getProductImages(item.product);
                         const unitPrice = getEffectivePrice(item.product);
                         return `
                             <div class="cart-item">
                                 <img src="${imgs[0] || ''}" alt="${item.product.name}">
                                 <div class="cart-item-info">
-                                    <div class="cart-item-title">${item.product.name} <small>(${item.selectedVariant || 'Standart'})</small></div>
+                                    <div class="cart-item-title">${item.product.name} ${item.selectedVariant ? `<small>(${item.selectedVariant})</small>` : ''}</div>
                                     <div class="cart-item-price">${formatMoney(unitPrice * item.qty)}</div>
                                     <div class="qty-controls">
                                         <button class="qty-btn" type="button" onclick="changeCartQty('${key.replace(/'/g, "\\'")}', -1)">-</button>
@@ -2000,7 +2022,7 @@
             if ($('customVariantExtra')) $('customVariantExtra').value = '';
             uploadedImages = [...getProductImages(prod)].slice(0, 4);
             renderSellerImagePreviews();
-            renderCatalogVariantOptions(normCat, prod.variants || ((normCat === 'Ayakkabı' || normCat === 'Gözlük') ? [] : ['Standart']));
+            renderCatalogVariantOptions(normCat, prod.variants || []);
             if ($('productFormHeading')) $('productFormHeading').innerHTML = `<i class="fa-solid fa-pen"></i> Ürünü Düzenle: ${prod.name}`;
             if ($('saveProductBtn')) $('saveProductBtn').innerHTML = `<i class="fa-solid fa-check"></i> Değişiklikleri Kaydet`;
             if ($('cancelEditProductBtn')) $('cancelEditProductBtn').classList.remove('hidden');
@@ -2071,7 +2093,7 @@
                         return `
                             <tr>
                                 <td><img src="${imgs[0] || ''}" class="table-thumb"></td>
-                                <td><strong>${p.name}</strong><br><small>${prodCat} • ${(p.variants || ['Standart']).join(', ')}</small></td>
+                                <td><strong>${p.name}</strong><br><small>${prodCat} • ${(p.variants || []).join(', ')}</small></td>
                                 <td>${effOld > 0 ? formatMoney(effOld) : formatMoney(effPrice)}</td>
                                 <td style="color:#f27a1a; font-weight:700;">${formatMoney(effPrice)}</td>
                                 <td>${Math.max(1, Number(p.minOrderQty || 1))} adet</td>
@@ -2379,7 +2401,7 @@
                 Object.keys(sellerGroups).forEach(sId => {
                     const groupItems = sellerGroups[sId];
                     const groupTotal = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
-                    const itemsText = groupItems.map(i => `${i.product.name} [${i.selectedVariant || 'Standart'}] (x${i.qty})`).join(', ');
+                    const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
                     const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
                     createdCodes.push(trackingCode);
 
@@ -2478,8 +2500,8 @@
                 try {
                     for (const file of files) {
                         if (uploadedImages.length >= 4) break;
-                        const base64Img = await compressImageToBase64(file, 480, 0.58);
-                        const finalImg = base64Img.length > 220000 ? await compressImageToBase64(file, 360, 0.48) : base64Img;
+                        const base64Img = await compressImageToBase64(file, 520, 0.62);
+                        const finalImg = base64Img.length > 230000 ? await compressImageToBase64(file, 420, 0.52) : base64Img;
                         if (finalImg) uploadedImages.push(finalImg);
                     }
                     renderSellerImagePreviews();
@@ -2507,14 +2529,12 @@
 
                 const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
                 const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
-                const variants = (category === 'Ayakkabı' || category === 'Gözlük')
-                    ? [...new Set([...selectedFormVariants, ...extraItems])]
-                    : ['Standart', ...new Set([...selectedFormVariants.filter(x => x !== 'Standart'), ...extraItems])];
+                const variants = [...new Set([...selectedFormVariants, ...extraItems])];
 
                 if (variants.length === 0) {
                     if (category === 'Ayakkabı') showToast('Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.');
                     else if (category === 'Gözlük') showToast('Lütfen en az bir gözlük rengi işaretleyin.');
-                    else showToast('Lütfen en az bir seçenek belirleyin.');
+                    else showToast('Lütfen en az bir seçenek işaretleyin veya yazın.');
                     return;
                 }
                 if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
