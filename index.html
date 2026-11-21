@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRENDTAN | Çok Satıcılı Alışveriş Platformu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=20261121">
+    <link rel="stylesheet" href="style.css?v=20261122">
     <style>
         /* Şekilli & Vurgulu Kampanya Hero Banner */
         .hero-banner.shimmer-hero {
@@ -102,6 +102,38 @@
             margin-bottom: 8px;
             text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
         }
+        .hero-wheel-cta-wrap {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .shaped-wheel-cta {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+            color: #0f172a;
+            border: 2px solid #ffffff;
+            border-radius: 10px;
+            transform: skewX(-9deg);
+            font-size: 13.5px;
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+            transition: transform 0.16s ease, box-shadow 0.16s ease;
+        }
+        .shaped-wheel-cta:hover {
+            transform: skewX(-9deg) translateY(-2px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.34);
+        }
+        .shaped-wheel-cta > * {
+            transform: skewX(9deg);
+        }
         .hero-banner.shimmer-hero .stat-box {
             background: rgba(15, 23, 42, 0.34);
             color: #ffffff;
@@ -109,7 +141,11 @@
             backdrop-filter: blur(6px);
         }
 
-        /* Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
+        /* Hızlı Açılış & Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
+        .product-card {
+            content-visibility: auto;
+            contain-intrinsic-size: 360px;
+        }
         .product-card .product-img {
             width: 100%;
             height: 220px;
@@ -124,6 +160,125 @@
         .cart-item img {
             object-fit: contain !important;
             background: #f8fafc;
+        }
+
+        /* Müşteri Hesap / Profil Butonları & Paneli */
+        .btn-member-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 13px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #fff7ed;
+            color: #9a3412;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-member-nav:hover {
+            border-color: #f27a1a;
+            background: #ffedd5;
+        }
+        .wallet-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 11.5px;
+            font-weight: 800;
+        }
+        .customer-profile-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            background: linear-gradient(120deg, #fff7ed 0%, #eff6ff 100%);
+            border: 1px solid #fed7aa;
+            margin-bottom: 18px;
+        }
+        .wallet-points-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        .wallet-points-amount {
+            font-size: 20px;
+            font-weight: 900;
+            color: #15803d;
+        }
+
+        /* Şanslı Çark Modal Tasarımı */
+        .lucky-wheel-modal-box {
+            max-width: 460px;
+            text-align: center;
+        }
+        .wheel-stage {
+            position: relative;
+            width: 290px;
+            height: 290px;
+            margin: 14px auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 26px solid #dc2626;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+        .lucky-wheel-disc {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            border: 6px solid #0f172a;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+            transition: transform 4.4s cubic-bezier(0.14, 0.85, 0.22, 1);
+            overflow: hidden;
+        }
+        .wheel-center-cap {
+            position: absolute;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #0f172a;
+            color: #facc15;
+            border: 3px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+            z-index: 8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .wheel-status-box {
+            padding: 11px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            color: #0f172a;
+            margin-bottom: 12px;
         }
 
         /* Sipariş Takip Butonu & Kartı */
@@ -230,8 +385,17 @@
             cursor: not-allowed;
             background: #f8fafc;
         }
+        .wallet-checkout-box {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #166534;
+            font-size: 12.5px;
+        }
 
-        /* Site İçi Canlı Destek Widget (Tam Site İçi Canlı Hat) */
+        /* Site İçi Canlı Destek Widget */
         .live-support-fab {
             position: fixed;
             right: 20px;
@@ -686,7 +850,7 @@
             color: #9a3412;
         }
 
-        /* Mobil Daha Uzaktan / Sıkıştırılmış Görünüm & Üst Üste Binme Koruması */
+        /* Mobil Görünüm & Üst Üste Binme Koruması */
         @media (max-width: 768px) {
             html {
                 font-size: 13.5px;
@@ -727,7 +891,8 @@
                 justify-content: flex-end;
             }
             .nav-actions button,
-            .btn-track-order {
+            .btn-track-order,
+            .btn-member-nav {
                 padding: 6px 8px !important;
                 font-size: 11px !important;
                 border-radius: 7px !important;
@@ -784,6 +949,10 @@
             .hero-banner p {
                 font-size: 12px !important;
                 line-height: 1.4 !important;
+            }
+            .shaped-wheel-cta {
+                padding: 8px 13px;
+                font-size: 11.5px;
             }
             .hero-stats {
                 width: 100%;
@@ -907,6 +1076,10 @@
             .modal-header h3 {
                 font-size: 15px !important;
             }
+            .wheel-stage {
+                width: 245px;
+                height: 245px;
+            }
             .live-support-fab {
                 right: 12px;
                 bottom: 12px;
@@ -954,6 +1127,10 @@
             </div>
 
             <div class="nav-actions">
+                <button class="btn-member-nav" id="openCustomerAuthBtn" type="button">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span id="headerMemberBtnText">Kayıt Ol / Giriş</span>
+                </button>
                 <button class="btn-track-order" id="openTrackOrderBtn" type="button">
                     <i class="fa-solid fa-truck-fast"></i>
                     <span>Sipariş Takip</span>
@@ -998,6 +1175,12 @@
                 </div>
                 <h1>TRENDTAN SEÇKİN FIRSATLAR</h1>
                 <p>Onaylı satıcıların ürünleri, <strong>HOSGELDIN75</strong> ile 75 TL indirim, anlık sipariş takip kodu ve güvenli ödeme altyapısı.</p>
+                <div class="hero-wheel-cta-wrap">
+                    <button type="button" class="shaped-wheel-cta" id="heroWheelCtaBtn">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                        <span>KAYIT OL ŞANSLI ÇARKI ÇEVİR, HEDİYELERİ KAP!</span>
+                    </button>
+                </div>
             </div>
             <div class="hero-stats">
                 <div class="stat-box"><i class="fa-solid fa-shield-halved"></i><span>Güvenli Ödeme</span></div>
@@ -1027,6 +1210,85 @@
         <!-- Ürün Listesi Grid -->
         <section class="product-grid" id="productGrid"></section>
     </main>
+
+    <!-- MÜŞTERİ PROFİL & PUAN CÜZDANI PANELİ -->
+    <section class="dashboard-section hidden" id="customerProfileView">
+        <div class="container">
+            <div class="dash-header">
+                <div>
+                    <span class="role-badge seller">MÜŞTERİ PROFİLİ & CÜZDAN</span>
+                    <h2 id="profileHeaderTitle">Müşteri Profilim</h2>
+                </div>
+                <div class="dash-header-actions">
+                    <button class="btn-primary" id="profileOpenWheelBtn" type="button">
+                        <i class="fa-solid fa-dharmachakra"></i> Şanslı Çark
+                    </button>
+                    <button class="btn-outline" id="backToStoreFromProfile" type="button">
+                        <i class="fa-solid fa-shop"></i> Mağazaya Dön
+                    </button>
+                    <button class="btn-danger" id="customerLogoutBtn" type="button">
+                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                    </button>
+                </div>
+            </div>
+
+            <div class="customer-profile-banner">
+                <div>
+                    <div style="font-size:13px; color:#475569;">Hoş geldiniz, <strong id="profileGreetingName">Müşteri</strong></div>
+                    <div style="margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <span class="wallet-badge-pill" id="profileWheelStatusBadge">Çark Hakkı: 1 Kez Kullanılabilir</span>
+                    </div>
+                </div>
+                <div class="wallet-points-box">
+                    <i class="fa-solid fa-coins" style="font-size:26px; color:#16a34a;"></i>
+                    <div>
+                        <small style="display:block; color:#64748b; font-weight:600;">Puan / Cüzdan Bakiyesi</small>
+                        <div class="wallet-points-amount" id="profileWalletBalance">0,00 ₺</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <h3><i class="fa-solid fa-user-pen"></i> Profil Bilgilerimi Düzenle</h3>
+                <p class="helper-text">Güncellediğiniz ad, soyad, telefon, adres, e-posta ve şifre bilgileri veritabanına kaydedilir.</p>
+                <form id="customerProfileForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Ad *</label>
+                        <input type="text" id="profFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Soyad *</label>
+                        <input type="text" id="profLastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon *</label>
+                        <input type="tel" id="profPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-Posta Adresi *</label>
+                        <input type="email" id="profEmail" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Adres *</label>
+                        <textarea id="profAddress" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Yeni Şifre (Değiştirmek istemiyorsanız boş bırakın)</label>
+                        <input type="password" id="profNewPassword" placeholder="Yeni şifreniz">
+                    </div>
+                    <div class="form-group">
+                        <label>Yeni Şifre Tekrar</label>
+                        <input type="password" id="profNewPasswordConfirm" placeholder="Yeni şifre tekrar">
+                    </div>
+                    <div class="form-actions full-width">
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> Profil Bilgilerini Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
     <!-- SATICI YÖNETİM PANELİ -->
     <section class="dashboard-section hidden" id="sellerDashboardView">
@@ -1496,10 +1758,100 @@
             <div class="summary-row"><span>Ara Toplam:</span><span id="cartSubtotal">0,00 ₺</span></div>
             <div class="summary-row"><span>Kargo Toplamı:</span><span id="cartShippingTotal">0,00 ₺</span></div>
             <div class="summary-row discount-row hidden" id="cartDiscountRow"><span>Kupon İndirimi:</span><span id="cartDiscountAmount">-0,00 ₺</span></div>
+            <div class="summary-row wallet-row hidden" id="cartWalletRow"><span>Puan / Cüzdan Bakiyesi:</span><span id="cartWalletAmount">-0,00 ₺</span></div>
             <div class="summary-row total-row"><span>Genel Toplam:</span><span id="cartGrandTotal">0,00 ₺</span></div>
             <button class="btn-checkout" id="proceedCheckoutBtn" type="button">Siparişi Tamamla <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </aside>
+
+    <!-- MODAL 0: MÜŞTERİ KAYIT & GİRİŞ MODALI -->
+    <div class="modal-backdrop hidden" id="customerAuthModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-check"></i> TRENDTAN Müşteri Hesabı</h3>
+                <button class="close-btn" data-close="customerAuthModal" type="button"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-tabs">
+                <button class="m-tab active" data-custtab="custRegisterTab" type="button">Kayıt Ol</button>
+                <button class="m-tab" data-custtab="custLoginTab" type="button">Giriş Yap</button>
+            </div>
+
+            <!-- Müşteri Kayıt Formu -->
+            <form id="customerRegisterForm" class="modal-form active">
+                <div class="two-col" style="margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Ad *</label>
+                        <input type="text" id="regFirstName" required placeholder="Adınız">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Soyad *</label>
+                        <input type="text" id="regLastName" required placeholder="Soyadınız">
+                    </div>
+                </div>
+                <div class="two-col" style="margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Telefon *</label>
+                        <input type="tel" id="regPhone" required placeholder="05XX XXX XX XX">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>E-Posta Adresi *</label>
+                        <input type="email" id="regEmail" required placeholder="ornek@mail.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Adres *</label>
+                    <textarea id="regAddress" rows="2" required placeholder="İl, İlçe, Mahalle, Sokak, Kapı No"></textarea>
+                </div>
+                <div class="two-col" style="margin-bottom: 12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Şifre *</label>
+                        <input type="password" id="regPassword" required minlength="4" placeholder="Şifreniz">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Şifre Tekrar *</label>
+                        <input type="password" id="regPasswordConfirm" required minlength="4" placeholder="Şifre tekrar">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary full-btn">Kayıt Ol ve Şanslı Çarkı Aç</button>
+            </form>
+
+            <!-- Müşteri Giriş Formu -->
+            <form id="customerLoginForm" class="modal-form hidden">
+                <div class="form-group">
+                    <label>E-Posta veya Telefon *</label>
+                    <input type="text" id="custLoginIdentifier" required placeholder="ornek@mail.com veya 05XX...">
+                </div>
+                <div class="form-group">
+                    <label>Şifre *</label>
+                    <input type="password" id="custLoginPassword" required placeholder="Şifreniz">
+                </div>
+                <button type="submit" class="btn-primary full-btn">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 0B: ŞANSLI ÇARK MODALI (TEK KULLANIMLIK, HEP 50 TL) -->
+    <div class="modal-backdrop hidden" id="luckyWheelModal">
+        <div class="modal-box lucky-wheel-modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-dharmachakra"></i> TRENDTAN Şanslı Çark</h3>
+                <button class="close-btn" data-close="luckyWheelModal" type="button"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-form active">
+                <div class="wheel-status-box" id="wheelStatusInfo">
+                    Kayıtlı müşterilere özel <strong>1 kez çevirme hakkı</strong>! Kazandığınız puan/bakiye hesabınıza yüklenir.
+                </div>
+                <div class="wheel-stage">
+                    <div class="wheel-pointer"></div>
+                    <div class="lucky-wheel-disc" id="luckyWheelDisc"></div>
+                    <div class="wheel-center-cap">ÇARK</div>
+                </div>
+                <button type="button" class="btn-primary full-btn" id="spinLuckyWheelBtn">
+                    <i class="fa-solid fa-play"></i> ÇARKI ÇEVİR (1 HAK)
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL 1: SATICI GİRİŞ & KURUMSAL BAŞVURU MODALI -->
     <div class="modal-backdrop hidden" id="sellerAuthModal">
@@ -1610,6 +1962,8 @@
                     <textarea id="custAddress" rows="2" required placeholder="İl, İlçe, Mahalle, Sokak ve Kapı No"></textarea>
                 </div>
 
+                <div id="checkoutWalletNotice" class="wallet-checkout-box hidden"></div>
+
                 <div class="form-group">
                     <label>Ödeme Yöntemi *</label>
                     <div class="payment-methods-grid">
@@ -1672,7 +2026,7 @@
 
                 <div class="checkout-final-bar">
                     <span>Ödenecek Tutar: <strong id="modalFinalPrice">0,00 ₺</strong></span>
-                    <button type="submit" class="btn-primary">Siparişi Onayla (Havale / EFT)</button>
+                    <button type="submit" class="btn-primary" id="checkoutSubmitBtn">Siparişi Onayla (Havale / EFT)</button>
                 </div>
             </form>
         </div>
@@ -1844,6 +2198,7 @@
             sellers: [],
             sellerApplications: [],
             customers: [],
+            shopCustomers: [],
             products: [],
             coupons: [
                 { code: 'HOSGELDIN75', type: 'fixed', value: 75 }
@@ -1853,7 +2208,8 @@
 
         const CACHE_KEYS = {
             products: 'trendtan_cached_products_v1',
-            mainState: 'trendtan_cached_main_v1'
+            mainState: 'trendtan_cached_main_v1',
+            shopCustomers: 'trendtan_shop_customers_v1'
         };
 
         function readLocalCache(key, fallback) {
@@ -1875,11 +2231,11 @@
             gizlilik: {
                 title: 'Gizlilik Politikası',
                 html: `
-                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önemiyoruz. Bu politika; sipariş, satıcı başvurusu, canlı destek ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
+                    <p><strong>TRENDTAN</strong> alışveriş platformu olarak kullanıcılarımızın gizliliğine ve verilerinin güvenliğine önemiyoruz. Bu politika; sipariş, müşteri kaydı/profili, satıcı başvurusu, canlı destek ve site kullanım süreçlerinde işlenen verilerin hangi amaçlarla kullanıldığını ve korunduğunu açıklar.</p>
                     <h4>1. Toplanan Veriler</h4>
                     <ul>
-                        <li>Sipariş oluşturma sırasında paylaşılan ad-soyad, telefon numarası, teslimat adresi ve sipariş/takip bilgileri,</li>
-                        <li>Canlı destek hattında paylaşılan ad-soyad, adres ve destek mesajları (yalnızca destek talebinin yanıtlanması amacıyla kaydedilir ve istenildiğinde silinebilir),</li>
+                        <li>Müşteri kaydı ve sipariş oluşturma sırasında paylaşılan ad, soyad, telefon numarası, teslimat adresi ve e-posta bilgileri,</li>
+                        <li>Canlı destek hattında paylaşılan ad-soyad, adres ve destek mesajları,</li>
                         <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri.</li>
                     </ul>
                     <h4>2. Ödeme Kartı Güvenliği</h4>
@@ -1894,7 +2250,7 @@
                     <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu <strong>[Firma/Şahıs Ünvanı]</strong> sıfatıyla kişisel verilerinizi aşağıda belirtilen kapsamda işliyoruz.</p>
                     <h4>1. Kişisel Verilerin İşlenme Amaçları</h4>
                     <ul>
-                        <li>Alışveriş işlemlerinin yürütülmesi, siparişlerin oluşturulması, takip kodu üretilmesi ve teslimat süreçlerinin yönetilmesi,</li>
+                        <li>Alışveriş işlemlerinin yürütülmesi, müşteri hesap/profil ve puan/cüzdan işlemlerinin yönetilmesi, siparişlerin oluşturulması ve teslimat süreçleri,</li>
                         <li>Canlı destek taleplerinin alınması ve yanıtlanması,</li>
                         <li>Satıcı üyelik ve başvuru süreçlerinin değerlendirilmesi ve yasal yükümlülüklerin yerine getirilmesi.</li>
                     </ul>
@@ -1930,7 +2286,7 @@
                         <li><strong>Alıcı:</strong> Sipariş formunda ad-soyad, telefon ve teslimat adresi bilgilerini beyan eden kişi.</li>
                     </ul>
                     <h4>2. Ürün, Fiyat ve Ödeme</h4>
-                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli ve uygulanan kupon indirimi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği kartlı ödeme veya havale/EFT yöntemiyle tamamlanır.</p>
+                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli, uygulanan kupon indirimi ve puan/cüzdan bakiyesi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği yöntemle tamamlanır.</p>
                     <h4>3. Teslimat ve Sorumluluk</h4>
                     <p>Siparişler, sipariş takip kodu ile takip edilecek şekilde alıcının belirttiği teslimat adresine gönderilir. Teslimat sırasında paketin hasarlı olması halinde tutanak tutulması önerilir.</p>
                 `
@@ -1971,6 +2327,7 @@
         const SESSION_KEYS = {
             view: 'trendtan_active_view',
             sellerId: 'trendtan_seller_id',
+            customerId: 'trendtan_shop_customer_id',
             adminAuth: 'trendtan_admin_authed',
             cart: 'trendtan_cart_items',
             coupon: 'trendtan_applied_coupon',
@@ -1986,9 +2343,13 @@
 
         const cachedMain = readLocalCache(CACHE_KEYS.mainState, null);
         const cachedProducts = readLocalCache(CACHE_KEYS.products, []);
+        const cachedShopCustomers = readLocalCache(CACHE_KEYS.shopCustomers, []);
         let db = {
             ...JSON.parse(JSON.stringify(DEFAULT_DB)),
             ...(cachedMain || {}),
+            shopCustomers: Array.isArray(cachedMain?.shopCustomers) && cachedMain.shopCustomers.length > 0
+                ? cachedMain.shopCustomers
+                : cachedShopCustomers,
             products: Array.isArray(cachedProducts) ? cachedProducts : []
         };
         if (!Array.isArray(db.coupons) || db.coupons.length === 0) {
@@ -2023,12 +2384,66 @@
         let currentCategory = savedFilters.category || 'all';
         let currentSearch = savedFilters.search || '';
         let currentSeller = null;
+        let currentCustomer = null;
         let uploadedImages = [];
         let selectedFormVariants = [];
         let cardSelectedVariants = {};
         let activeDetailProductId = null;
         let activeDetailPhotoIdx = 0;
         let activeDetailVariant = '';
+        let isWheelSpinning = false;
+        let currentWheelRotation = 0;
+
+        /* Şanslı Çark Dilimleri (8 dilim x 45 deg; 50 TL ağırlıklı, dönüş her zaman 50 TL diliminde durur) */
+        const WHEEL_SLICES = [
+            { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' },
+            { label: '150 TL', amount: 150, color: '#1e293b', textColor: '#ffffff' },
+            { label: '50 TL', amount: 50, color: '#ea580c', textColor: '#ffffff' },
+            { label: '500 TL', amount: 500, color: '#312e81', textColor: '#fde047' },
+            { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' },
+            { label: '1.000 TL', amount: 1000, color: '#0f172a', textColor: '#fde047' },
+            { label: '50 TL', amount: 50, color: '#ea580c', textColor: '#ffffff' },
+            { label: '50 TL', amount: 50, color: '#f97316', textColor: '#ffffff' }
+        ];
+        const FIFTY_TL_INDICES = WHEEL_SLICES
+            .map((s, idx) => (s.amount === 50 ? idx : -1))
+            .filter(idx => idx !== -1);
+
+        function buildLuckyWheelDisc() {
+            const disc = $('luckyWheelDisc');
+            if (!disc) return;
+            const n = WHEEL_SLICES.length;
+            const step = 360 / n;
+            const gradientParts = WHEEL_SLICES.map((s, i) => {
+                const start = i * step;
+                const end = (i + 1) * step;
+                return `${s.color} ${start}deg ${end}deg`;
+            });
+            disc.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+
+            disc.innerHTML = WHEEL_SLICES.map((s, i) => {
+                const midAngle = i * step + step / 2;
+                return `
+                    <div style="
+                        position:absolute;
+                        inset:0;
+                        transform:rotate(${midAngle}deg);
+                        display:flex;
+                        justify-content:center;
+                        align-items:flex-start;
+                        padding-top:16px;
+                        pointer-events:none;
+                    ">
+                        <span style="
+                            color:${s.textColor};
+                            font-weight:900;
+                            font-size:13px;
+                            text-shadow:0 1px 3px rgba(0,0,0,0.45);
+                        ">${s.label}</span>
+                    </div>
+                `;
+            }).join('');
+        }
 
         let soundEnabled = loadSessionJson(SESSION_KEYS.soundEnabled, true);
         let audioCtx = null;
@@ -2343,8 +2758,23 @@
             persistUiState();
         }
 
+        function updateHeaderMemberButton() {
+            const btnText = $('headerMemberBtnText');
+            const btn = $('openCustomerAuthBtn');
+            if (!btnText || !btn) return;
+            if (currentCustomer) {
+                const bal = Number(currentCustomer.walletPoints || 0);
+                btnText.textContent = `Profilim (${bal.toLocaleString('tr-TR', { maximumFractionDigits: 0 })} ₺)`;
+                btn.title = `${currentCustomer.fullName} — Puan Bakiyesi: ${formatMoney(bal)}`;
+            } else {
+                btnText.textContent = 'Kayıt Ol / Giriş';
+                btn.title = 'Müşteri Kayıt Ol veya Giriş Yap';
+            }
+        }
+
         function switchMainView(viewId, skipSave = false) {
             if ($('customerStoreView')) $('customerStoreView').classList.add('hidden');
+            if ($('customerProfileView')) $('customerProfileView').classList.add('hidden');
             if ($('sellerDashboardView')) $('sellerDashboardView').classList.add('hidden');
             if ($('superAdminDashboardView')) $('superAdminDashboardView').classList.add('hidden');
             if ($(viewId)) $(viewId).classList.remove('hidden');
@@ -2352,6 +2782,104 @@
                 try { sessionStorage.setItem(SESSION_KEYS.view, viewId); } catch (_) {}
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderCustomerProfileView() {
+            if (!currentCustomer) return;
+            const fresh = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+            currentCustomer = fresh;
+
+            if ($('profileHeaderTitle')) $('profileHeaderTitle').textContent = `${fresh.fullName} — Profilim`;
+            if ($('profileGreetingName')) $('profileGreetingName').textContent = fresh.fullName;
+            if ($('profileWalletBalance')) $('profileWalletBalance').textContent = formatMoney(fresh.walletPoints || 0);
+            if ($('profileWheelStatusBadge')) {
+                if (fresh.wheelSpun) {
+                    $('profileWheelStatusBadge').textContent = `Şanslı Çark Kullanıldı (${Number(fresh.wheelWonAmount || 50)} TL Kazanıldı)`;
+                    $('profileWheelStatusBadge').style.background = '#e2e8f0';
+                    $('profileWheelStatusBadge').style.color = '#334155';
+                } else {
+                    $('profileWheelStatusBadge').textContent = 'Çark Hakkı: 1 Kez Kullanılabilir';
+                    $('profileWheelStatusBadge').style.background = '#dcfce7';
+                    $('profileWheelStatusBadge').style.color = '#166534';
+                }
+            }
+
+            if ($('profFirstName')) $('profFirstName').value = fresh.firstName || '';
+            if ($('profLastName')) $('profLastName').value = fresh.lastName || '';
+            if ($('profPhone')) $('profPhone').value = fresh.phone || '';
+            if ($('profEmail')) $('profEmail').value = fresh.email || '';
+            if ($('profAddress')) $('profAddress').value = fresh.address || '';
+            if ($('profNewPassword')) $('profNewPassword').value = '';
+            if ($('profNewPasswordConfirm')) $('profNewPasswordConfirm').value = '';
+        }
+
+        async function saveShopCustomerRecord(custObj) {
+            if (!Array.isArray(db.shopCustomers)) db.shopCustomers = [];
+            const idx = db.shopCustomers.findIndex(c => c.id === custObj.id);
+            if (idx >= 0) db.shopCustomers[idx] = custObj;
+            else db.shopCustomers.unshift(custObj);
+            writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
+
+            if (firestoreReady && firestoreDb) {
+                isSaving = true;
+                try {
+                    await setDoc(doc(firestoreDb, "trendtan_shop_customers", custObj.id), custObj);
+                } catch (_) {}
+                finally { setTimeout(() => { isSaving = false; }, 250); }
+            }
+            await saveDB();
+        }
+
+        function openWheelModalOrPrompt() {
+            if (!currentCustomer) {
+                showToast('Şanslı çarkı çevirmek için önce müşteri kaydı oluşturun veya giriş yapın.');
+                if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
+                switchCustomerAuthTab('custRegisterTab');
+                return;
+            }
+            updateWheelModalUI();
+            if ($('luckyWheelModal')) $('luckyWheelModal').classList.remove('hidden');
+        }
+
+        function updateWheelModalUI() {
+            const btn = $('spinLuckyWheelBtn');
+            const statusEl = $('wheelStatusInfo');
+            if (!currentCustomer) return;
+            const fresh = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+            currentCustomer = fresh;
+
+            if (fresh.wheelSpun) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = `<i class="fa-solid fa-check-circle"></i> Çark Hakkınız Kullanıldı (${Number(fresh.wheelWonAmount || 50)} TL Eklendi)`;
+                }
+                if (statusEl) {
+                    statusEl.innerHTML = `Bu hesap için tek kullanımlık çark hakkınızı kullandınız. Kazanılan <strong>${Number(fresh.wheelWonAmount || 50)} TL</strong> bakiyenizde (Güncel Bakiye: <strong>${formatMoney(fresh.walletPoints || 0)}</strong>).`;
+                }
+            } else {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-play"></i> ÇARKI ÇEVİR (1 HAK)`;
+                }
+                if (statusEl) {
+                    statusEl.innerHTML = `<strong>${fresh.fullName}</strong>, hesabınıza özel <strong>1 kez çevirme hakkınız</strong> var! Kazandığınız tutar puan/cüzdan bakiyenize eklenir.`;
+                }
+            }
+        }
+
+        function switchCustomerAuthTab(targetTabId) {
+            document.querySelectorAll('#customerAuthModal .m-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.custtab === targetTabId);
+            });
+            const regForm = $('customerRegisterForm');
+            const logForm = $('customerLoginForm');
+            if (targetTabId === 'custLoginTab') {
+                if (regForm) { regForm.classList.add('hidden'); regForm.classList.remove('active'); }
+                if (logForm) { logForm.classList.remove('hidden'); logForm.classList.add('active'); }
+            } else {
+                if (logForm) { logForm.classList.add('hidden'); logForm.classList.remove('active'); }
+                if (regForm) { regForm.classList.remove('hidden'); regForm.classList.add('active'); }
+            }
         }
 
         function applySavedDashTabs() {
@@ -2369,7 +2897,14 @@
         function restoreSessionViewIfPossible() {
             const savedView = sessionStorage.getItem(SESSION_KEYS.view);
             const savedSellerId = sessionStorage.getItem(SESSION_KEYS.sellerId);
+            const savedCustomerId = sessionStorage.getItem(SESSION_KEYS.customerId);
             const isAdminAuthed = sessionStorage.getItem(SESSION_KEYS.adminAuth) === '1';
+
+            if (savedCustomerId) {
+                const foundCust = (db.shopCustomers || []).find(c => c.id === savedCustomerId);
+                if (foundCust) currentCustomer = foundCust;
+            }
+            updateHeaderMemberButton();
 
             if (savedView === 'sellerDashboardView' && savedSellerId) {
                 const foundSeller = (db.sellers || []).find(s => s.id === savedSellerId);
@@ -2387,6 +2922,12 @@
                 return;
             }
 
+            if (savedView === 'customerProfileView' && currentCustomer) {
+                switchMainView('customerProfileView', true);
+                renderCustomerProfileView();
+                return;
+            }
+
             switchMainView('customerStoreView', true);
         }
 
@@ -2395,9 +2936,17 @@
                 const updatedSeller = (db.sellers || []).find(s => s.id === currentSeller.id);
                 if (updatedSeller) currentSeller = updatedSeller;
             }
+            if (currentCustomer) {
+                const updatedCust = (db.shopCustomers || []).find(c => c.id === currentCustomer.id);
+                if (updatedCust) currentCustomer = updatedCust;
+            }
+            updateHeaderMemberButton();
             syncCartWithDbProducts();
             renderProducts();
             updateCartUI();
+            if (currentCustomer && $('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
+                renderCustomerProfileView();
+            }
             if (currentSeller) renderSellerDashboard();
             if ($('superAdminDashboardView') && !$('superAdminDashboardView').classList.contains('hidden')) {
                 renderAdminDashboard();
@@ -2414,9 +2963,11 @@
                 sellers: db.sellers || [],
                 sellerApplications: db.sellerApplications || [],
                 customers: db.customers || [],
+                shopCustomers: db.shopCustomers || [],
                 coupons: db.coupons || [],
                 orders: db.orders || []
             });
+            writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers || []);
             if (!firestoreReady || !storeDocRef) return true;
             isSaving = true;
             try {
@@ -2426,6 +2977,7 @@
                     sellers: db.sellers || [],
                     sellerApplications: db.sellerApplications || [],
                     customers: db.customers || [],
+                    shopCustomers: db.shopCustomers || [],
                     coupons: db.coupons || [],
                     orders: db.orders || [],
                     products: includeProductsInMain ? (db.products || []) : []
@@ -2721,7 +3273,7 @@
                         ${discountRate > 0 ? `<span class="discount-tag">%${discountRate} İndirim</span>` : ''}
                         ${Number(prod.shipping) === 0 ? `<span class="shipping-tag">Ücretsiz Kargo</span>` : ''}
                         <div class="product-click-zone" onclick="openProductDetailModal('${prod.id}')">
-                            <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img" loading="eager" decoding="async">
+                            <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img" loading="eager" decoding="async" fetchpriority="high">
                         </div>
                         <div class="product-body">
                             <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)}</span>
@@ -2889,12 +3441,15 @@
             if (appliedCoupon && subtotal > 0) {
                 discount = appliedCoupon.type === 'percent' ? (subtotal * appliedCoupon.value) / 100 : Math.min(subtotal, appliedCoupon.value);
             }
-            const grandTotal = Math.max(0, subtotal + shippingTotal - discount);
-            return { subtotal, shippingTotal, discount, grandTotal, totalCount };
+            const afterCoupon = Math.max(0, subtotal + shippingTotal - discount);
+            const availableWallet = currentCustomer ? Math.max(0, Number(currentCustomer.walletPoints || 0)) : 0;
+            const walletUsed = afterCoupon > 0 ? Math.min(afterCoupon, availableWallet) : 0;
+            const grandTotal = Math.max(0, afterCoupon - walletUsed);
+            return { subtotal, shippingTotal, discount, walletUsed, grandTotal, totalCount };
         }
 
         function updateCartUI() {
-            const { subtotal, shippingTotal, discount, grandTotal, totalCount } = calculateCartTotals();
+            const { subtotal, shippingTotal, discount, walletUsed, grandTotal, totalCount } = calculateCartTotals();
             if ($('cartBadge')) $('cartBadge').textContent = totalCount;
             const container = $('cartItemsContainer');
             if (container) {
@@ -2928,6 +3483,14 @@
                     $('cartDiscountAmount').textContent = '-' + formatMoney(discount);
                 } else {
                     $('cartDiscountRow').classList.add('hidden');
+                }
+            }
+            if ($('cartWalletRow') && $('cartWalletAmount')) {
+                if (walletUsed > 0) {
+                    $('cartWalletRow').classList.remove('hidden');
+                    $('cartWalletAmount').textContent = '-' + formatMoney(walletUsed);
+                } else {
+                    $('cartWalletRow').classList.add('hidden');
                 }
             }
             if ($('cartGrandTotal')) $('cartGrandTotal').textContent = formatMoney(grandTotal);
@@ -3270,6 +3833,226 @@
         };
 
         function bindAllUIEvents() {
+            buildLuckyWheelDisc();
+
+            /* Müşteri Kayıt / Giriş / Profil Butonları */
+            if ($('openCustomerAuthBtn')) {
+                $('openCustomerAuthBtn').addEventListener('click', () => {
+                    if (currentCustomer) {
+                        switchMainView('customerProfileView');
+                        renderCustomerProfileView();
+                    } else if ($('customerAuthModal')) {
+                        $('customerAuthModal').classList.remove('hidden');
+                        switchCustomerAuthTab('custRegisterTab');
+                    }
+                });
+            }
+
+            if ($('heroWheelCtaBtn')) {
+                $('heroWheelCtaBtn').addEventListener('click', openWheelModalOrPrompt);
+            }
+            if ($('profileOpenWheelBtn')) {
+                $('profileOpenWheelBtn').addEventListener('click', () => {
+                    updateWheelModalUI();
+                    if ($('luckyWheelModal')) $('luckyWheelModal').classList.remove('hidden');
+                });
+            }
+            if ($('backToStoreFromProfile')) {
+                $('backToStoreFromProfile').addEventListener('click', () => switchMainView('customerStoreView'));
+            }
+            if ($('customerLogoutBtn')) {
+                $('customerLogoutBtn').addEventListener('click', () => {
+                    currentCustomer = null;
+                    try { sessionStorage.removeItem(SESSION_KEYS.customerId); } catch (_) {}
+                    updateHeaderMemberButton();
+                    updateCartUI();
+                    switchMainView('customerStoreView');
+                    showToast('Müşteri çıkışı yapıldı.');
+                });
+            }
+
+            document.querySelectorAll('#customerAuthModal .m-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchCustomerAuthTab(tab.dataset.custtab));
+            });
+
+            if ($('customerRegisterForm')) {
+                $('customerRegisterForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const firstName = $('regFirstName').value.trim();
+                    const lastName = $('regLastName').value.trim();
+                    const phone = $('regPhone').value.trim();
+                    const email = $('regEmail').value.trim().toLowerCase();
+                    const address = $('regAddress').value.trim();
+                    const password = $('regPassword').value;
+                    const passwordConfirm = $('regPasswordConfirm').value;
+
+                    if (password !== passwordConfirm) {
+                        showToast('Şifre ve şifre tekrar alanları eşleşmiyor!');
+                        return;
+                    }
+
+                    if (!Array.isArray(db.shopCustomers)) db.shopCustomers = [];
+                    const exists = db.shopCustomers.some(c =>
+                        (c.email && c.email.toLowerCase() === email) ||
+                        (c.phone && c.phone.replace(/\s+/g, '') === phone.replace(/\s+/g, ''))
+                    );
+                    if (exists) {
+                        showToast('Bu e-posta veya telefon ile kayıtlı hesap zaten var. Giriş yapabilirsiniz.');
+                        switchCustomerAuthTab('custLoginTab');
+                        return;
+                    }
+
+                    const newCust = {
+                        id: 'shop_cust_' + Date.now(),
+                        firstName,
+                        lastName,
+                        fullName: `${firstName} ${lastName}`.trim(),
+                        phone,
+                        email,
+                        address,
+                        password,
+                        walletPoints: 0,
+                        wheelSpun: false,
+                        wheelWonAmount: 0,
+                        createdAt: new Date().toLocaleDateString('tr-TR')
+                    };
+
+                    currentCustomer = newCust;
+                    try { sessionStorage.setItem(SESSION_KEYS.customerId, newCust.id); } catch (_) {}
+                    await saveShopCustomerRecord(newCust);
+                    updateHeaderMemberButton();
+                    updateCartUI();
+
+                    $('customerRegisterForm').reset();
+                    if ($('customerAuthModal')) $('customerAuthModal').classList.add('hidden');
+                    showToast(`Hoş geldiniz ${newCust.fullName}! Kaydınız tamamlandı, şimdi Şanslı Çarkı çevirebilirsiniz.`);
+                    updateWheelModalUI();
+                    if ($('luckyWheelModal')) $('luckyWheelModal').classList.remove('hidden');
+                });
+            }
+
+            if ($('customerLoginForm')) {
+                $('customerLoginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const identifier = $('custLoginIdentifier').value.trim().toLowerCase();
+                    const pass = $('custLoginPassword').value;
+                    const found = (db.shopCustomers || []).find(c =>
+                        ((c.email && c.email.toLowerCase() === identifier) ||
+                         (c.phone && c.phone.replace(/\s+/g, '').toLowerCase() === identifier.replace(/\s+/g, ''))) &&
+                        c.password === pass
+                    );
+                    if (!found) {
+                        showToast('E-posta/telefon veya şifre hatalı!');
+                        return;
+                    }
+                    currentCustomer = found;
+                    try { sessionStorage.setItem(SESSION_KEYS.customerId, found.id); } catch (_) {}
+                    updateHeaderMemberButton();
+                    updateCartUI();
+                    if ($('customerAuthModal')) $('customerAuthModal').classList.add('hidden');
+                    $('customerLoginForm').reset();
+                    switchMainView('customerProfileView');
+                    renderCustomerProfileView();
+                    showToast(`Tekrar hoş geldiniz, ${found.fullName}!`);
+                });
+            }
+
+            if ($('customerProfileForm')) {
+                $('customerProfileForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!currentCustomer) return;
+                    const firstName = $('profFirstName').value.trim();
+                    const lastName = $('profLastName').value.trim();
+                    const phone = $('profPhone').value.trim();
+                    const email = $('profEmail').value.trim().toLowerCase();
+                    const address = $('profAddress').value.trim();
+                    const newPass = $('profNewPassword').value;
+                    const newPassConfirm = $('profNewPasswordConfirm').value;
+
+                    if (newPass || newPassConfirm) {
+                        if (newPass.length < 4) {
+                            showToast('Yeni şifre en az 4 karakter olmalıdır.');
+                            return;
+                        }
+                        if (newPass !== newPassConfirm) {
+                            showToast('Yeni şifre ve şifre tekrar eşleşmiyor!');
+                            return;
+                        }
+                    }
+
+                    const updated = {
+                        ...currentCustomer,
+                        firstName,
+                        lastName,
+                        fullName: `${firstName} ${lastName}`.trim(),
+                        phone,
+                        email,
+                        address,
+                        password: newPass ? newPass : currentCustomer.password,
+                        updatedAt: new Date().toLocaleDateString('tr-TR')
+                    };
+
+                    currentCustomer = updated;
+                    await saveShopCustomerRecord(updated);
+                    updateHeaderMemberButton();
+                    renderCustomerProfileView();
+                    showToast('Profil bilgileriniz kaydedildi.');
+                });
+            }
+
+            /* Tek Kullanımlık Şanslı Çark Çevirme (Her zaman 50 TL diliminde durur) */
+            if ($('spinLuckyWheelBtn')) {
+                $('spinLuckyWheelBtn').addEventListener('click', async () => {
+                    if (isWheelSpinning || !currentCustomer) return;
+                    const fresh = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+                    currentCustomer = fresh;
+
+                    if (fresh.wheelSpun) {
+                        showToast('Bu hesap için çark hakkınız zaten kullanıldı.');
+                        updateWheelModalUI();
+                        return;
+                    }
+
+                    isWheelSpinning = true;
+                    const btn = $('spinLuckyWheelBtn');
+                    if (btn) btn.disabled = true;
+
+                    const sliceDeg = 360 / WHEEL_SLICES.length; // 45 derece
+                    const chosenIdx = FIFTY_TL_INDICES[Math.floor(Math.random() * FIFTY_TL_INDICES.length)];
+                    const sliceCenter = chosenIdx * sliceDeg + sliceDeg / 2;
+                    // İşaretçi üstte (0 deg); dilim merkezinin üstte durması için 360 - sliceCenter
+                    const targetMod = (360 - sliceCenter) % 360;
+                    const currentMod = ((currentWheelRotation % 360) + 360) % 360;
+                    let delta = targetMod - currentMod;
+                    if (delta < 0) delta += 360;
+                    currentWheelRotation += 6 * 360 + delta;
+
+                    const disc = $('luckyWheelDisc');
+                    if (disc) {
+                        disc.style.transform = `rotate(${currentWheelRotation}deg)`;
+                    }
+
+                    const wonAmount = 50;
+                    setTimeout(async () => {
+                        const latest = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+                        latest.wheelSpun = true;
+                        latest.wheelWonAmount = wonAmount;
+                        latest.walletPoints = Number(latest.walletPoints || 0) + wonAmount;
+                        currentCustomer = latest;
+
+                        await saveShopCustomerRecord(latest);
+                        updateHeaderMemberButton();
+                        updateCartUI();
+                        updateWheelModalUI();
+                        if ($('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
+                            renderCustomerProfileView();
+                        }
+                        isWheelSpinning = false;
+                        showToast(`Tebrikler! Şanslı Çarktan ${wonAmount} TL puan bakiyesi kazandınız!`);
+                    }, 4450);
+                });
+            }
+
             if ($('openLiveSupportBtn')) {
                 $('openLiveSupportBtn').addEventListener('click', () => {
                     isSupportWindowOpen = !isSupportWindowOpen;
@@ -3478,13 +4261,31 @@
                 $('proceedCheckoutBtn').addEventListener('click', () => {
                     if (cart.length === 0) { showToast('Sepetiniz boş.'); return; }
                     closeCart();
+                    if (currentCustomer) {
+                        if ($('custName') && !$('custName').value) $('custName').value = currentCustomer.fullName || '';
+                        if ($('custPhone') && !$('custPhone').value) $('custPhone').value = currentCustomer.phone || '';
+                        if ($('custAddress') && !$('custAddress').value) $('custAddress').value = currentCustomer.address || '';
+                    }
                     const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
                     if (eftRadio) eftRadio.checked = true;
                     if ($('eftPaymentOption')) $('eftPaymentOption').classList.add('selected');
                     if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
                     if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
-                    const { grandTotal } = calculateCartTotals();
+                    const { walletUsed, grandTotal } = calculateCartTotals();
+                    const walletBox = $('checkoutWalletNotice');
+                    if (walletBox) {
+                        if (walletUsed > 0) {
+                            walletBox.classList.remove('hidden');
+                            walletBox.innerHTML = `<i class="fa-solid fa-coins"></i> Puan / Cüzdan bakiyenizden <strong>${formatMoney(walletUsed)}</strong> sipariş tutarından düşülecek.`;
+                        } else {
+                            walletBox.classList.add('hidden');
+                            walletBox.innerHTML = '';
+                        }
+                    }
                     if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
+                    if ($('checkoutSubmitBtn')) {
+                        $('checkoutSubmitBtn').textContent = grandTotal > 0 ? 'Siparişi Onayla (Havale / EFT)' : 'Siparişi Onayla (Puan Bakiyesi ile)';
+                    }
                     if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
                 });
             }
@@ -3508,9 +4309,18 @@
                     const custName = $('custName').value.trim();
                     const custPhone = $('custPhone').value.trim();
                     const custAddress = $('custAddress').value.trim();
-                    const paymentMethod = 'Havale / EFT (MUSTAFA TAN - EN PARA)';
+                    const { walletUsed, grandTotal } = calculateCartTotals();
+                    const paymentMethod = grandTotal > 0
+                        ? 'Havale / EFT (MUSTAFA TAN - EN PARA)'
+                        : 'Puan / Cüzdan Bakiyesi ile Ödendi';
                     const today = new Date().toLocaleDateString('tr-TR');
-                    const { grandTotal } = calculateCartTotals();
+
+                    if (currentCustomer && walletUsed > 0) {
+                        const freshCust = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+                        freshCust.walletPoints = Math.max(0, Number(freshCust.walletPoints || 0) - walletUsed);
+                        currentCustomer = freshCust;
+                        await saveShopCustomerRecord(freshCust);
+                    }
 
                     let customer = db.customers.find(c => c.phone === custPhone || c.name.toLowerCase() === custName.toLowerCase());
                     if (customer) {
@@ -3538,7 +4348,8 @@
                     const createdCodes = [];
                     Object.keys(sellerGroups).forEach(sId => {
                         const groupItems = sellerGroups[sId];
-                        const groupTotal = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
+                        const groupRaw = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
+                        const groupTotal = Math.max(0, groupRaw - walletUsed);
                         const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
                         const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
                         createdCodes.push(trackingCode);
@@ -3567,7 +4378,11 @@
                     await saveDB();
                     cart = []; appliedCoupon = null;
                     persistUiState();
+                    updateHeaderMemberButton();
                     updateCartUI(); renderProducts();
+                    if ($('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
+                        renderCustomerProfileView();
+                    }
                     if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
                     $('checkoutForm').reset();
 
@@ -3577,7 +4392,7 @@
                         try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
                         runOrderTrackingSearch(createdCodes[0]);
                     }
-                    showToast(`Havale / EFT siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')} • IBAN: TR08 0015 7000 0000 0143 0070 74`);
+                    showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
                 });
             }
 
@@ -3855,7 +4670,7 @@
         bindAllUIEvents();
         applySavedDashTabs();
         restoreSessionViewIfPossible();
-        refreshAllViews();
+        requestAnimationFrame(() => refreshAllViews());
 
         (async () => {
             try {
@@ -3864,6 +4679,7 @@
                 storeDocRef = doc(firestoreDb, "trendtan_store", "main_state");
                 productsColRef = collection(firestoreDb, "trendtan_products");
                 liveChatsColRef = collection(firestoreDb, "trendtan_live_chats");
+                const shopCustColRef = collection(firestoreDb, "trendtan_shop_customers");
                 firestoreReady = true;
 
                 onSnapshot(productsColRef, (colSnap) => {
@@ -3883,12 +4699,29 @@
                     refreshAllViews();
                 });
 
+                onSnapshot(shopCustColRef, (colSnap) => {
+                    if (isSaving) return;
+                    const custList = [];
+                    colSnap.forEach((d) => {
+                        const item = d.data() || {};
+                        custList.push({ id: item.id || d.id, ...item });
+                    });
+                    if (custList.length > 0) {
+                        db.shopCustomers = custList;
+                        writeLocalCache(CACHE_KEYS.shopCustomers, custList);
+                        refreshAllViews();
+                    }
+                });
+
                 onSnapshot(storeDocRef, (docSnap) => {
                     if (isSaving || !docSnap.exists()) return;
                     const remoteData = docSnap.data() || {};
                     db = {
                         ...db,
                         ...remoteData,
+                        shopCustomers: (Array.isArray(remoteData.shopCustomers) && remoteData.shopCustomers.length > 0)
+                            ? remoteData.shopCustomers
+                            : (db.shopCustomers || []),
                         products: db.products || [],
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
@@ -3901,6 +4734,7 @@
                         sellers: db.sellers,
                         sellerApplications: db.sellerApplications,
                         customers: db.customers,
+                        shopCustomers: db.shopCustomers,
                         coupons: db.coupons,
                         orders: db.orders
                     });
@@ -3923,6 +4757,9 @@
                     db = {
                         ...db,
                         ...remoteData,
+                        shopCustomers: (Array.isArray(remoteData.shopCustomers) && remoteData.shopCustomers.length > 0)
+                            ? remoteData.shopCustomers
+                            : (db.shopCustomers || []),
                         products: (db.products && db.products.length > 0) ? db.products : legacyProducts,
                         adminPassword: remoteData.adminPassword || 'trendtan2026'
                     };
