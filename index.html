@@ -497,6 +497,17 @@
             justify-content: space-between;
             gap: 6px;
         }
+        .support-member-banner {
+            padding: 7px 12px;
+            background: #fff7ed;
+            border-bottom: 1px solid #fed7aa;
+            font-size: 11.5px;
+            color: #9a3412;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
         .support-messages {
             padding: 12px;
             height: 265px;
@@ -560,6 +571,11 @@
             border-radius: 8px;
             font-size: 12.5px;
         }
+        .support-input-row input:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
         .support-input-row button {
             padding: 8px 12px;
             border-radius: 8px;
@@ -568,6 +584,10 @@
             color: #ffffff;
             font-weight: 700;
             cursor: pointer;
+        }
+        .support-input-row button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
         }
 
         /* Admin Canlı Destek Konsolu */
@@ -1421,9 +1441,9 @@
                         </div>
 
                         <div class="form-group full-width">
-                            <label>Ürün Görselleri Yükle (En Fazla 4 Fotoğraf, Otomatik Sıkıştırılır) *</label>
+                            <label>Ürün Görselleri Yükle (Dosya / Galeri Seçimi • En Fazla 4 Fotoğraf, Otomatik Sıkıştırılır) *</label>
                             <div class="file-upload-box">
-                                <input type="file" id="prodImageFile" accept="image/*" capture="environment" multiple>
+                                <input type="file" id="prodImageFile" accept="image/jpeg,image/png,image/webp,image/gif,image/*" multiple>
                                 <div id="imagePreviewContainer" class="multi-preview-grid hidden"></div>
                             </div>
                         </div>
@@ -1646,7 +1666,7 @@
                     <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                         <div>
                             <h3 style="margin:0;"><i class="fa-solid fa-headset"></i> Canlı Destek Konsolu (Sesli Bildirimli)</h3>
-                            <p class="helper-text" style="margin:4px 0 0 0;">Yeni müşteri mesajı geldiğinde sesli uyarı çalar. Gizlilik gereği konuşmaları istediğiniz zaman sohbet bazında veya tümünü silebilirsiniz.</p>
+                            <p class="helper-text" style="margin:4px 0 0 0;">Kayıtlı kullanıcı bilgileri sohbet açıldığında otomatik olarak iletilir. Yeni müşteri mesajı geldiğinde sesli uyarı çalar.</p>
                         </div>
                         <button type="button" class="btn-sm btn-danger" id="adminClearAllChatsBtn">
                             <i class="fa-solid fa-trash"></i> Tüm Sohbet Kayıtlarını Sil
@@ -2190,13 +2210,14 @@
             </div>
         </div>
         <div class="support-privacy-strip">
-            <span><i class="fa-solid fa-lock"></i> Destek gizliliği kapsamında kayıtlıdır</span>
-            <span id="supportSessionBadge">AI Asistan</span>
+            <span><i class="fa-solid fa-lock"></i> Üyelere özel canlı destek</span>
+            <span id="supportSessionBadge">Üyelik Gerekli</span>
         </div>
+        <div class="support-member-banner hidden" id="supportMemberInfoStrip"></div>
         <div class="support-messages" id="supportMessagesBox"></div>
         <form class="support-input-row" id="liveSupportForm">
-            <input type="text" id="liveSupportInput" placeholder="İsim Soyisim yazın..." autocomplete="off">
-            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            <input type="text" id="liveSupportInput" placeholder="Mesajınızı yazın..." autocomplete="off">
+            <button type="submit" id="liveSupportSubmitBtn"><i class="fa-solid fa-paper-plane"></i></button>
         </form>
     </div>
 
@@ -2609,24 +2630,95 @@
         let previousCustomerMsgCountByChat = {};
         let liveChatsSnapshotInitialized = false;
 
-        function createDefaultCustomerChatObj(id) {
+        function getMemberChatId(customer) {
+            return 'member_chat_' + customer.id;
+        }
+
+        function createMemberChatObj(customer) {
             const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
             return {
-                id,
-                step: 'ask_name',
-                customerName: '',
-                customerAddress: '',
+                id: getMemberChatId(customer),
+                customerId: customer.id,
+                customerName: customer.fullName || `${customer.firstName || ''} ${customer.lastName || ''}`.trim() || 'Kayıtlı Müşteri',
+                customerPhone: customer.phone || '',
+                customerEmail: customer.email || '',
+                customerAddress: customer.address || '',
+                step: 'connected',
                 updatedAt: Date.now(),
                 unreadForAdmin: 0,
                 messages: [
-                    { sender: 'ai', text: 'Merhaba, TRENDTAN Canlı Destek hattına hoş geldiniz! Size yardımcı olabilmem için önce İsim Soyisim bilginizi paylaşır mısınız?', time: nowStr }
+                    {
+                        sender: 'connected',
+                        text: `Merhaba ${customer.fullName || 'Müşteri'}, kayıtlı profil bilgileriniz (${customer.phone || '-'} • ${customer.address || '-'}) destek ekibine iletildi. Canlı destek hattına bağlandınız.`,
+                        time: nowStr
+                    }
                 ]
             };
         }
 
+        function syncLoggedInCustomerSupportSession(autoOpen = false) {
+            if (!currentCustomer) return;
+            const freshCust = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+            currentCustomer = freshCust;
+            const chatId = getMemberChatId(freshCust);
+            activeChatId = chatId;
+            try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+
+            let chat = liveChats.find(c => c.id === chatId);
+            const fullName = freshCust.fullName || `${freshCust.firstName || ''} ${freshCust.lastName || ''}`.trim();
+            const phone = freshCust.phone || '';
+            const email = freshCust.email || '';
+            const address = freshCust.address || '';
+
+            if (!chat) {
+                chat = createMemberChatObj(freshCust);
+                liveChats.unshift(chat);
+                persistLiveChatDoc(chat);
+            } else {
+                const infoChanged =
+                    chat.customerName !== fullName ||
+                    chat.customerPhone !== phone ||
+                    chat.customerEmail !== email ||
+                    chat.customerAddress !== address ||
+                    chat.step !== 'connected';
+
+                chat.customerId = freshCust.id;
+                chat.customerName = fullName;
+                chat.customerPhone = phone;
+                chat.customerEmail = email;
+                chat.customerAddress = address;
+                chat.step = 'connected';
+
+                if (infoChanged && autoOpen) {
+                    chat.updatedAt = Date.now();
+                    persistLiveChatDoc(chat);
+                }
+            }
+            renderCustomerSupportWidget();
+            renderAdminLiveSupportTab();
+        }
+
         function getCurrentCustomerChat() {
-            const found = liveChats.find(c => c.id === activeChatId);
-            return found || createDefaultCustomerChatObj(activeChatId);
+            if (!currentCustomer) {
+                return {
+                    id: 'guest_locked',
+                    step: 'auth_required',
+                    customerName: '',
+                    customerPhone: '',
+                    customerEmail: '',
+                    customerAddress: '',
+                    unreadForAdmin: 0,
+                    messages: [
+                        {
+                            sender: 'ai',
+                            text: 'Canlı destek hattını kullanabilmek için lütfen önce müşteri kaydı oluşturun veya hesabınıza giriş yapın.',
+                            time: ''
+                        }
+                    ]
+                };
+            }
+            const mId = getMemberChatId(currentCustomer);
+            return liveChats.find(c => c.id === mId) || createMemberChatObj(currentCustomer);
         }
 
         function playNotificationTone() {
@@ -2683,20 +2775,59 @@
             const win = $('liveSupportWindow');
             const box = $('supportMessagesBox');
             const badge = $('supportSessionBadge');
+            const memberStrip = $('supportMemberInfoStrip');
             const inputEl = $('liveSupportInput');
-            const chat = getCurrentCustomerChat();
+            const submitBtn = $('liveSupportSubmitBtn');
 
             if (win) win.classList.toggle('hidden', !isSupportWindowOpen);
-            if (badge) {
-                if (chat.step === 'connected') {
-                    badge.textContent = `Canlı Hatta Bağlı (${chat.customerName})`;
-                    badge.style.color = '#166534';
+
+            if (!currentCustomer) {
+                if (badge) {
+                    badge.textContent = 'Üyelik Gerekli';
+                    badge.style.color = '#dc2626';
                     badge.style.fontWeight = '700';
-                } else {
-                    badge.textContent = 'AI Asistan';
-                    badge.style.color = '#475569';
-                    badge.style.fontWeight = '600';
                 }
+                if (memberStrip) {
+                    memberStrip.classList.remove('hidden');
+                    memberStrip.innerHTML = `
+                        <span><i class="fa-solid fa-user-lock"></i> Mesaj yazmak için giriş yapın</span>
+                        <button type="button" class="copy-iban-btn" id="supportPromptAuthBtn">Kayıt Ol / Giriş</button>
+                    `;
+                    const promptBtn = $('supportPromptAuthBtn');
+                    if (promptBtn) {
+                        promptBtn.addEventListener('click', () => {
+                            if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
+                            switchCustomerAuthTab('custLoginTab');
+                        });
+                    }
+                }
+                if (box) {
+                    box.innerHTML = `
+                        <div class="support-msg ai">
+                            Canlı destek hattına yalnızca kayıtlı ve giriş yapmış müşteriler mesaj gönderebilir.
+                        </div>
+                    `;
+                }
+                if (inputEl) {
+                    inputEl.disabled = true;
+                    inputEl.placeholder = 'Mesaj yazmak için önce giriş yapın...';
+                }
+                if (submitBtn) submitBtn.disabled = true;
+                return;
+            }
+
+            const chat = getCurrentCustomerChat();
+            if (badge) {
+                badge.textContent = `Canlı Hatta Bağlı (${currentCustomer.fullName})`;
+                badge.style.color = '#166534';
+                badge.style.fontWeight = '700';
+            }
+            if (memberStrip) {
+                memberStrip.classList.remove('hidden');
+                memberStrip.innerHTML = `
+                    <span><strong>${currentCustomer.fullName}</strong> • ${currentCustomer.phone || ''}</span>
+                    <span style="font-size:10.5px;">Bilgiler İletildi</span>
+                `;
             }
             if (box) {
                 box.innerHTML = (chat.messages || []).map(m => {
@@ -2712,10 +2843,10 @@
                 box.scrollTop = box.scrollHeight;
             }
             if (inputEl) {
-                if (chat.step === 'ask_name') inputEl.placeholder = 'İsim Soyisim yazın...';
-                else if (chat.step === 'ask_address') inputEl.placeholder = 'Açık adresinizi yazın...';
-                else inputEl.placeholder = 'Mesajınızı yazın...';
+                inputEl.disabled = false;
+                inputEl.placeholder = 'Mesajınızı yazın...';
             }
+            if (submitBtn) submitBtn.disabled = false;
         }
 
         function renderAdminLiveSupportTab() {
@@ -2735,7 +2866,7 @@
             if (!liveChats.length) {
                 threadsEl.innerHTML = `<div style="padding:16px; font-size:12.5px; color:#64748b; text-align:center;">Henüz canlı destek konuşması bulunmuyor.</div>`;
                 headEl.innerHTML = `<span>Aktif konuşma yok</span>`;
-                streamEl.innerHTML = `<div style="text-align:center; color:#64748b; margin-top:40px; font-size:13px;">Müşteriler canlı destek penceresinden yazmaya başladığında burada görünecektir.</div>`;
+                streamEl.innerHTML = `<div style="text-align:center; color:#64748b; margin-top:40px; font-size:13px;">Kayıtlı müşteriler canlı destek penceresini açtığında bilgileri ve mesajları burada görünecektir.</div>`;
                 return;
             }
 
@@ -2745,7 +2876,7 @@
 
             threadsEl.innerHTML = liveChats.map(c => {
                 const isSel = c.id === selectedAdminChatId;
-                const title = c.customerName ? `${c.customerName}` : `Ziyaretçi (${c.id.slice(-5)})`;
+                const title = c.customerName ? `${c.customerName}` : `Üye (${c.id.slice(-5)})`;
                 const lastMsg = (c.messages && c.messages.length) ? c.messages[c.messages.length - 1].text : '';
                 const unread = Number(c.unreadForAdmin || 0);
                 return `
@@ -2754,7 +2885,7 @@
                             ${title}
                             ${unread > 0 ? `<span class="admin-unread-pill">${unread} yeni</span>` : ''}
                         </div>
-                        <div style="font-size:11px; color:#64748b; margin-top:2px;">${c.step === 'connected' ? 'Canlı Hatta Bağlı' : 'Bilgi Alınıyor'}</div>
+                        <div style="font-size:11px; color:#166534; margin-top:2px;">${c.customerPhone || ''} ${c.customerEmail ? '• ' + c.customerEmail : ''}</div>
                         <div style="font-size:11.5px; color:#334155; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${lastMsg}</div>
                     </div>
                 `;
@@ -2763,8 +2894,11 @@
             const activeChat = liveChats.find(c => c.id === selectedAdminChatId) || liveChats[0];
             headEl.innerHTML = `
                 <div>
-                    <strong>${activeChat.customerName || 'İsim Bekleniyor'}</strong>
-                    <div style="font-size:11.5px; color:#475569;">Adres: ${activeChat.customerAddress || 'Adres bekleniyor'}</div>
+                    <strong>${activeChat.customerName || 'Kayıtlı Müşteri'}</strong>
+                    <div style="font-size:11.5px; color:#475569;">
+                        Tel: ${activeChat.customerPhone || '-'} • E-Posta: ${activeChat.customerEmail || '-'}
+                    </div>
+                    <div style="font-size:11.5px; color:#475569;">Adres: ${activeChat.customerAddress || '-'}</div>
                 </div>
                 <button type="button" class="btn-sm btn-danger" onclick="deleteSingleSupportChat('${activeChat.id}')">
                     <i class="fa-solid fa-trash"></i> Bu Sohbeti Sil
@@ -2773,7 +2907,7 @@
 
             streamEl.innerHTML = (activeChat.messages || []).map(m => {
                 const cls = m.sender === 'user' ? 'user' : (m.sender === 'connected' ? 'connected-banner' : (m.sender === 'agent' ? 'agent' : 'ai'));
-                const label = m.sender === 'user' ? (activeChat.customerName || 'Müşteri') : (m.sender === 'agent' ? 'Siz (Canlı Destek)' : 'AI Asistan');
+                const label = m.sender === 'user' ? (activeChat.customerName || 'Müşteri') : (m.sender === 'agent' ? 'Siz (Canlı Destek)' : 'Sistem');
                 return `
                     <div class="support-msg ${cls}">
                         <small style="display:block; font-weight:700; margin-bottom:2px; opacity:0.85;">${label}</small>
@@ -2810,8 +2944,14 @@
                 finally { setTimeout(() => { isSaving = false; }, 250); }
             }
             if (chatId === activeChatId) {
-                activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-                try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                if (currentCustomer) {
+                    const freshChat = createMemberChatObj(currentCustomer);
+                    liveChats.unshift(freshChat);
+                    await persistLiveChatDoc(freshChat);
+                } else {
+                    activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                    try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                }
                 renderCustomerSupportWidget();
             }
             renderAdminLiveSupportTab();
@@ -3056,9 +3196,13 @@
 
             if (savedCustomerId) {
                 const foundCust = (db.shopCustomers || []).find(c => c.id === savedCustomerId);
-                if (foundCust) currentCustomer = foundCust;
+                if (foundCust) {
+                    currentCustomer = foundCust;
+                    syncLoggedInCustomerSupportSession(false);
+                }
             }
             updateHeaderMemberButton();
+            renderCustomerSupportWidget();
 
             if (savedView === 'sellerDashboardView' && savedSellerId) {
                 const foundSeller = (db.sellers || []).find(s => s.id === savedSellerId);
@@ -3095,6 +3239,7 @@
                 if (updatedCust) currentCustomer = updatedCust;
             }
             updateHeaderMemberButton();
+            renderCustomerSupportWidget();
             syncCartWithDbProducts();
             renderProducts();
             updateCartUI();
@@ -4056,6 +4201,7 @@
                     try { sessionStorage.removeItem(SESSION_KEYS.customerId); } catch (_) {}
                     updateHeaderMemberButton();
                     updateCartUI();
+                    renderCustomerSupportWidget();
                     switchMainView('customerStoreView');
                     showToast('Müşteri çıkışı yapıldı.');
                 });
@@ -4110,6 +4256,7 @@
                     currentCustomer = newCust;
                     try { sessionStorage.setItem(SESSION_KEYS.customerId, newCust.id); } catch (_) {}
                     await saveShopCustomerRecord(newCust);
+                    syncLoggedInCustomerSupportSession(true);
                     updateHeaderMemberButton();
                     updateCartUI();
 
@@ -4137,6 +4284,7 @@
                     }
                     currentCustomer = found;
                     try { sessionStorage.setItem(SESSION_KEYS.customerId, found.id); } catch (_) {}
+                    syncLoggedInCustomerSupportSession(true);
                     updateHeaderMemberButton();
                     updateCartUI();
                     if ($('customerAuthModal')) $('customerAuthModal').classList.add('hidden');
@@ -4184,6 +4332,7 @@
 
                     currentCustomer = updated;
                     await saveShopCustomerRecord(updated);
+                    syncLoggedInCustomerSupportSession(true);
                     updateHeaderMemberButton();
                     renderCustomerProfileView();
                     showToast('Profil bilgileriniz kaydedildi.');
@@ -4282,10 +4431,20 @@
             }
 
             if ($('openLiveSupportBtn')) {
-                $('openLiveSupportBtn').addEventListener('click', () => {
+                $('openLiveSupportBtn').addEventListener('click', async () => {
+                    if (!currentCustomer) {
+                        showToast('Canlı destek hattına yazmak için önce kayıt olun veya giriş yapın.');
+                        if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
+                        switchCustomerAuthTab('custLoginTab');
+                        return;
+                    }
                     isSupportWindowOpen = !isSupportWindowOpen;
                     saveSessionJson(SESSION_KEYS.supportOpen, isSupportWindowOpen);
-                    renderCustomerSupportWidget();
+                    if (isSupportWindowOpen) {
+                        syncLoggedInCustomerSupportSession(true);
+                    } else {
+                        renderCustomerSupportWidget();
+                    }
                 });
             }
             if ($('closeLiveSupportBtn')) {
@@ -4297,16 +4456,18 @@
             }
             if ($('clearMySupportChatBtn')) {
                 $('clearMySupportChatBtn').addEventListener('click', async () => {
+                    if (!currentCustomer) return;
                     if (!confirm('Gizlilik gereği mevcut sohbet kaydınız silinsin mi?')) return;
-                    const oldId = activeChatId;
-                    liveChats = liveChats.filter(c => c.id !== oldId);
+                    const mChatId = getMemberChatId(currentCustomer);
+                    liveChats = liveChats.filter(c => c.id !== mChatId);
                     if (firestoreReady && firestoreDb) {
                         isSaving = true;
-                        try { await deleteDoc(doc(firestoreDb, "trendtan_live_chats", oldId)); } catch (_) {}
+                        try { await deleteDoc(doc(firestoreDb, "trendtan_live_chats", mChatId)); } catch (_) {}
                         finally { setTimeout(() => { isSaving = false; }, 250); }
                     }
-                    activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-                    try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                    const freshChat = createMemberChatObj(currentCustomer);
+                    liveChats.unshift(freshChat);
+                    await persistLiveChatDoc(freshChat);
                     renderCustomerSupportWidget();
                     renderAdminLiveSupportTab();
                     showToast('Sohbet kaydınız temizlendi.');
@@ -4315,6 +4476,12 @@
             if ($('liveSupportForm')) {
                 $('liveSupportForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    if (!currentCustomer) {
+                        showToast('Canlı destek hattına yazmak için önce giriş yapın.');
+                        if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
+                        switchCustomerAuthTab('custLoginTab');
+                        return;
+                    }
                     const inp = $('liveSupportInput');
                     if (!inp) return;
                     const text = inp.value.trim();
@@ -4322,30 +4489,19 @@
                     inp.value = '';
 
                     const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                    let chat = liveChats.find(c => c.id === activeChatId);
-                    if (!chat) chat = createDefaultCustomerChatObj(activeChatId);
+                    const mChatId = getMemberChatId(currentCustomer);
+                    let chat = liveChats.find(c => c.id === mChatId);
+                    if (!chat) chat = createMemberChatObj(currentCustomer);
 
+                    chat.customerId = currentCustomer.id;
+                    chat.customerName = currentCustomer.fullName || `${currentCustomer.firstName || ''} ${currentCustomer.lastName || ''}`.trim();
+                    chat.customerPhone = currentCustomer.phone || '';
+                    chat.customerEmail = currentCustomer.email || '';
+                    chat.customerAddress = currentCustomer.address || '';
+                    chat.step = 'connected';
                     chat.messages.push({ sender: 'user', text, time: nowStr });
                     chat.updatedAt = Date.now();
                     chat.unreadForAdmin = Number(chat.unreadForAdmin || 0) + 1;
-
-                    if (chat.step === 'ask_name') {
-                        chat.customerName = text;
-                        chat.step = 'ask_address';
-                        chat.messages.push({
-                            sender: 'ai',
-                            text: `Teşekkürler ${text}. Şimdi açık adresinizi paylaşır mısınız?`,
-                            time: nowStr
-                        });
-                    } else if (chat.step === 'ask_address') {
-                        chat.customerAddress = text;
-                        chat.step = 'connected';
-                        chat.messages.push({
-                            sender: 'connected',
-                            text: `Canlı desteğe bağlandınız (${chat.customerName}). Destek ekibimizle buradan canlı yazışabilirsiniz.`,
-                            time: nowStr
-                        });
-                    }
 
                     renderCustomerSupportWidget();
                     await persistLiveChatDoc(chat);
@@ -4390,8 +4546,11 @@
                         } catch (_) {}
                         finally { setTimeout(() => { isSaving = false; }, 250); }
                     }
-                    activeChatId = 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-                    try { sessionStorage.setItem(SESSION_KEYS.supportChatId, activeChatId); } catch (_) {}
+                    if (currentCustomer) {
+                        const freshChat = createMemberChatObj(currentCustomer);
+                        liveChats.unshift(freshChat);
+                        await persistLiveChatDoc(freshChat);
+                    }
                     renderCustomerSupportWidget();
                     renderAdminLiveSupportTab();
                     showToast('Tüm canlı destek kayıtları silindi.');
