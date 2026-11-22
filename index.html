@@ -157,10 +157,13 @@
             line-height: 1.25;
         }
 
-        /* Hızlı Açılış & Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
+        /* Hızlı Açılış, Nizami Hizalama & Uzun / Dikey Ürün Fotoğraflarının Kesilmeden Tam Görünmesi */
         .product-card {
             content-visibility: auto;
             contain-intrinsic-size: 360px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .product-card .product-img {
             width: 100%;
@@ -170,12 +173,74 @@
             padding: 6px;
             display: block;
         }
+        .product-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .product-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 36px;
+        }
+        .price-block {
+            margin-top: auto;
+        }
         .multi-thumb-item img,
         .detail-thumb-img,
         .table-thumb,
         .cart-item img {
             object-fit: contain !important;
             background: #f8fafc;
+        }
+
+        /* Ciro Sıfırlama Butonu */
+        .kpi-reset-btn {
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .kpi-reset-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* Sepet & Ödeme Kolay Erişim */
+        .cart-drawer {
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-items-container {
+            flex: 1 1 auto;
+            max-height: 44vh;
+            overflow-y: auto;
+        }
+        .cart-summary {
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            z-index: 15;
+            box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.08);
+        }
+        .checkout-final-bar {
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            padding-top: 10px;
+            padding-bottom: 4px;
+            z-index: 10;
+            border-top: 1px solid #e2e8f0;
         }
 
         /* Müşteri Hesap / Profil Butonları & Paneli */
@@ -876,15 +941,6 @@
             padding-left: 20px;
             margin: 6px 0 12px 0;
         }
-        .policy-modal-note {
-            margin-top: 14px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            background: #fff7ed;
-            border: 1px solid #fed7aa;
-            font-size: 12px;
-            color: #9a3412;
-        }
 
         /* Mobil Görünüm & Üst Üste Binme Koruması */
         @media (max-width: 768px) {
@@ -1050,6 +1106,7 @@
                 font-size: 11px !important;
                 line-height: 1.35 !important;
                 margin-bottom: 5px !important;
+                min-height: 30px;
             }
             .current-price {
                 font-size: 13.5px !important;
@@ -1549,6 +1606,9 @@
                     <div>
                         <span>Toplam Platform Cirosu</span>
                         <h3 id="adminTotalPlatformRevenue">0,00 ₺</h3>
+                        <button type="button" class="kpi-reset-btn" id="resetPlatformRevenueBtn" title="Ciroyu sıfırla ve gün/tarih/yıl olarak geçmiş gün sipariş toplamlarına kaydet">
+                            <i class="fa-solid fa-rotate-left"></i> Ciroyu Sıfırla & Kaydet
+                        </button>
                     </div>
                 </div>
                 <div class="kpi-card">
@@ -1577,6 +1637,8 @@
             <!-- Admin Sekmeleri -->
             <div class="dash-tabs">
                 <button class="tab-btn active" data-tab="admin-all-orders" type="button">Tüm Platform Siparişleri</button>
+                <button class="tab-btn" data-tab="admin-past-orders" type="button">Geçmiş Siparişler</button>
+                <button class="tab-btn" data-tab="admin-daily-revenue-history" type="button">Geçmiş Gün Sipariş Toplamları</button>
                 <button class="tab-btn" data-tab="admin-timed-bonus" type="button">Zamanlı Seçili Ürün & Puan</button>
                 <button class="tab-btn" data-tab="admin-live-support" type="button" id="adminLiveSupportTabBtn">
                     Canlı Destek <span class="admin-unread-pill hidden" id="adminChatUnreadBadge">0</span>
@@ -1592,7 +1654,7 @@
             <div class="tab-content active" id="admin-all-orders">
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-boxes-packing"></i> Tüm Bayi & Mağaza Siparişleri (Merkezi Takip)</h3>
-                    <p class="helper-text">Site üzerinden verilen tüm siparişler satıcı paneliyle eş zamanlı olarak burada listelenir. Ayrı satıcı panellerine girmeden kargo ve teslimat durumunu buradan yönetebilirsiniz.</p>
+                    <p class="helper-text">Site üzerinden verilen tüm siparişler satıcı paneliyle eş zamanlı olarak burada listelenir. Teslim edilen siparişleri sildiğinizde aynı tarihle Geçmiş Siparişler kısmına aktarılır.</p>
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -1606,6 +1668,50 @@
                                 </tr>
                             </thead>
                             <tbody id="adminAllOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME: GEÇMİŞ SİPARİŞLER -->
+            <div class="tab-content" id="admin-past-orders">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Geçmiş Siparişler (Teslim Edilen / Arşivlenen)</h3>
+                    <p class="helper-text">Teslim edilen siparişler silindiğinde aynı tarih ve detaylarıyla burada saklanır.</p>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Takip Kodu & Tarih</th>
+                                    <th>İlgili Bayi / Mağaza</th>
+                                    <th>Müşteri & Adres</th>
+                                    <th>Ürünler</th>
+                                    <th>Tutar & Ödeme</th>
+                                    <th>Arşiv Durumu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminPastOrdersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME: GEÇMİŞ GÜN SİPARİŞ TOPLAMLARI -->
+            <div class="tab-content" id="admin-daily-revenue-history">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-calendar-check"></i> Geçmiş Gün Sipariş Toplamları</h3>
+                    <p class="helper-text">Toplam Platform Cirosu sıfırlandığında o günün tarihi (gün/ay/yıl), sipariş adedi ve sıfırlanan toplam ciro tutarı burada kayıtlı kalır.</p>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tarih (Gün / Ay / Yıl)</th>
+                                    <th>Sıfırlanma Saati</th>
+                                    <th>Sipariş Adedi</th>
+                                    <th>Geçmiş Gün Toplam Ciro</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminDailyRevenueHistoryBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -1693,7 +1799,7 @@
             <div class="tab-content" id="admin-applications">
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-file-signature"></i> Kurumsal Satıcı Başvuru Kayıtları</h3>
-                    <p class="helper-text">Başvuran firmaların tüm iletişim, vergi/TC kimlik ve adres bilgilerini inceleyip kullanıcı adı ve şifre atayarak onaylayabilirsiniz.</p>
+                    <p class="helper-text">Başvuran firmaların tüm iletişim ve adres bilgilerini inceleyip kullanıcı adı ve şifre atayarak onaylayabilirsiniz.</p>
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -1701,7 +1807,7 @@
                                     <th>Firma Tam Adı</th>
                                     <th>Ad Soyad</th>
                                     <th>Telefon & E-Posta</th>
-                                    <th>VKN / T.C. Kimlik</th>
+                                    <th>Bilgi Kodu</th>
                                     <th>Açık Adres</th>
                                     <th>Tarih</th>
                                     <th>İnceleme & Onay</th>
@@ -1722,7 +1828,7 @@
                             <thead>
                                 <tr>
                                     <th>Firma Tam Adı & Yetkili</th>
-                                    <th>VKN / T.C. & Adres</th>
+                                    <th>Adres</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>Şifre</th>
                                     <th>İletişim</th>
@@ -2002,8 +2108,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Vergi Kimlik No (VKN) veya T.C. Kimlik No *</label>
-                    <input type="text" id="applyTaxOrTc" required maxlength="11" placeholder="10 haneli VKN veya 11 haneli T.C. Kimlik No">
+                    <label>Mağaza / Referans Kodu *</label>
+                    <input type="text" id="applyTaxOrTc" required maxlength="15" placeholder="Mağaza veya başvuru kodu">
                 </div>
 
                 <div class="form-group">
@@ -2041,6 +2147,10 @@
                 <button class="close-btn" data-close="checkoutModal" type="button"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="checkoutForm" class="modal-form active">
+                <div class="checkout-final-bar" style="margin-bottom:12px; border-top:none; border-bottom:1px solid #e2e8f0; padding-top:0; padding-bottom:10px;">
+                    <span>Ödenecek Tutar: <strong id="modalFinalPriceTop">0,00 ₺</strong></span>
+                    <button type="submit" class="btn-primary" id="checkoutSubmitBtnTop">Siparişi Onayla</button>
+                </div>
                 <div class="form-group">
                     <label>Alıcı Adı Soyadı *</label>
                     <input type="text" id="custName" required placeholder="Adınız Soyadınız">
@@ -2185,9 +2295,6 @@
             </div>
             <div class="modal-form active">
                 <div id="policyPopupContent" class="policy-modal-body"></div>
-                <div class="policy-modal-note">
-                    <strong>Not:</strong> Metinlerde yer alan <em>[Firma/Şahıs Ünvanı]</em>, <em>[Vergi/T.C. Kimlik No]</em>, <em>[Adres]</em>, <em>[Telefon]</em> ve <em>[E-Posta]</em> alanlarını kendi resmi bilgilerinizle doldurunuz.
-                </div>
             </div>
         </div>
     </div>
@@ -2298,6 +2405,9 @@
             products: [],
             coupons: [],
             orders: [],
+            pastOrders: [],
+            dailyRevenueHistory: [],
+            revenueResetOffset: 0,
             timedBonusRules: []
         };
 
@@ -2331,18 +2441,18 @@
                     <ul>
                         <li>Müşteri kaydı ve sipariş oluşturma sırasında paylaşılan ad, soyad, telefon numarası, teslimat adresi ve e-posta bilgileri,</li>
                         <li>Canlı destek hattında paylaşılan ad-soyad, adres ve destek mesajları,</li>
-                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri, vergi veya T.C. kimlik numarası ve adres bilgileri.</li>
+                        <li>Satıcı başvurularında paylaşılan firma ünvanı, yetkili adı-soyadı, iletişim bilgileri ve adres bilgileri.</li>
                     </ul>
                     <h4>2. Ödeme Kartı Güvenliği</h4>
                     <p>Kartlı ödemelerde kart bilgileri Sanal POS altyapısı (PayTR / iyzico vb.) üzerinden işlenir; platformumuzda kart numarası veya güvenlik kodu saklanmaz.</p>
-                    <h4>3. Verilerin Paylaşımı</h4>
-                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, canlı destek yanıtı veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz.</p>
+                    <h4>3. İletişim ve Veri Talepleri</h4>
+                    <p>Kişisel veriler; siparişin hazırlanması ve teslimi, canlı destek yanıtı veya yasal yükümlülüklerin yerine getirilmesi kapsamı dışında üçüncü kişilerle ticari amaçla paylaşılmaz. İletişim için <strong>tredtandestek@gmail.com</strong> ve <strong>0501 090 17 22</strong> üzerinden bize ulaşabilirsiniz.</p>
                 `
             },
             kvkk: {
                 title: 'KVKK Aydınlatma Metni',
                 html: `
-                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu <strong>[Firma/Şahıs Ünvanı]</strong> sıfatıyla kişisel verilerinizi aşağıda belirtilen kapsamda işliyoruz.</p>
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca veri sorumlusu <strong>TRENDTAN</strong> sıfatıyla kişisel verilerinizi aşağıda belirtilen kapsamda işliyoruz.</p>
                     <h4>1. Kişisel Verilerin İşlenme Amaçları</h4>
                     <ul>
                         <li>Alışveriş işlemlerinin yürütülmesi, müşteri hesap/profil ve puan/cüzdan işlemlerinin yönetilmesi, siparişlerin oluşturulması ve teslimat süreçleri,</li>
@@ -2352,15 +2462,15 @@
                     <h4>2. Hukuki Sebepler ve Aktarım</h4>
                     <p>Verileriniz KVKK m.5 ve m.6 kapsamında sözleşmenin kurulması/ifası, hukuki yükümlülüklerin yerine getirilmesi ve meşru menfaat hukuki sebeplerine dayanarak işlenir; ilgili mevzuat sınırları içinde korunur.</p>
                     <h4>3. İlgili Kişinin Hakları (KVKK m.11)</h4>
-                    <p>Veri sahipleri; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve kanuni şartlar oluştuğunda silinmesini/yok edilmesini talep etme haklarına sahiptir. Başvurularınızı <strong>[E-Posta]</strong> veya <strong>[Adres]</strong> üzerinden iletebilirsiniz.</p>
+                    <p>Veri sahipleri; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve kanuni şartlar oluştuğunda silinmesini/yok edilmesini talep etme haklarına sahiptir. Başvurularınızı <strong>tredtandestek@gmail.com</strong> veya <strong>0501 090 17 22</strong> üzerinden iletebilirsiniz.</p>
                 `
             },
             iade: {
                 title: 'İptal ve İade Politikası',
                 html: `
-                    <p>TRENDTAN üzerinden verilen siparişlerde iptal ve iade süreçleri, ilgili ürünün niteliğine ve yürürlükteki tüketici mevzuatına göre yürütülür.</p>
+                    <p><strong>TRENDTAN</strong> üzerinden verilen siparişlerde iptal ve iade süreçleri, ilgili ürünün niteliğine ve yürürlükteki tüketici mevzuatına göre yürütülür.</p>
                     <h4>1. Sipariş İptali</h4>
-                    <p>Henüz kargoya verilmemiş siparişler için <strong>[Telefon]</strong> veya <strong>[E-Posta]</strong> üzerinden sipariş/takip kodu ile iptal talebi oluşturulabilir.</p>
+                    <p>Henüz kargoya verilmemiş siparişler için <strong>0501 090 17 22</strong> veya <strong>tredtandestek@gmail.com</strong> üzerinden sipariş/takip kodu ile iptal talebi oluşturulabilir.</p>
                     <h4>2. Cayma ve İade Koşulları</h4>
                     <ul>
                         <li>Teslim alınan ürünlerde cayma hakkı ve iade talepleri, ilgili mevzuatta öngörülen süreler içinde ve ürünün kullanılmamış, hasar görmemiş, orijinal ambalajı ve aksesuarlarıyla eksiksiz olması kaydıyla değerlendirilir.</li>
@@ -2377,7 +2487,7 @@
                     <p>İşbu bilgilendirme metni, elektronik ortamda sipariş oluşturan alıcı ile satıcı/platform arasındaki mesafeli satış süreçlerinin temel esaslarını özetler.</p>
                     <h4>1. Taraflar</h4>
                     <ul>
-                        <li><strong>Satıcı / Sağlayıcı:</strong> [Firma/Şahıs Ünvanı] — Adres: [Adres] — Tel: [Telefon] — E-Posta: [E-Posta] — VKN/T.C.: [Vergi/T.C. Kimlik No]</li>
+                        <li><strong>Satıcı / Sağlayıcı:</strong> TRENDTAN — Telefon: 0501 090 17 22 — E-Posta: tredtandestek@gmail.com</li>
                         <li><strong>Alıcı:</strong> Sipariş formunda ad-soyad, telefon ve teslimat adresi bilgilerini beyan eden kişi.</li>
                     </ul>
                     <h4>2. Ürün, Fiyat ve Ödeme</h4>
@@ -2446,6 +2556,9 @@
                 ? cachedMain.shopCustomers
                 : cachedShopCustomers,
             products: Array.isArray(cachedProducts) ? cachedProducts : [],
+            pastOrders: Array.isArray(cachedMain?.pastOrders) ? cachedMain.pastOrders : [],
+            dailyRevenueHistory: Array.isArray(cachedMain?.dailyRevenueHistory) ? cachedMain.dailyRevenueHistory : [],
+            revenueResetOffset: Number(cachedMain?.revenueResetOffset || 0),
             timedBonusRules: Array.isArray(cachedMain?.timedBonusRules) ? cachedMain.timedBonusRules : []
         };
 
@@ -2990,7 +3103,8 @@
         function getSellerDisplayName(sellerId) {
             const found = (db.sellers || []).find(s => s.id === sellerId);
             if (found) return found.companyName || found.fullName || sellerId;
-            const orderMatch = (db.orders || []).find(o => o.sellerId === sellerId && o.sellerName);
+            const orderMatch = (db.orders || []).find(o => o.sellerId === sellerId && o.sellerName) ||
+                               (db.pastOrders || []).find(o => o.sellerId === sellerId && o.sellerName);
             return orderMatch ? orderMatch.sellerName : (sellerId || 'TRENDTAN Mağaza');
         }
 
@@ -3009,6 +3123,12 @@
             const normal = Number(prod.oldPrice || 0);
             const disc = Number(prod.price || 0);
             return normal > disc && disc > 0 ? normal : 0;
+        }
+
+        function getCurrentDisplayedPlatformRevenue() {
+            const rawSum = (db.orders || []).reduce((s, o) => s + Number(o.total || 0), 0);
+            const offset = Number(db.revenueResetOffset || 0);
+            return Math.max(0, rawSum - offset);
         }
 
         function showToast(msg) {
@@ -3066,7 +3186,7 @@
             }
         }
 
-        function switchMainView(viewId, skipSave = false) {
+        function switchMainView(viewId, skipSave = false, shouldScrollTop = true) {
             if ($('customerStoreView')) $('customerStoreView').classList.add('hidden');
             if ($('customerProfileView')) $('customerProfileView').classList.add('hidden');
             if ($('sellerDashboardView')) $('sellerDashboardView').classList.add('hidden');
@@ -3075,7 +3195,9 @@
             if (!skipSave) {
                 try { sessionStorage.setItem(SESSION_KEYS.view, viewId); } catch (_) {}
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (shouldScrollTop) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function renderCustomerProfileView() {
@@ -3265,6 +3387,9 @@
                 shopCustomers: db.shopCustomers || [],
                 coupons: db.coupons || [],
                 orders: db.orders || [],
+                pastOrders: db.pastOrders || [],
+                dailyRevenueHistory: db.dailyRevenueHistory || [],
+                revenueResetOffset: Number(db.revenueResetOffset || 0),
                 timedBonusRules: db.timedBonusRules || []
             });
             writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers || []);
@@ -3280,6 +3405,9 @@
                     shopCustomers: db.shopCustomers || [],
                     coupons: db.coupons || [],
                     orders: db.orders || [],
+                    pastOrders: db.pastOrders || [],
+                    dailyRevenueHistory: db.dailyRevenueHistory || [],
+                    revenueResetOffset: Number(db.revenueResetOffset || 0),
                     timedBonusRules: db.timedBonusRules || [],
                     products: includeProductsInMain ? (db.products || []) : []
                 };
@@ -3490,7 +3618,8 @@
                 resBox.innerHTML = 'Lütfen takip kodunu veya telefon numarasını girin.';
                 return;
             }
-            const found = (db.orders || []).find(o =>
+            const pool = [...(db.orders || []), ...(db.pastOrders || [])];
+            const found = pool.find(o =>
                 (o.trackingCode && o.trackingCode.toLowerCase() === q) ||
                 (o.id && o.id.toLowerCase() === q) ||
                 (o.customerPhone && o.customerPhone.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')))
@@ -3573,10 +3702,10 @@
                 const scheduledRules = getAllRulesForProduct(prod.id);
 
                 return `
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductDetailModal('${prod.id}')">
                         ${discountRate > 0 ? `<span class="discount-tag">%${discountRate} İndirim</span>` : ''}
                         ${Number(prod.shipping) === 0 ? `<span class="shipping-tag">Ücretsiz Kargo</span>` : ''}
-                        <div class="product-click-zone" onclick="openProductDetailModal('${prod.id}')">
+                        <div class="product-click-zone">
                             <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img" loading="eager" decoding="async" fetchpriority="high">
                         </div>
                         <div class="product-body">
@@ -3592,29 +3721,29 @@
                                     <span>Seçili Saatlerde TRENDTAN BAKİYE KAZANMA ŞANSI (${scheduledRules[0].startTime}-${scheduledRules[0].endTime})</span>
                                 </div>
                             ` : '')}
-                            <h3 class="product-title product-click-zone" onclick="openProductDetailModal('${prod.id}')">${prod.name}</h3>
+                            <h3 class="product-title product-click-zone">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
                                 ${optionSummaryLabel}: <strong>${variants.length ? variants.join(', ') : 'Belirtilmemiş'}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
                             </small>
                             ${variants.length > 0 ? `
-                                <div class="card-size-select-row">
+                                <div class="card-size-select-row" onclick="event.stopPropagation()">
                                     <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${optionLabel}</span>
                                     <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)">
                                         ${variants.map(v => `<option value="${v.replace(/"/g, '&quot;')}" ${v === selectedVal ? 'selected' : ''}>${isShoe ? v + ' Numara' : v}</option>`).join('')}
                                     </select>
                                 </div>
                             ` : ''}
-                            <div class="price-block">
+                            <div class="price-block" onclick="event.stopPropagation()">
                                 ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
                                 <span class="current-price">${formatMoney(effPrice)}</span>
                                 <span class="shipping-info-text">${Number(prod.shipping) === 0 ? 'Kargo Bedava' : 'Kargo: ' + formatMoney(prod.shipping)}</span>
-                            </div>
-                            <div style="display:flex; gap:6px;">
-                                <button class="btn-outline" type="button" style="padding:9px 10px;" onclick="openProductDetailModal('${prod.id}')"><i class="fa-solid fa-eye"></i></button>
-                                <button class="btn-add-cart" type="button" style="flex:1;" onclick="addFromProductCard('${prod.id}')">
-                                    <i class="fa-solid fa-cart-plus"></i> Sepete Ekle (${minQty} Ad.)
-                                </button>
+                                <div style="display:flex; gap:6px; margin-top:8px;">
+                                    <button class="btn-outline" type="button" style="padding:9px 10px;" onclick="openProductDetailModal('${prod.id}')"><i class="fa-solid fa-eye"></i></button>
+                                    <button class="btn-add-cart" type="button" style="flex:1;" onclick="addFromProductCard('${prod.id}')">
+                                        <i class="fa-solid fa-cart-plus"></i> Sepete Ekle (${minQty} Ad.)
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3923,6 +4052,31 @@
             }
         };
 
+        window.moveDeliveredOrderToPast = async function(orderId) {
+            const idx = (db.orders || []).findIndex(o => o.id === orderId);
+            if (idx === -1) return;
+            const target = db.orders[idx];
+            if (target.status !== 'completed') {
+                showToast('Yalnızca teslim edilmiş / tamamlanmış siparişler Geçmiş Siparişler kısmına aktarılabilir.');
+                return;
+            }
+            if (!confirm('Bu teslim edilmiş siparişi silip aynı tarihle Geçmiş Siparişler kısmına aktarmak istiyor musunuz?')) return;
+
+            if (!Array.isArray(db.pastOrders)) db.pastOrders = [];
+            const archivedAtDate = target.date || new Date().toLocaleDateString('tr-TR');
+            db.pastOrders.unshift({
+                ...target,
+                date: archivedAtDate,
+                archivedAt: archivedAtDate,
+                status: 'completed'
+            });
+            db.orders.splice(idx, 1);
+
+            await saveDB();
+            refreshAllViews();
+            showToast(`Sipariş (${target.trackingCode || target.id}) ${archivedAtDate} tarihi ile Geçmiş Siparişler kısmına aktarıldı.`);
+        };
+
         function renderSellerDashboard() {
             if (!currentSeller) return;
             if ($('sellerStoreTitle')) $('sellerStoreTitle').textContent = `${currentSeller.companyName} — ${currentSeller.fullName}`;
@@ -4003,7 +4157,7 @@
 
         function renderAdminDashboard() {
             const allOrders = db.orders || [];
-            const platformRev = allOrders.reduce((s, o) => s + Number(o.total), 0);
+            const platformRev = getCurrentDisplayedPlatformRevenue();
             if ($('adminTotalPlatformRevenue')) $('adminTotalPlatformRevenue').textContent = formatMoney(platformRev);
             if ($('adminPendingAppsCount')) $('adminPendingAppsCount').textContent = (db.sellerApplications || []).length;
             if ($('adminActiveSellersCount')) $('adminActiveSellersCount').textContent = (db.sellers || []).length;
@@ -4011,6 +4165,40 @@
 
             renderAdminTimedBonusTab();
             renderAdminLiveSupportTab();
+
+            if ($('adminPastOrdersBody')) {
+                const pastList = Array.isArray(db.pastOrders) ? db.pastOrders : [];
+                $('adminPastOrdersBody').innerHTML = pastList.length === 0
+                    ? `<tr><td colspan="6" style="text-align:center;">Henüz geçmiş sipariş kaydı bulunmuyor.</td></tr>`
+                    : pastList.map(o => {
+                        const tCode = o.trackingCode || o.id;
+                        const sellerLabel = o.sellerName || getSellerDisplayName(o.sellerId);
+                        return `
+                            <tr>
+                                <td><strong><code>${tCode}</code></strong><br><small>Tarih: <strong>${o.date || '-'}</strong></small></td>
+                                <td><strong>${sellerLabel}</strong></td>
+                                <td><strong>${o.customerName}</strong><br><small>${o.customerPhone}</small><br><small>${o.customerAddress}</small></td>
+                                <td>${o.itemsText}</td>
+                                <td><strong>${formatMoney(o.total)}</strong><br><small>${o.paymentMethod || 'Havale / EFT'}</small></td>
+                                <td><span style="color:#16a34a; font-weight:700;">Teslim Edildi • Geçmişte</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+            }
+
+            if ($('adminDailyRevenueHistoryBody')) {
+                const histList = Array.isArray(db.dailyRevenueHistory) ? db.dailyRevenueHistory : [];
+                $('adminDailyRevenueHistoryBody').innerHTML = histList.length === 0
+                    ? `<tr><td colspan="4" style="text-align:center;">Henüz sıfırlanmış geçmiş gün sipariş toplamı bulunmuyor.</td></tr>`
+                    : histList.map(h => `
+                        <tr>
+                            <td><strong>${h.dateStr}</strong></td>
+                            <td><code>${h.timeStr || '-'}</code></td>
+                            <td>${Number(h.orderCount || 0)} sipariş</td>
+                            <td style="color:#16a34a; font-weight:800;">${formatMoney(h.totalAmount || 0)}</td>
+                        </tr>
+                    `).join('');
+            }
 
             if ($('adminAllOrdersBody')) {
                 $('adminAllOrdersBody').innerHTML = allOrders.length === 0
@@ -4030,7 +4218,10 @@
                                 <td>
                                     <input type="text" id="adminCargoInput_${o.id}" class="cargo-inline-input" value="${o.carrierCargoNo || ''}" placeholder="Kargo no / not">
                                     ${!isDone ? `<button class="btn-sm btn-outline" type="button" onclick="markOrderShipped('${o.id}', 'adminCargoInput_')"><i class="fa-solid fa-truck"></i> Kargoya Verildi</button>` : ''}
-                                    ${!isDone ? `<button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}', 'adminCargoInput_')"><i class="fa-solid fa-check"></i> Tamamla</button>` : `<span style="color:#16a34a; font-weight:700; font-size:12px;">Teslim Edildi</span>`}
+                                    ${!isDone ? `<button class="btn-sm btn-primary" type="button" onclick="completeSellerOrder('${o.id}', 'adminCargoInput_')"><i class="fa-solid fa-check"></i> Tamamla</button>` : `
+                                        <span style="color:#16a34a; font-weight:700; font-size:12px; display:block; margin-bottom:4px;">Teslim Edildi</span>
+                                        <button class="btn-sm btn-danger" type="button" onclick="moveDeliveredOrderToPast('${o.id}')"><i class="fa-solid fa-box-archive"></i> Geçmişe At / Sil</button>
+                                    `}
                                 </td>
                             </tr>
                         `;
@@ -4062,7 +4253,7 @@
                     : db.sellers.map(s => `
                         <tr>
                             <td><strong>${s.companyName}</strong><br><small>${s.fullName}</small></td>
-                            <td>VKN/TC: <code>${s.taxOrTc}</code><br><small>${s.address}</small></td>
+                            <td>${s.address}</td>
                             <td><code>${s.username}</code></td>
                             <td><code>${s.password}</code></td>
                             <td>${s.phone}<br><small>${s.email}</small></td>
@@ -4119,7 +4310,7 @@
                     <strong>Firma Tam Adı:</strong> ${app.companyName}<br>
                     <strong>Yetkili:</strong> ${app.fullName}<br>
                     <strong>Telefon / E-Posta:</strong> ${app.phone} — ${app.email}<br>
-                    <strong>VKN / T.C. Kimlik:</strong> ${app.taxOrTc}<br>
+                    <strong>Kod:</strong> ${app.taxOrTc}<br>
                     <strong>Açık Adres:</strong> ${app.address}
                 `;
             }
@@ -4169,6 +4360,36 @@
 
         function bindAllUIEvents() {
             buildLuckyWheelDisc();
+
+            /* Toplam Ciroyu Sıfırla & Geçmiş Gün Sipariş Toplamlarına Kaydet */
+            if ($('resetPlatformRevenueBtn')) {
+                $('resetPlatformRevenueBtn').addEventListener('click', async () => {
+                    const currentRev = getCurrentDisplayedPlatformRevenue();
+                    if (currentRev <= 0) {
+                        showToast('Sıfırlanacak aktif ciro tutarı bulunmuyor.');
+                        return;
+                    }
+                    const now = new Date();
+                    const dateStr = now.toLocaleDateString('tr-TR');
+                    const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    if (!confirm(`Toplam Ciro (${formatMoney(currentRev)}) sıfırlanıp ${dateStr} tarihi ile Geçmiş Gün Sipariş Toplamlarına kaydedilsin mi?`)) return;
+
+                    if (!Array.isArray(db.dailyRevenueHistory)) db.dailyRevenueHistory = [];
+                    db.dailyRevenueHistory.unshift({
+                        id: 'rev_' + Date.now(),
+                        dateStr,
+                        timeStr,
+                        orderCount: (db.orders || []).length,
+                        totalAmount: currentRev
+                    });
+                    const rawSum = (db.orders || []).reduce((s, o) => s + Number(o.total || 0), 0);
+                    db.revenueResetOffset = rawSum;
+
+                    await saveDB();
+                    renderAdminDashboard();
+                    showToast(`${dateStr} tarihli ${formatMoney(currentRev)} tutar Geçmiş Gün Sipariş Toplamlarına kaydedildi.`);
+                });
+            }
 
             /* Müşteri Kayıt / Giriş / Profil Butonları */
             if ($('openCustomerAuthBtn')) {
@@ -4356,7 +4577,7 @@
                     const btn = $('spinLuckyWheelBtn');
                     if (btn) btn.disabled = true;
 
-                    const sliceDeg = 360 / WHEEL_SLICES.length; // 36 derece
+                    const sliceDeg = 360 / WHEEL_SLICES.length;
                     const chosenIdx = ALLOWED_WIN_INDICES[Math.floor(Math.random() * ALLOWED_WIN_INDICES.length)];
                     const wonAmount = Number(WHEEL_SLICES[chosenIdx].amount || 50);
                     const sliceCenter = chosenIdx * sliceDeg + sliceDeg / 2;
@@ -4668,9 +4889,10 @@
                         }
                     }
                     if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
-                    if ($('checkoutSubmitBtn')) {
-                        $('checkoutSubmitBtn').textContent = grandTotal > 0 ? 'Siparişi Onayla (Havale / EFT)' : 'Siparişi Onayla (Puan Bakiyesi ile)';
-                    }
+                    if ($('modalFinalPriceTop')) $('modalFinalPriceTop').textContent = formatMoney(grandTotal);
+                    const btnText = grandTotal > 0 ? 'Siparişi Onayla (Havale / EFT)' : 'Siparişi Onayla (Puan Bakiyesi ile)';
+                    if ($('checkoutSubmitBtn')) $('checkoutSubmitBtn').textContent = btnText;
+                    if ($('checkoutSubmitBtnTop')) $('checkoutSubmitBtnTop').textContent = 'Siparişi Onayla';
                     if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
                 });
             }
@@ -5076,6 +5298,18 @@
                 });
             });
 
+            /* Dış Katmana (Backdrop) Dokununca Modalları Kapatma */
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) {
+                        backdrop.classList.add('hidden');
+                        if (backdrop.id === 'trackOrderModal') {
+                            try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
+                        }
+                    }
+                });
+            });
+
             document.querySelectorAll('[data-close]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const modal = $(btn.dataset.close);
@@ -5115,8 +5349,13 @@
                         return numB - numA;
                     });
                     db.products = list;
-                    writeLocalCache(CACHE_KEYS.products, list);
+                    writeLocalCache(CACHE_KEYS.products, db.products);
                     refreshAllViews();
+                });
+
+                onSnapshot(liveChatsColRef, (colSnap) => {
+                    if (isSaving) return;
+                    handleLiveChatsSnapshot(colSnap);
                 });
 
                 onSnapshot(shopCustColRef, (colSnap) => {
@@ -5127,88 +5366,77 @@
                         custList.push({ id: item.id || d.id, ...item });
                     });
                     if (custList.length > 0) {
-                        db.shopCustomers = custList;
-                        writeLocalCache(CACHE_KEYS.shopCustomers, custList);
+                        const merged = [...(db.shopCustomers || [])];
+                        custList.forEach(c => {
+                            const idx = merged.findIndex(m => m.id === c.id);
+                            if (idx >= 0) merged[idx] = { ...merged[idx], ...c };
+                            else merged.push(c);
+                        });
+                        db.shopCustomers = merged;
+                        writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
                         refreshAllViews();
                     }
-                });
-
-                onSnapshot(storeDocRef, (docSnap) => {
-                    if (isSaving || !docSnap.exists()) return;
-                    const remoteData = docSnap.data() || {};
-                    db = {
-                        ...db,
-                        ...remoteData,
-                        shopCustomers: (Array.isArray(remoteData.shopCustomers) && remoteData.shopCustomers.length > 0)
-                            ? remoteData.shopCustomers
-                            : (db.shopCustomers || []),
-                        products: db.products || [],
-                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || []),
-                        adminPassword: remoteData.adminPassword || 'trendtan2026'
-                    };
-                    writeLocalCache(CACHE_KEYS.mainState, {
-                        adminPassword: db.adminPassword,
-                        posConfig: db.posConfig,
-                        sellers: db.sellers,
-                        sellerApplications: db.sellerApplications,
-                        customers: db.customers,
-                        shopCustomers: db.shopCustomers,
-                        coupons: db.coupons,
-                        orders: db.orders,
-                        timedBonusRules: db.timedBonusRules
-                    });
-                    refreshAllViews();
-                    const activeTrackQ = $('trackCodeInput') ? $('trackCodeInput').value.trim() : '';
-                    if (activeTrackQ && $('trackOrderResult') && !$('trackOrderResult').classList.contains('hidden')) {
-                        runOrderTrackingSearch(activeTrackQ);
-                    }
-                });
-
-                onSnapshot(liveChatsColRef, (colSnap) => {
-                    if (isSaving) return;
-                    handleLiveChatsSnapshot(colSnap);
                 });
 
                 const snap = await getDoc(storeDocRef);
                 if (snap.exists()) {
                     const remoteData = snap.data() || {};
-                    const legacyProducts = Array.isArray(remoteData.products) ? remoteData.products : [];
+                    const mergedShopCusts = [...(db.shopCustomers || [])];
+                    (remoteData.shopCustomers || []).forEach(c => {
+                        const idx = mergedShopCusts.findIndex(m => m.id === c.id);
+                        if (idx >= 0) mergedShopCusts[idx] = { ...c, ...mergedShopCusts[idx] };
+                        else mergedShopCusts.push(c);
+                    });
                     db = {
-                        ...db,
+                        ...JSON.parse(JSON.stringify(DEFAULT_DB)),
                         ...remoteData,
-                        shopCustomers: (Array.isArray(remoteData.shopCustomers) && remoteData.shopCustomers.length > 0)
-                            ? remoteData.shopCustomers
-                            : (db.shopCustomers || []),
-                        products: (db.products && db.products.length > 0) ? db.products : legacyProducts,
-                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || []),
-                        adminPassword: remoteData.adminPassword || 'trendtan2026'
+                        shopCustomers: mergedShopCusts,
+                        products: Array.isArray(remoteData.products) && remoteData.products.length > 0
+                            ? remoteData.products
+                            : db.products,
+                        pastOrders: Array.isArray(remoteData.pastOrders) ? remoteData.pastOrders : (db.pastOrders || []),
+                        dailyRevenueHistory: Array.isArray(remoteData.dailyRevenueHistory) ? remoteData.dailyRevenueHistory : (db.dailyRevenueHistory || []),
+                        revenueResetOffset: Number(remoteData.revenueResetOffset ?? db.revenueResetOffset ?? 0),
+                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || [])
                     };
-                    if (legacyProducts.length > 0) {
-                        for (const lp of legacyProducts) {
-                            if (lp && lp.id) {
-                                await setDoc(doc(firestoreDb, "trendtan_products", lp.id), lp);
-                            }
-                        }
-                        await saveDB(false);
-                    }
+                    if (db.products.length > 0) writeLocalCache(CACHE_KEYS.products, db.products);
+                    writeLocalCache(CACHE_KEYS.mainState, db);
+                    writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
                     restoreSessionViewIfPossible();
                     refreshAllViews();
                 } else {
-                    await setDoc(storeDocRef, { ...DEFAULT_DB, products: [] });
+                    await saveDB(false);
                 }
 
-                const savedTrackQuery = sessionStorage.getItem(SESSION_KEYS.trackQuery);
-                const savedTrackOpen = sessionStorage.getItem(SESSION_KEYS.trackOpen) === '1';
-                if (savedTrackOpen && $('trackOrderModal')) {
-                    $('trackOrderModal').classList.remove('hidden');
-                    if (savedTrackQuery && $('trackCodeInput')) {
-                        $('trackCodeInput').value = savedTrackQuery;
-                        runOrderTrackingSearch(savedTrackQuery);
-                    }
-                }
+                onSnapshot(storeDocRef, (docSnap) => {
+                    if (isSaving || !docSnap.exists()) return;
+                    const remoteData = docSnap.data() || {};
+                    const mergedShopCusts = [...(db.shopCustomers || [])];
+                    (remoteData.shopCustomers || []).forEach(c => {
+                        const idx = mergedShopCusts.findIndex(m => m.id === c.id);
+                        if (idx >= 0) mergedShopCusts[idx] = { ...c, ...mergedShopCusts[idx] };
+                        else mergedShopCusts.push(c);
+                    });
+                    db = {
+                        ...db,
+                        ...remoteData,
+                        shopCustomers: mergedShopCusts,
+                        products: Array.isArray(remoteData.products) && remoteData.products.length > 0
+                            ? remoteData.products
+                            : db.products,
+                        pastOrders: Array.isArray(remoteData.pastOrders) ? remoteData.pastOrders : (db.pastOrders || []),
+                        dailyRevenueHistory: Array.isArray(remoteData.dailyRevenueHistory) ? remoteData.dailyRevenueHistory : (db.dailyRevenueHistory || []),
+                        revenueResetOffset: Number(remoteData.revenueResetOffset ?? db.revenueResetOffset ?? 0),
+                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || [])
+                    };
+                    writeLocalCache(CACHE_KEYS.mainState, db);
+                    writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
+                    refreshAllViews();
+                });
             } catch (err) {
-                console.error(err);
-                showToast('Bağlantı uyarısı: Önbellekteki veriler gösteriliyor.');
+                console.warn("Firebase senkronizasyonu başlatılamadı, yerel önbellek kullanılıyor:", err);
+                restoreSessionViewIfPossible();
+                refreshAllViews();
             }
         })();
     </script>
