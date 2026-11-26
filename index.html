@@ -5,8 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRENDTAN | Çok Satıcılı Alışveriş Platformu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=20261122">
+    <link rel="stylesheet" href="style.css?v=20261126">
     <style>
+        /* En Üst Beyaz Zemin - Turuncu Yazı Tedarikçi Kayan Bandı */
+        .supplier-top-marquee {
+            width: 100%;
+            background: #ffffff;
+            color: #ff6a00;
+            border-bottom: 1px solid #fed7aa;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 8px 0;
+            font-size: 13px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1200;
+        }
+        .supplier-top-marquee-track {
+            display: inline-block;
+            padding-left: 100%;
+            animation: supplierMarqueeScroll 24s linear infinite;
+        }
+        .supplier-top-marquee:hover .supplier-top-marquee-track {
+            animation-play-state: paused;
+        }
+        .supplier-top-marquee-track span {
+            display: inline-block;
+            margin-right: 48px;
+        }
+        @keyframes supplierMarqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Kenardan Açılan Çark Butonu */
+        .side-wheel-dock {
+            position: fixed;
+            right: 0;
+            top: 46%;
+            transform: translateY(-50%);
+            z-index: 1960;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 11px 14px;
+            border-radius: 12px 0 0 12px;
+            border: 2px solid #facc15;
+            border-right: none;
+            background: #0f172a;
+            color: #facc15;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: -6px 10px 24px rgba(15, 23, 42, 0.28);
+            transition: transform 0.16s ease, background 0.16s ease;
+        }
+        .side-wheel-dock:hover {
+            transform: translateY(-50%) translateX(-3px);
+            background: #1e293b;
+        }
+
+        /* Satıcı Kurdele Rozeti */
+        .seller-ribbon-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: #ffffff;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            margin-left: 6px;
+        }
+
         /* Şekilli & Vurgulu Kampanya Hero Banner */
         .hero-banner.shimmer-hero {
             position: relative;
@@ -164,6 +237,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            position: relative;
         }
         .product-card .product-img {
             width: 100%;
@@ -172,6 +246,7 @@
             background: #f8fafc;
             padding: 6px;
             display: block;
+            transition: filter 0.2s ease, opacity 0.2s ease;
         }
         .product-body {
             display: flex;
@@ -194,6 +269,188 @@
         .cart-item img {
             object-fit: contain !important;
             background: #f8fafc;
+        }
+
+        /* Stokta Yok Kırmızı Bant & Gri Ton Durumları */
+        .out-of-stock-ribbon {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            z-index: 6;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 5px 11px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+            letter-spacing: 0.3px;
+            pointer-events: none;
+        }
+        .product-card.is-out-of-stock .product-img.gray-out-target,
+        .product-card.is-out-of-stock .product-click-zone img {
+            filter: grayscale(100%) !important;
+            opacity: 0.65 !important;
+        }
+        .btn-add-cart.green-add-btn {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+        .btn-add-cart.green-add-btn:hover:not(:disabled) {
+            background: #15803d !important;
+        }
+        .btn-add-cart.gray-out-btn,
+        .btn-add-cart:disabled {
+            background: #cbd5e1 !important;
+            color: #475569 !important;
+            border-color: #94a3b8 !important;
+            filter: grayscale(100%);
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+
+        /* Kart İçi Yeşil Sepete Ekle + Yanında - / + Adet Kontrolü */
+        .card-add-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .card-qty-box {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            overflow: hidden;
+            height: 36px;
+        }
+        .card-qty-btn {
+            width: 26px;
+            height: 100%;
+            border: none;
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .card-qty-btn:hover {
+            background: #e2e8f0;
+        }
+        .card-qty-val {
+            min-width: 22px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        /* Üstte 2 Saniyede Bir Otomatik Kayan "Bu Haftanın Trendleri" & Altında "En Çok Satanlar" Bölümleri */
+        .showcase-band {
+            margin-top: 16px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+        .showcase-band-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .showcase-band-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+        }
+        .showcase-band-sub {
+            font-size: 11.5px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .trend-carousel-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            transition: opacity 0.25s ease;
+        }
+        .bestseller-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .mini-showcase-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .mini-showcase-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+        }
+        .mini-showcase-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain !important;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .mini-showcase-card.is-out-of-stock img {
+            filter: grayscale(100%) !important;
+            opacity: 0.65 !important;
+        }
+        .mini-showcase-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #0f172a;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .mini-showcase-price {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #f27a1a;
+        }
+
+        /* Sayfa İçi Ürün Detay Sekmesi / Görünümü */
+        .detail-page-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+        }
+        .detail-page-grid {
+            display: grid;
+            grid-template-columns: minmax(280px, 420px) 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 768px) {
+            .detail-page-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Ciro Sıfırlama Butonu */
@@ -822,10 +1079,7 @@
             cursor: pointer;
         }
 
-        /* Kaydırmalı Ürün Detay Modalı */
-        .detail-modal-box {
-            max-width: 720px;
-        }
+        /* Kaydırmalı Ürün Görsel Alanı */
         .detail-carousel-wrap {
             position: relative;
             border-radius: 12px;
@@ -835,7 +1089,7 @@
         }
         .detail-main-img {
             width: 100%;
-            max-height: 340px;
+            max-height: 360px;
             object-fit: contain;
             display: block;
             background: #ffffff;
@@ -951,6 +1205,14 @@
                 padding-left: 10px !important;
                 padding-right: 10px !important;
             }
+            .supplier-top-marquee {
+                font-size: 11px;
+                padding: 6px 0;
+            }
+            .side-wheel-dock {
+                padding: 8px 10px;
+                font-size: 11.5px;
+            }
             .top-promo-bar {
                 height: auto !important;
                 min-height: 30px;
@@ -1055,6 +1317,11 @@
             .hero-stats .stat-box {
                 padding: 7px 9px !important;
                 font-size: 11px !important;
+            }
+            .trend-carousel-grid,
+            .bestseller-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
             }
             .filter-bar {
                 flex-direction: column !important;
@@ -1200,9 +1467,17 @@
 </head>
 <body>
 
+    <!-- SAYFANIN EN BAŞI: BEYAZ ZEMİN - TURUNCU YAZI TEDARİKÇİ KAYAN YAZISI -->
+    <div class="supplier-top-marquee" role="region" aria-label="Tedarikçi Bilgilendirmesi">
+        <div class="supplier-top-marquee-track">
+            <span><i class="fa-solid fa-industry"></i> Ürünlerimiz tedarikçi firma tarafından gönderilmektedir • Minimum alışveriş tutarı 500 TL • 500 TL altı alışverişlerde 150 TL kargo ücreti uygulanır</span>
+            <span><i class="fa-solid fa-industry"></i> Ürünlerimiz tedarikçi firma tarafından gönderilmektedir • Minimum alışveriş tutarı 500 TL • 500 TL altı alışverişlerde 150 TL kargo ücreti uygulanır</span>
+        </div>
+    </div>
+
     <!-- ÜST BİLGİ BARI -->
     <div class="top-promo-bar">
-        <span><i class="fa-solid fa-coins"></i> <strong>Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</strong> • Seçili zamanlarda sipariş ver, puan/bakiye kazan!</span>
+        <span><i class="fa-solid fa-coins"></i> <strong>Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</strong> • Minimum alışveriş 500 TL (500 TL altı 150 TL kargo)</span>
     </div>
 
     <!-- HEADER / NAVBAR -->
@@ -1259,15 +1534,33 @@
 
     <!-- ANA VİTRİN (MÜŞTERİ EKRANI) -->
     <main class="container main-store" id="customerStoreView">
+        <!-- ÜSTTE 2 SANİYEDE BİR OTOMATİK KAYAN BU HAFTANIN TRENDLERİ -->
+        <section class="showcase-band" id="weeklyTrendsSection">
+            <div class="showcase-band-head">
+                <h2 class="showcase-band-title"><i class="fa-solid fa-fire" style="color:#ea580c;"></i> Bu Haftanın Trendleri</h2>
+                <span class="showcase-band-sub">2 saniyede bir otomatik kayar</span>
+            </div>
+            <div class="trend-carousel-grid" id="weeklyTrendsCarousel"></div>
+        </section>
+
+        <!-- ALTINDA EN ÇOK SATANLAR -->
+        <section class="showcase-band" id="bestSellersSection">
+            <div class="showcase-band-head">
+                <h2 class="showcase-band-title"><i class="fa-solid fa-crown" style="color:#d97706;"></i> En Çok Satanlar</h2>
+                <span class="showcase-band-sub">Seçili çok satan ürünler</span>
+            </div>
+            <div class="bestseller-grid" id="bestSellersGrid"></div>
+        </section>
+
         <!-- Şekilli Kampanya Banner -->
-        <section class="hero-banner shimmer-hero">
+        <section class="hero-banner shimmer-hero" style="margin-top:16px;">
             <div class="hero-text">
                 <div class="hero-ribbon-row">
                     <span class="hero-badge"><i class="fa-solid fa-bolt"></i> FIRSAT VİTRİNİ</span>
                     <span class="hero-weekly-pill"><i class="fa-solid fa-coins"></i> Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</span>
                 </div>
                 <h1>TRENDTAN SEÇKİN FIRSATLAR</h1>
-                <p>Onaylı satıcıların ürünleri, <strong>her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI</strong>, anlık sipariş takip kodu ve güvenli ödeme altyapısı.</p>
+                <p>Ürünlerimiz tedarikçi firma tarafından gönderilmektedir • Minimum alışveriş tutarı <strong>500 TL</strong> (500 TL altı <strong>150 TL</strong> kargo).</p>
                 <div class="hero-wheel-cta-wrap">
                     <button type="button" class="shaped-wheel-cta" id="heroWheelCtaBtn">
                         <i class="fa-solid fa-dharmachakra"></i>
@@ -1289,7 +1582,7 @@
             </div>
             <div class="filter-right">
                 <label class="checkbox-label">
-                    <input type="checkbox" id="freeShippingFilter"> Ücretsiz Kargo
+                    <input type="checkbox" id="freeShippingFilter"> 500 TL Üzeri Kargo Avantajı
                 </label>
                 <select id="sortSelect">
                     <option value="default">Önerilen Sıralama</option>
@@ -1303,6 +1596,33 @@
         <!-- Ürün Listesi Grid -->
         <section class="product-grid" id="productGrid"></section>
     </main>
+
+    <!-- SAYFA İÇİ ÜRÜN DETAY SEKMESİ / GÖRÜNÜMÜ + ÖNERİLEN ÜRÜNLER -->
+    <section class="dashboard-section hidden" id="productDetailPageView">
+        <div class="container">
+            <div class="dash-header">
+                <div>
+                    <span class="role-badge seller">ÜRÜN DETAY SAYFASI</span>
+                    <h2 id="detailPageHeading">Ürün Detayı</h2>
+                </div>
+                <div class="dash-header-actions">
+                    <button class="btn-outline" id="backToStoreFromDetailPage" type="button">
+                        <i class="fa-solid fa-arrow-left"></i> Vitrindeki Tüm Ürünlere Dön
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-page-card" id="productDetailPageContent"></div>
+
+            <section class="showcase-band" style="margin-top:24px;">
+                <div class="showcase-band-head">
+                    <h2 class="showcase-band-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:#f27a1a;"></i> Bunları da Beğenebilirsiniz (Önerilen Ürünler)</h2>
+                    <span class="showcase-band-sub">Benzer ve öne çıkan ürünler</span>
+                </div>
+                <div class="bestseller-grid" id="recommendedProductsGrid"></div>
+            </section>
+        </div>
+    </section>
 
     <!-- MÜŞTERİ PROFİL & PUAN CÜZDANI PANELİ -->
     <section class="dashboard-section hidden" id="customerProfileView">
@@ -1482,11 +1802,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Kargo Ücreti (₺) (0 = Ücretsiz Kargo) *</label>
-                            <input type="number" id="prodShipping" step="0.01" min="0" value="0" required>
-                        </div>
-
-                        <div class="form-group">
                             <label>Stok Adedi *</label>
                             <input type="number" id="prodStock" min="0" value="10" required>
                         </div>
@@ -1495,6 +1810,18 @@
                             <label id="catalogVariantLabel">Katalog Seçenekleri (İstediğinizi İşaretleyin veya Kaldırın) *</label>
                             <div id="catalogVariantCheckboxes" class="variant-chips-wrap"></div>
                             <input type="text" id="customVariantExtra" placeholder="Ek seçenek yazın (Örn: XL, Mat Siyah, 50ml)" style="margin-top:8px;">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Seçenek / Renk / Beden Görseli Eşleştirme (İsteğe Bağlı — Seçilen Seçenekte Otomatik Geçer)</label>
+                            <p class="helper-text" style="margin:4px 0 8px 0;">Seçenek seçip aşağıdan fotoğraf yükleyebilir veya her satıra <code>Kırmızı = https://...</code> formatında bağlantı yazabilirsiniz.</p>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px;">
+                                <input type="text" id="variantImageKeyInput" placeholder="Seçenek adı (Örn: Kırmızı, 42, M)" style="max-width:210px;">
+                                <input type="file" id="variantImageFileInput" accept="image/*" style="max-width:240px;">
+                                <button type="button" class="btn-sm btn-outline" id="addVariantImageBtn"><i class="fa-solid fa-image"></i> Seçeneğe Görsel Bağla</button>
+                            </div>
+                            <textarea id="variantImageMapText" rows="2" placeholder="İsteğe bağlı: Kırmızı = https://..., Siyah = https://..."></textarea>
+                            <div id="variantImageChipsPreview" class="variant-chips-wrap"></div>
                         </div>
 
                         <div class="form-group full-width">
@@ -1529,6 +1856,7 @@
                                     <th>Satış Fiyatı</th>
                                     <th>Min. Adet</th>
                                     <th>Stok</th>
+                                    <th>Stokta Yok</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
@@ -1637,6 +1965,7 @@
             <!-- Admin Sekmeleri -->
             <div class="dash-tabs">
                 <button class="tab-btn active" data-tab="admin-all-orders" type="button">Tüm Platform Siparişleri</button>
+                <button class="tab-btn" data-tab="admin-showcase-selection" type="button">Trend & En Çok Satanlar Seçimi</button>
                 <button class="tab-btn" data-tab="admin-past-orders" type="button">Geçmiş Siparişler</button>
                 <button class="tab-btn" data-tab="admin-daily-revenue-history" type="button">Geçmiş Gün Sipariş Toplamları</button>
                 <button class="tab-btn" data-tab="admin-timed-bonus" type="button">Zamanlı Seçili Ürün & Puan</button>
@@ -1669,6 +1998,33 @@
                             </thead>
                             <tbody id="adminAllOrdersBody"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SEKME: TREND & EN ÇOK SATANLAR SEÇİMİ -->
+            <div class="tab-content" id="admin-showcase-selection">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-fire"></i> Bu Haftanın Trendleri & En Çok Satanlar Ürün Seçimi</h3>
+                    <p class="helper-text">Vitrinin en üstünde 2 saniyede bir kayan <strong>Bu Haftanın Trendleri</strong> ve altındaki <strong>En Çok Satanlar</strong> için ürünleri buradan seçin.</p>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Görsel</th>
+                                    <th>Ürün Adı</th>
+                                    <th>Fiyat</th>
+                                    <th>Bu Haftanın Trendi</th>
+                                    <th>En Çok Satanlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminShowcaseSelectionBody"></tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:14px;">
+                        <button type="button" class="btn-primary" id="saveShowcaseSelectionBtn">
+                            <i class="fa-solid fa-save"></i> Trend & En Çok Satanlar Seçimini Kaydet
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1807,7 +2163,7 @@
                                     <th>Firma Tam Adı</th>
                                     <th>Ad Soyad</th>
                                     <th>Telefon & E-Posta</th>
-                                    <th>Bilgi Kodu</th>
+                                    <th>Bilgi Kodu & Kurdele</th>
                                     <th>Açık Adres</th>
                                     <th>Tarih</th>
                                     <th>İnceleme & Onay</th>
@@ -1827,7 +2183,7 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Firma Tam Adı & Yetkili</th>
+                                    <th>Firma Tam Adı, Kurdele & Yetkili</th>
                                     <th>Adres</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>Şifre</th>
@@ -1941,6 +2297,9 @@
 
         <!-- Kupon Uygulama Alanı -->
         <div class="cart-coupon-box">
+            <div style="font-size:11.5px; color:#c2410c; font-weight:700; margin-bottom:4px;">
+                <i class="fa-solid fa-truck"></i> Minimum alışveriş 500 TL • 500 TL altı 150 TL kargo ücreti
+            </div>
             <div style="font-size:11.5px; color:#15803d; font-weight:700; margin-bottom:6px;">
                 <i class="fa-solid fa-coins"></i> Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI
             </div>
@@ -1954,7 +2313,7 @@
         <!-- Sepet Özeti -->
         <div class="cart-summary">
             <div class="summary-row"><span>Ara Toplam:</span><span id="cartSubtotal">0,00 ₺</span></div>
-            <div class="summary-row"><span>Kargo Toplamı:</span><span id="cartShippingTotal">0,00 ₺</span></div>
+            <div class="summary-row"><span>Kargo Toplamı (500 TL altı 150 TL):</span><span id="cartShippingTotal">0,00 ₺</span></div>
             <div class="summary-row discount-row hidden" id="cartDiscountRow"><span>Kupon İndirimi:</span><span id="cartDiscountAmount">-0,00 ₺</span></div>
             <div class="summary-row wallet-row hidden" id="cartWalletRow"><span>Puan / Cüzdan Bakiyesi:</span><span id="cartWalletAmount">-0,00 ₺</span></div>
             <div class="summary-row total-row"><span>Genel Toplam:</span><span id="cartGrandTotal">0,00 ₺</span></div>
@@ -2028,7 +2387,7 @@
         </div>
     </div>
 
-    <!-- MODAL 0B: ŞANSLI ÇARK MODALI (10 DİLİM, 50 TL YAN YANA DEĞİL, SADECE 50 TL VEYA 75 TL GELİR) -->
+    <!-- MODAL 0B: ŞANSLI ÇARK MODALI -->
     <div class="modal-backdrop hidden" id="luckyWheelModal">
         <div class="modal-box lucky-wheel-modal-box">
             <div class="modal-header">
@@ -2110,6 +2469,11 @@
                 <div class="form-group">
                     <label>Mağaza / Referans Kodu *</label>
                     <input type="text" id="applyTaxOrTc" required maxlength="15" placeholder="Mağaza veya başvuru kodu">
+                </div>
+
+                <div class="form-group">
+                    <label>Kurdele Yazısı (İsteğe Bağlı)</label>
+                    <input type="text" id="applyRibbonText" maxlength="32" placeholder="Örn: Yetkili Tedarikçi, Yıldız Mağaza (Boş bırakılabilir)">
                 </div>
 
                 <div class="form-group">
@@ -2275,17 +2639,6 @@
         </div>
     </div>
 
-    <!-- MODAL 6: KAYDIRMALI ÜRÜN DETAY & SEÇENEK MODALI -->
-    <div class="modal-backdrop hidden" id="productDetailModal">
-        <div class="modal-box detail-modal-box">
-            <div class="modal-header">
-                <h3 id="detailModalTitle">Ürün Detayı</h3>
-                <button class="close-btn" data-close="productDetailModal" type="button"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="productDetailBody" class="modal-form active"></div>
-        </div>
-    </div>
-
     <!-- MODAL 7: ÖN PLANDA AÇILAN POLİTİKA METİN PENCERESİ -->
     <div class="modal-backdrop hidden" id="policyPopupModal">
         <div class="modal-box policy-modal-box">
@@ -2298,6 +2651,12 @@
             </div>
         </div>
     </div>
+
+    <!-- EKRANIN SAĞINDA SABİT ÇARK AÇMA BUTONU -->
+    <button type="button" class="side-wheel-dock" id="sideWheelDockBtn" title="Şanslı Çarkı Aç">
+        <i class="fa-solid fa-dharmachakra"></i>
+        <span>Çark</span>
+    </button>
 
     <!-- SİTE İÇİ CANLI DESTEK PENCERESİ -->
     <button type="button" class="live-support-fab" id="openLiveSupportBtn">
@@ -2334,7 +2693,7 @@
             <div class="legal-footer-inner">
                 <div class="legal-brand-line">TAN MEDYA TASARIM MARKASIDIR.2026</div>
                 <div style="font-size:12px; color:#15803d; font-weight:700;">
-                    Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI
+                    Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI • Minimum alışveriş 500 TL (500 TL altı 150 TL kargo)
                 </div>
                 <nav class="legal-links-group" aria-label="Politikalar">
                     <button type="button" class="legal-link-btn" onclick="openPolicyPopup('gizlilik')">Gizlilik Politikası</button>
@@ -2354,6 +2713,9 @@
         import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const $ = (id) => document.getElementById(id);
+
+        const MIN_ORDER_AMOUNT = 500;
+        const BELOW_MIN_SHIPPING_FEE = 150;
 
         const formatMoney = (amount) => {
             const num = Number(amount || 0);
@@ -2408,7 +2770,9 @@
             pastOrders: [],
             dailyRevenueHistory: [],
             revenueResetOffset: 0,
-            timedBonusRules: []
+            timedBonusRules: [],
+            trendProductIds: [],
+            bestSellerProductIds: []
         };
 
         const CACHE_KEYS = {
@@ -2491,9 +2855,9 @@
                         <li><strong>Alıcı:</strong> Sipariş formunda ad-soyad, telefon ve teslimat adresi bilgilerini beyan eden kişi.</li>
                     </ul>
                     <h4>2. Ürün, Fiyat ve Ödeme</h4>
-                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli, uygulanan kupon indirimi ve puan/cüzdan bakiyesi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği yöntemle tamamlanır.</p>
+                    <p>Ürünlerin birim fiyatı, varsa indirimli tutarı, minimum sipariş adedi, kargo bedeli (500 TL altı alışverişlerde 150 TL), uygulanan kupon indirimi ve puan/cüzdan bakiyesi sipariş özetinde gösterilir. Ödeme, alıcının seçtiği yöntemle tamamlanır.</p>
                     <h4>3. Teslimat ve Sorumluluk</h4>
-                    <p>Siparişler, sipariş takip kodu ile takip edilecek şekilde alıcının belirttiği teslimat adresine gönderilir. Teslimat sırasında paketin hasarlı olması halinde tutanak tutulması önerilir.</p>
+                    <p>Siparişler tedarikçi firma süreci ve sipariş takip kodu ile takip edilecek şekilde alıcının belirttiği teslimat adresine gönderilir.</p>
                 `
             }
         };
@@ -2531,6 +2895,7 @@
 
         const SESSION_KEYS = {
             view: 'trendtan_active_view',
+            detailProductId: 'trendtan_detail_product_id',
             sellerId: 'trendtan_seller_id',
             customerId: 'trendtan_shop_customer_id',
             adminAuth: 'trendtan_admin_authed',
@@ -2559,7 +2924,9 @@
             pastOrders: Array.isArray(cachedMain?.pastOrders) ? cachedMain.pastOrders : [],
             dailyRevenueHistory: Array.isArray(cachedMain?.dailyRevenueHistory) ? cachedMain.dailyRevenueHistory : [],
             revenueResetOffset: Number(cachedMain?.revenueResetOffset || 0),
-            timedBonusRules: Array.isArray(cachedMain?.timedBonusRules) ? cachedMain.timedBonusRules : []
+            timedBonusRules: Array.isArray(cachedMain?.timedBonusRules) ? cachedMain.timedBonusRules : [],
+            trendProductIds: Array.isArray(cachedMain?.trendProductIds) ? cachedMain.trendProductIds : [],
+            bestSellerProductIds: Array.isArray(cachedMain?.bestSellerProductIds) ? cachedMain.bestSellerProductIds : []
         };
 
         let isSaving = false;
@@ -2593,12 +2960,16 @@
         let currentCustomer = null;
         let uploadedImages = [];
         let selectedFormVariants = [];
+        let formVariantImages = {};
         let cardSelectedVariants = {};
-        let activeDetailProductId = null;
+        let cardSelectedQty = {};
+        let activeDetailProductId = sessionStorage.getItem(SESSION_KEYS.detailProductId) || null;
         let activeDetailPhotoIdx = 0;
         let activeDetailVariant = '';
+        let activeDetailQty = 1;
         let isWheelSpinning = false;
         let currentWheelRotation = 0;
+        let trendSlideOffset = 0;
 
         /* Şanslı Çark: 10 dilim (36 deg), iki 50 TL yan yana değil; çark sadece 50 TL veya 75 TL üzerine gelir */
         const WHEEL_SLICES = [
@@ -2652,6 +3023,125 @@
                 `;
             }).join('');
         }
+
+        function getSellerRibbonText(sellerId) {
+            const found = (db.sellers || []).find(s => s.id === sellerId);
+            return found && found.ribbonText ? String(found.ribbonText).trim() : '';
+        }
+
+        function getTrendProductsList() {
+            const all = db.products || [];
+            if (!all.length) return [];
+            if (Array.isArray(db.trendProductIds) && db.trendProductIds.length > 0) {
+                const picked = all.filter(p => db.trendProductIds.includes(p.id));
+                if (picked.length > 0) return picked;
+            }
+            return all.slice(0, Math.min(4, all.length));
+        }
+
+        function getBestSellerProductsList() {
+            const all = db.products || [];
+            if (!all.length) return [];
+            if (Array.isArray(db.bestSellerProductIds) && db.bestSellerProductIds.length > 0) {
+                const picked = all.filter(p => db.bestSellerProductIds.includes(p.id));
+                if (picked.length > 0) return picked.slice(0, 4);
+            }
+            return all.slice(0, Math.min(4, all.length));
+        }
+
+        function renderShowcaseBands() {
+            const trendBox = $('weeklyTrendsCarousel');
+            const bestBox = $('bestSellersGrid');
+            const trends = getTrendProductsList();
+            const bests = getBestSellerProductsList();
+
+            if (trendBox) {
+                if (!trends.length) {
+                    trendBox.innerHTML = `<p style="grid-column:1/-1; color:#64748b; font-size:12.5px; margin:0;">Henüz trend ürün bulunmuyor.</p>`;
+                } else {
+                    const visibleTrends = [];
+                    const count = Math.min(4, trends.length);
+                    for (let i = 0; i < count; i++) {
+                        visibleTrends.push(trends[(trendSlideOffset + i) % trends.length]);
+                    }
+                    trendBox.innerHTML = visibleTrends.map(prod => {
+                        const out = Number(prod.stock || 0) <= 0;
+                        const imgs = getProductImages(prod);
+                        const ribbon = getSellerRibbonText(prod.sellerId);
+                        return `
+                            <div class="mini-showcase-card ${out ? 'is-out-of-stock' : ''}" onclick="openProductDetailPage('${prod.id}')">
+                                ${out ? `<span class="out-of-stock-ribbon">Stokta Yok</span>` : ''}
+                                ${ribbon ? `<span class="seller-ribbon-badge" style="align-self:flex-start; margin-left:0;"><i class="fa-solid fa-award"></i> ${ribbon}</span>` : ''}
+                                <img src="${imgs[0] || ''}" alt="${prod.name}" loading="eager" decoding="async">
+                                <div class="mini-showcase-title">${prod.name}</div>
+                                <div class="mini-showcase-price">${formatMoney(getEffectivePrice(prod))}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            if (bestBox) {
+                if (!bests.length) {
+                    bestBox.innerHTML = `<p style="grid-column:1/-1; color:#64748b; font-size:12.5px; margin:0;">Henüz çok satan ürün seçilmemiş.</p>`;
+                } else {
+                    bestBox.innerHTML = bests.map(prod => {
+                        const out = Number(prod.stock || 0) <= 0;
+                        const imgs = getProductImages(prod);
+                        const ribbon = getSellerRibbonText(prod.sellerId);
+                        return `
+                            <div class="mini-showcase-card ${out ? 'is-out-of-stock' : ''}" onclick="openProductDetailPage('${prod.id}')">
+                                ${out ? `<span class="out-of-stock-ribbon">Stokta Yok</span>` : ''}
+                                ${ribbon ? `<span class="seller-ribbon-badge" style="align-self:flex-start; margin-left:0;"><i class="fa-solid fa-award"></i> ${ribbon}</span>` : ''}
+                                <img src="${imgs[0] || ''}" alt="${prod.name}" loading="eager" decoding="async">
+                                <div class="mini-showcase-title">${prod.name}</div>
+                                <div class="mini-showcase-price">${formatMoney(getEffectivePrice(prod))}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        function renderAdminShowcaseSelectionTab() {
+            const tbody = $('adminShowcaseSelectionBody');
+            if (!tbody) return;
+            const prods = db.products || [];
+            if (!prods.length) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Henüz ürün bulunmuyor.</td></tr>`;
+                return;
+            }
+            const trendSet = new Set(db.trendProductIds || []);
+            const bestSet = new Set(db.bestSellerProductIds || []);
+            tbody.innerHTML = prods.map(p => {
+                const imgs = getProductImages(p);
+                return `
+                    <tr>
+                        <td><img src="${imgs[0] || ''}" class="table-thumb"></td>
+                        <td><strong>${p.name}</strong></td>
+                        <td>${formatMoney(getEffectivePrice(p))}</td>
+                        <td>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="admin-trend-chk" value="${p.id}" ${trendSet.has(p.id) ? 'checked' : ''}> Trend
+                            </label>
+                        </td>
+                        <td>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="admin-bestseller-chk" value="${p.id}" ${bestSet.has(p.id) ? 'checked' : ''}> En Çok Satan
+                            </label>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        setInterval(() => {
+            const trends = getTrendProductsList();
+            if (trends.length > 1 && $('customerStoreView') && !$('customerStoreView').classList.contains('hidden')) {
+                trendSlideOffset = (trendSlideOffset + 1) % trends.length;
+                renderShowcaseBands();
+            }
+        }, 2000);
 
         function timeToMinutes(hhmm) {
             if (!hhmm || typeof hhmm !== 'string' || !hhmm.includes(':')) return null;
@@ -3113,6 +3603,29 @@
             return prod.image ? [prod.image] : [];
         }
 
+        function parseVariantImageMapFromText(rawText) {
+            const map = {};
+            if (!rawText || typeof rawText !== 'string') return map;
+            rawText.split(/\n|,/).forEach(chunk => {
+                const idx = chunk.indexOf('=');
+                if (idx > 0) {
+                    const key = chunk.slice(0, idx).trim();
+                    const url = chunk.slice(idx + 1).trim();
+                    if (key && url) map[key] = url;
+                }
+            });
+            return map;
+        }
+
+        function getVariantImageForProduct(prod, variantKey) {
+            if (!prod || !variantKey) return '';
+            const map = prod.variantImages && typeof prod.variantImages === 'object' ? prod.variantImages : {};
+            if (map[variantKey]) return map[variantKey];
+            const lowerTarget = String(variantKey).toLowerCase();
+            const foundKey = Object.keys(map).find(k => String(k).toLowerCase() === lowerTarget);
+            return foundKey ? map[foundKey] : '';
+        }
+
         function getEffectivePrice(prod) {
             const disc = Number(prod.price || 0);
             const normal = Number(prod.oldPrice || disc);
@@ -3159,7 +3672,7 @@
             }
             cart = (cart || []).filter(item => {
                 const fresh = products.find(p => p.id === item.product?.id);
-                if (!fresh || fresh.stock <= 0) return false;
+                if (!fresh || Number(fresh.stock || 0) <= 0) return false;
                 const minQ = Math.max(1, Number(fresh.minOrderQty || 1));
                 item.product = fresh;
                 item.qty = Math.min(Math.max(Number(item.qty || minQ), minQ), fresh.stock);
@@ -3188,6 +3701,7 @@
 
         function switchMainView(viewId, skipSave = false, shouldScrollTop = true) {
             if ($('customerStoreView')) $('customerStoreView').classList.add('hidden');
+            if ($('productDetailPageView')) $('productDetailPageView').classList.add('hidden');
             if ($('customerProfileView')) $('customerProfileView').classList.add('hidden');
             if ($('sellerDashboardView')) $('sellerDashboardView').classList.add('hidden');
             if ($('superAdminDashboardView')) $('superAdminDashboardView').classList.add('hidden');
@@ -3330,25 +3844,34 @@
                 const foundSeller = (db.sellers || []).find(s => s.id === savedSellerId);
                 if (foundSeller && foundSeller.active) {
                     currentSeller = foundSeller;
-                    switchMainView('sellerDashboardView', true);
+                    switchMainView('sellerDashboardView', true, false);
                     renderSellerDashboard();
                     return;
                 }
             }
 
             if (savedView === 'superAdminDashboardView' && isAdminAuthed) {
-                switchMainView('superAdminDashboardView', true);
+                switchMainView('superAdminDashboardView', true, false);
                 renderAdminDashboard();
                 return;
             }
 
             if (savedView === 'customerProfileView' && currentCustomer) {
-                switchMainView('customerProfileView', true);
+                switchMainView('customerProfileView', true, false);
                 renderCustomerProfileView();
                 return;
             }
 
-            switchMainView('customerStoreView', true);
+            if (savedView === 'productDetailPageView' && activeDetailProductId) {
+                const existsProd = (db.products || []).find(p => p.id === activeDetailProductId);
+                if (existsProd) {
+                    switchMainView('productDetailPageView', true, false);
+                    renderProductDetailPage();
+                    return;
+                }
+            }
+
+            switchMainView('customerStoreView', true, false);
         }
 
         function refreshAllViews() {
@@ -3363,6 +3886,7 @@
             updateHeaderMemberButton();
             renderCustomerSupportWidget();
             syncCartWithDbProducts();
+            renderShowcaseBands();
             renderProducts();
             updateCartUI();
             if (currentCustomer && $('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
@@ -3372,8 +3896,8 @@
             if ($('superAdminDashboardView') && !$('superAdminDashboardView').classList.contains('hidden')) {
                 renderAdminDashboard();
             }
-            if (activeDetailProductId && $('productDetailModal') && !$('productDetailModal').classList.contains('hidden')) {
-                renderProductDetailModal();
+            if (activeDetailProductId && $('productDetailPageView') && !$('productDetailPageView').classList.contains('hidden')) {
+                renderProductDetailPage();
             }
         }
 
@@ -3390,7 +3914,9 @@
                 pastOrders: db.pastOrders || [],
                 dailyRevenueHistory: db.dailyRevenueHistory || [],
                 revenueResetOffset: Number(db.revenueResetOffset || 0),
-                timedBonusRules: db.timedBonusRules || []
+                timedBonusRules: db.timedBonusRules || [],
+                trendProductIds: db.trendProductIds || [],
+                bestSellerProductIds: db.bestSellerProductIds || []
             });
             writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers || []);
             if (!firestoreReady || !storeDocRef) return true;
@@ -3409,6 +3935,8 @@
                     dailyRevenueHistory: db.dailyRevenueHistory || [],
                     revenueResetOffset: Number(db.revenueResetOffset || 0),
                     timedBonusRules: db.timedBonusRules || [],
+                    trendProductIds: db.trendProductIds || [],
+                    bestSellerProductIds: db.bestSellerProductIds || [],
                     products: includeProductsInMain ? (db.products || []) : []
                 };
                 await setDoc(storeDocRef, payload);
@@ -3501,6 +4029,28 @@
             `).join('');
         }
 
+        function renderVariantImageChipsPreview() {
+            const wrap = $('variantImageChipsPreview');
+            if (!wrap) return;
+            const entries = Object.entries(formVariantImages || {});
+            if (!entries.length) {
+                wrap.innerHTML = '';
+                return;
+            }
+            wrap.innerHTML = entries.map(([key, url]) => `
+                <span class="variant-chip-btn active">
+                    <img src="${url}" style="width:20px;height:20px;object-fit:cover;border-radius:4px;">
+                    <span>${key}</span>
+                    <button type="button" style="border:none;background:none;color:#dc2626;font-weight:800;cursor:pointer;" onclick="removeVariantImageBinding('${key.replace(/'/g, "\\'")}')">×</button>
+                </span>
+            `).join('');
+        }
+
+        window.removeVariantImageBinding = function(key) {
+            delete formVariantImages[key];
+            renderVariantImageChipsPreview();
+        };
+
         window.removeUploadedImage = function(idx) {
             uploadedImages.splice(idx, 1);
             renderSellerImagePreviews();
@@ -3561,6 +4111,9 @@
                 selectedFormVariants = selectedFormVariants.filter(x => x !== opt);
             } else {
                 selectedFormVariants.push(opt);
+                if ($('variantImageKeyInput') && !$('variantImageKeyInput').value.trim()) {
+                    $('variantImageKeyInput').value = opt;
+                }
             }
 
             const container = $('catalogVariantCheckboxes');
@@ -3634,14 +4187,38 @@
 
         window.onCardVariantChange = function(prodId, val) {
             cardSelectedVariants[prodId] = val;
+            const prod = (db.products || []).find(p => p.id === prodId);
+            const imgEl = $(`cardImg_${prodId}`);
+            if (prod && imgEl) {
+                const imgs = getProductImages(prod);
+                const vImg = getVariantImageForProduct(prod, val);
+                imgEl.src = vImg || imgs[0] || '';
+            }
+        };
+
+        window.changeCardQty = function(prodId, delta) {
+            const prod = (db.products || []).find(p => p.id === prodId);
+            if (!prod || Number(prod.stock || 0) <= 0) return;
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            const maxStock = Number(prod.stock || 1);
+            const cur = Number(cardSelectedQty[prodId] || minQty);
+            const next = Math.max(minQty, Math.min(maxStock, cur + delta));
+            cardSelectedQty[prodId] = next;
+            const valEl = $(`cardQtyVal_${prodId}`);
+            if (valEl) valEl.textContent = String(next);
         };
 
         window.addFromProductCard = function(prodId) {
             const prod = (db.products || []).find(p => p.id === prodId);
-            if (!prod) return;
+            if (!prod || Number(prod.stock || 0) <= 0) {
+                showToast('Bu ürün stokta yok.');
+                return;
+            }
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            const qty = Math.max(minQty, Number(cardSelectedQty[prodId] || minQty));
             const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
             const chosen = cardSelectedVariants[prodId] || variants[0] || '';
-            addToCart(prodId, null, chosen);
+            addToCart(prodId, qty, chosen);
         };
 
         function renderProducts() {
@@ -3662,7 +4239,7 @@
                 const matchSearch = (p.name || '').toLowerCase().includes(currentSearch.toLowerCase()) ||
                                     (p.sellerName || '').toLowerCase().includes(currentSearch.toLowerCase()) ||
                                     (prodCat || '').toLowerCase().includes(currentSearch.toLowerCase());
-                const matchShip = !onlyFreeShipping || Number(p.shipping) === 0;
+                const matchShip = !onlyFreeShipping || getEffectivePrice(p) >= MIN_ORDER_AMOUNT;
                 return matchCat && matchSearch && matchShip;
             });
 
@@ -3685,14 +4262,18 @@
             }
 
             grid.innerHTML = filtered.map(prod => {
+                const isOutOfStock = Number(prod.stock || 0) <= 0;
                 const effPrice = getEffectivePrice(prod);
                 const effOldPrice = getEffectiveOldPrice(prod);
                 const discountRate = effOldPrice > effPrice ? Math.round(((effOldPrice - effPrice) / effOldPrice) * 100) : 0;
                 const imgs = getProductImages(prod);
                 const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+                const currentQty = Math.max(minQty, Number(cardSelectedQty[prod.id] || minQty));
+                cardSelectedQty[prod.id] = currentQty;
                 const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
                 const selectedVal = variants.includes(cardSelectedVariants[prod.id]) ? cardSelectedVariants[prod.id] : (variants[0] || '');
                 cardSelectedVariants[prod.id] = selectedVal;
+                const activeDisplayImg = getVariantImageForProduct(prod, selectedVal) || imgs[0] || '';
                 const prodCat = normalizeCategoryName(prod.category);
                 const isShoe = prodCat === 'Ayakkabı';
                 const isEyewear = prodCat === 'Gözlük';
@@ -3700,16 +4281,20 @@
                 const optionSummaryLabel = isShoe ? 'Numaralar' : (isEyewear ? 'Renkler' : 'Seçenek');
                 const activeBonus = getActiveBonusRuleForProduct(prod.id);
                 const scheduledRules = getAllRulesForProduct(prod.id);
+                const sellerRibbon = getSellerRibbonText(prod.sellerId);
 
                 return `
-                    <div class="product-card" onclick="openProductDetailModal('${prod.id}')">
-                        ${discountRate > 0 ? `<span class="discount-tag">%${discountRate} İndirim</span>` : ''}
-                        ${Number(prod.shipping) === 0 ? `<span class="shipping-tag">Ücretsiz Kargo</span>` : ''}
+                    <div class="product-card ${isOutOfStock ? 'is-out-of-stock' : ''}" onclick="openProductDetailPage('${prod.id}')">
+                        ${isOutOfStock ? `<span class="out-of-stock-ribbon">Stokta Yok</span>` : ''}
+                        ${!isOutOfStock && discountRate > 0 ? `<span class="discount-tag">%${discountRate} İndirim</span>` : ''}
                         <div class="product-click-zone">
-                            <img src="${imgs[0] || ''}" alt="${prod.name}" class="product-img" loading="eager" decoding="async" fetchpriority="high">
+                            <img id="cardImg_${prod.id}" src="${activeDisplayImg}" alt="${prod.name}" class="product-img gray-out-target" loading="eager" decoding="async" fetchpriority="high">
                         </div>
                         <div class="product-body">
-                            <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)}</span>
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:4px;">
+                                <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)}</span>
+                                ${sellerRibbon ? `<span class="seller-ribbon-badge"><i class="fa-solid fa-award"></i> ${sellerRibbon}</span>` : ''}
+                            </div>
                             ${activeBonus ? `
                                 <div class="bonus-chance-badge">
                                     <i class="fa-solid fa-coins"></i>
@@ -3724,12 +4309,12 @@
                             <h3 class="product-title product-click-zone">${prod.name}</h3>
                             <p class="product-desc">${prod.desc || ''}</p>
                             <small style="display:block; color:#475569; margin-bottom:6px;">
-                                ${optionSummaryLabel}: <strong>${variants.length ? variants.join(', ') : 'Belirtilmemiş'}</strong> • Min. Sipariş: <strong>${minQty} adet</strong> ${imgs.length > 1 ? `• <strong>${imgs.length} Fotoğraf</strong>` : ''}
+                                ${optionSummaryLabel}: <strong>${variants.length ? variants.join(', ') : 'Belirtilmemiş'}</strong> • Min. Sipariş: <strong>${minQty} adet</strong>
                             </small>
                             ${variants.length > 0 ? `
                                 <div class="card-size-select-row" onclick="event.stopPropagation()">
                                     <span><i class="fa-solid fa-check-circle" style="color:#f27a1a;"></i> ${optionLabel}</span>
-                                    <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)">
+                                    <select class="card-size-select" onchange="onCardVariantChange('${prod.id}', this.value)" ${isOutOfStock ? 'disabled' : ''}>
                                         ${variants.map(v => `<option value="${v.replace(/"/g, '&quot;')}" ${v === selectedVal ? 'selected' : ''}>${isShoe ? v + ' Numara' : v}</option>`).join('')}
                                     </select>
                                 </div>
@@ -3737,12 +4322,18 @@
                             <div class="price-block" onclick="event.stopPropagation()">
                                 ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
                                 <span class="current-price">${formatMoney(effPrice)}</span>
-                                <span class="shipping-info-text">${Number(prod.shipping) === 0 ? 'Kargo Bedava' : 'Kargo: ' + formatMoney(prod.shipping)}</span>
-                                <div style="display:flex; gap:6px; margin-top:8px;">
-                                    <button class="btn-outline" type="button" style="padding:9px 10px;" onclick="openProductDetailModal('${prod.id}')"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="btn-add-cart" type="button" style="flex:1;" onclick="addFromProductCard('${prod.id}')">
-                                        <i class="fa-solid fa-cart-plus"></i> Sepete Ekle (${minQty} Ad.)
+                                <span class="shipping-info-text">${effPrice >= MIN_ORDER_AMOUNT ? '500 TL Üzeri • Kargo Bedava' : '500 TL Altı • 150,00 ₺ Kargo'}</span>
+                                <div class="card-add-row">
+                                    <button class="btn-add-cart green-add-btn ${isOutOfStock ? 'gray-out-btn' : ''}" type="button" style="flex:1;" ${isOutOfStock ? 'disabled' : ''} onclick="addFromProductCard('${prod.id}')">
+                                        <i class="fa-solid ${isOutOfStock ? 'fa-ban' : 'fa-cart-plus'}"></i> ${isOutOfStock ? 'Stokta Yok' : 'Sepete Ekle'}
                                     </button>
+                                    ${!isOutOfStock ? `
+                                        <div class="card-qty-box">
+                                            <button type="button" class="card-qty-btn" onclick="changeCardQty('${prod.id}', -1)">-</button>
+                                            <span class="card-qty-val" id="cardQtyVal_${prod.id}">${currentQty}</span>
+                                            <button type="button" class="card-qty-btn" onclick="changeCardQty('${prod.id}', 1)">+</button>
+                                        </div>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
@@ -3751,110 +4342,213 @@
             }).join('');
         }
 
-        window.openProductDetailModal = function(prodId) {
+        window.openProductDetailPage = function(prodId) {
+            const prod = (db.products || []).find(p => p.id === prodId);
+            if (!prod) return;
             activeDetailProductId = prodId;
             activeDetailPhotoIdx = 0;
-            const prod = (db.products || []).find(p => p.id === prodId);
-            const variants = prod && Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            activeDetailQty = Math.max(minQty, Number(cardSelectedQty[prodId] || minQty));
+            const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
             activeDetailVariant = variants.includes(cardSelectedVariants[prodId]) ? cardSelectedVariants[prodId] : (variants[0] || '');
-            renderProductDetailModal();
-            if ($('productDetailModal')) $('productDetailModal').classList.remove('hidden');
+            try { sessionStorage.setItem(SESSION_KEYS.detailProductId, prodId); } catch (_) {}
+            switchMainView('productDetailPageView');
+            renderProductDetailPage();
         };
 
-        window.changeDetailPhoto = function(deltaOrIdx, isDirect = false) {
+        window.changeDetailPagePhoto = function(deltaOrIdx, isDirect = false) {
             const prod = (db.products || []).find(p => p.id === activeDetailProductId);
             if (!prod) return;
             const imgs = getProductImages(prod);
             if (!imgs.length) return;
             if (isDirect) activeDetailPhotoIdx = Math.max(0, Math.min(imgs.length - 1, deltaOrIdx));
             else activeDetailPhotoIdx = (activeDetailPhotoIdx + deltaOrIdx + imgs.length) % imgs.length;
-            renderProductDetailModal();
+            renderProductDetailPage();
         };
 
-        window.selectDetailVariant = function(v) {
+        window.selectDetailPageVariant = function(v) {
             activeDetailVariant = v;
-            if (activeDetailProductId) cardSelectedVariants[activeDetailProductId] = v;
-            renderProductDetailModal();
+            const prod = (db.products || []).find(p => p.id === activeDetailProductId);
+            if (activeDetailProductId) {
+                cardSelectedVariants[activeDetailProductId] = v;
+            }
+            if (prod) {
+                const vImg = getVariantImageForProduct(prod, v);
+                const imgs = getProductImages(prod);
+                if (vImg) {
+                    const matchIdx = imgs.findIndex(u => u === vImg);
+                    if (matchIdx >= 0) activeDetailPhotoIdx = matchIdx;
+                }
+            }
+            renderProductDetailPage();
             renderProducts();
         };
 
-        function renderProductDetailModal() {
+        window.changeDetailPageQty = function(delta) {
             const prod = (db.products || []).find(p => p.id === activeDetailProductId);
-            const body = $('productDetailBody');
-            if (!prod || !body) return;
-            if ($('detailModalTitle')) $('detailModalTitle').textContent = prod.name;
+            if (!prod) return;
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            const maxStock = Math.max(minQty, Number(prod.stock || 1));
+            activeDetailQty = Math.max(minQty, Math.min(maxStock, Number(activeDetailQty || minQty) + delta));
+            if (activeDetailProductId) cardSelectedQty[activeDetailProductId] = activeDetailQty;
+            renderProductDetailPage();
+        };
+
+        window.addFromDetailPage = function(prodId) {
+            const prod = (db.products || []).find(p => p.id === prodId);
+            if (!prod || Number(prod.stock || 0) <= 0) {
+                showToast('Bu ürün stokta yok.');
+                return;
+            }
+            const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            const qty = Math.max(minQty, Number(activeDetailQty || minQty));
+            addToCart(prodId, qty, activeDetailVariant || '');
+        };
+
+        function renderRecommendedProductsSection(currentProd) {
+            const recGrid = $('recommendedProductsGrid');
+            if (!recGrid) return;
+            const all = (db.products || []).filter(p => p.id !== currentProd.id);
+            const sameCat = all.filter(p => normalizeCategoryName(p.category) === normalizeCategoryName(currentProd.category));
+            const list = (sameCat.length >= 4 ? sameCat : [...sameCat, ...all.filter(p => !sameCat.includes(p))]).slice(0, 4);
+
+            if (!list.length) {
+                recGrid.innerHTML = `<p style="grid-column:1/-1; color:#64748b; font-size:12.5px; margin:0;">Şu an önerilecek başka ürün bulunmuyor.</p>`;
+                return;
+            }
+
+            recGrid.innerHTML = list.map(prod => {
+                const out = Number(prod.stock || 0) <= 0;
+                const imgs = getProductImages(prod);
+                const ribbon = getSellerRibbonText(prod.sellerId);
+                return `
+                    <div class="mini-showcase-card ${out ? 'is-out-of-stock' : ''}" onclick="openProductDetailPage('${prod.id}')">
+                        ${out ? `<span class="out-of-stock-ribbon">Stokta Yok</span>` : ''}
+                        ${ribbon ? `<span class="seller-ribbon-badge" style="align-self:flex-start; margin-left:0;"><i class="fa-solid fa-award"></i> ${ribbon}</span>` : ''}
+                        <img src="${imgs[0] || ''}" alt="${prod.name}" loading="eager" decoding="async">
+                        <div class="mini-showcase-title">${prod.name}</div>
+                        <div class="mini-showcase-price">${formatMoney(getEffectivePrice(prod))}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderProductDetailPage() {
+            const prod = (db.products || []).find(p => p.id === activeDetailProductId);
+            const container = $('productDetailPageContent');
+            if (!prod || !container) return;
+
+            if ($('detailPageHeading')) $('detailPageHeading').textContent = prod.name;
+            const isOutOfStock = Number(prod.stock || 0) <= 0;
             const imgs = getProductImages(prod);
             if (activeDetailPhotoIdx >= imgs.length) activeDetailPhotoIdx = 0;
+
             const variants = Array.isArray(prod.variants) && prod.variants.length ? prod.variants : [];
-            if (variants.length && !variants.includes(activeDetailVariant)) activeDetailVariant = variants[0];
+            if (variants.length && !variants.includes(activeDetailVariant)) {
+                activeDetailVariant = cardSelectedVariants[prod.id] && variants.includes(cardSelectedVariants[prod.id])
+                    ? cardSelectedVariants[prod.id]
+                    : variants[0];
+            }
+
+            const variantImg = getVariantImageForProduct(prod, activeDetailVariant);
+            const mainDisplayImg = variantImg || imgs[activeDetailPhotoIdx] || imgs[0] || '';
             const minQty = Math.max(1, Number(prod.minOrderQty || 1));
+            if (Number(activeDetailQty || 0) < minQty) activeDetailQty = minQty;
+
             const effPrice = getEffectivePrice(prod);
             const effOldPrice = getEffectiveOldPrice(prod);
             const prodCat = normalizeCategoryName(prod.category);
             const isShoe = prodCat === 'Ayakkabı';
             const isEyewear = prodCat === 'Gözlük';
             const detailSelectLabel = isShoe
-                ? 'Ayakkabı Numaranızı Seçin (Tik İşareti ile Seçilir) *'
-                : (isEyewear ? 'Gözlük Rengini Seçin (Tik İşareti ile Seçilir) *' : 'Seçenek / Beden / Renk Seçin *');
+                ? 'Ayakkabı Numaranızı Seçin *'
+                : (isEyewear ? 'Gözlük Rengini Seçin *' : 'Seçenek / Beden / Renk Seçin *');
             const activeBonus = getActiveBonusRuleForProduct(prod.id);
             const scheduledRules = getAllRulesForProduct(prod.id);
+            const sellerRibbon = getSellerRibbonText(prod.sellerId);
 
-            body.innerHTML = `
-                <div class="detail-carousel-wrap">
-                    <img src="${imgs[activeDetailPhotoIdx] || ''}" alt="${prod.name}" class="detail-main-img">
-                    ${imgs.length > 1 ? `
-                        <button type="button" class="detail-nav-btn prev" onclick="changeDetailPhoto(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button type="button" class="detail-nav-btn next" onclick="changeDetailPhoto(1)"><i class="fa-solid fa-chevron-right"></i></button>
-                        <div class="detail-thumbs-strip">
-                            ${imgs.map((src, i) => `<img src="${src}" class="detail-thumb-img ${i === activeDetailPhotoIdx ? 'active' : ''}" onclick="changeDetailPhoto(${i}, true)">`).join('')}
+            container.innerHTML = `
+                <div class="detail-page-grid">
+                    <div>
+                        <div class="detail-carousel-wrap" style="position:relative;">
+                            ${isOutOfStock ? `<span class="out-of-stock-ribbon">Stokta Yok</span>` : ''}
+                            <img src="${mainDisplayImg}" alt="${prod.name}" class="detail-main-img" style="${isOutOfStock ? 'filter:grayscale(100%);opacity:0.65;' : ''}">
+                            ${imgs.length > 1 ? `
+                                <button type="button" class="detail-nav-btn prev" onclick="changeDetailPagePhoto(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" class="detail-nav-btn next" onclick="changeDetailPagePhoto(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                            ` : ''}
                         </div>
-                    ` : ''}
-                </div>
-                <div style="margin-top:14px;">
-                    <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)} • ${prodCat}</span>
-                    ${activeBonus ? `
-                        <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:8px;">
-                            <i class="fa-solid fa-coins"></i>
-                            <span>TRENDTAN BAKİYE KAZANMA ŞANSI — Bu ürün için ${activeBonus.startTime} - ${activeBonus.endTime} saatleri arasında sipariş verin, +${formatMoney(activeBonus.rewardAmount)} puan/bakiye kazanın! (Her hafta belirli ürünlerde TRENDTAN PARA KAZANMA ŞANSI)</span>
-                        </div>
-                    ` : (scheduledRules.length > 0 ? `
-                        <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:8px; background:#fff7ed; border-color:#fdba74; color:#9a3412;">
-                            <i class="fa-solid fa-clock"></i>
-                            <span>TRENDTAN BAKİYE KAZANMA ŞANSI — Seçili saat aralığı: ${scheduledRules[0].startTime} - ${scheduledRules[0].endTime} (+${formatMoney(scheduledRules[0].rewardAmount)})</span>
-                        </div>
-                    ` : '')}
-                    <p style="margin-top:8px; color:#334155;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
-                    <div class="price-block" style="margin-top:10px;">
-                        ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
-                        <span class="current-price">${formatMoney(effPrice)}</span>
-                        <span class="shipping-info-text">Min. Sipariş: <strong>${minQty} adet</strong> • Stok: <strong>${prod.stock} adet</strong></span>
-                    </div>
-                    ${variants.length > 0 ? `
-                        <div class="form-group" style="margin-top:10px;">
-                            <label>${detailSelectLabel}</label>
-                            <div class="variant-chips-wrap">
-                                ${variants.map(v => {
-                                    const active = v === activeDetailVariant;
-                                    return `
-                                        <button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="selectDetailVariant('${v.replace(/'/g, "\\'")}')">
-                                            <i class="fa-solid ${active ? 'fa-square-check' : 'fa-square'}"></i>
-                                            <span>${v}</span>
-                                        </button>
-                                    `;
-                                }).join('')}
+                        ${imgs.length > 1 ? `
+                            <div class="detail-thumbs-strip">
+                                ${imgs.map((src, i) => `<img src="${src}" class="detail-thumb-img ${!variantImg && i === activeDetailPhotoIdx ? 'active' : ''}" onclick="changeDetailPagePhoto(${i}, true)">`).join('')}
                             </div>
+                        ` : ''}
+                    </div>
+                    <div>
+                        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+                            <span class="seller-chip"><i class="fa-solid fa-store"></i> ${prod.sellerName || getSellerDisplayName(prod.sellerId)} • ${prodCat}</span>
+                            ${sellerRibbon ? `<span class="seller-ribbon-badge"><i class="fa-solid fa-award"></i> ${sellerRibbon}</span>` : ''}
                         </div>
-                    ` : ''}
-                    <button type="button" class="btn-primary full-btn" onclick="addToCart('${prod.id}', ${minQty}, '${activeDetailVariant.replace(/'/g, "\\'")}'); if($('productDetailModal')) $('productDetailModal').classList.add('hidden');">
-                        <i class="fa-solid fa-cart-plus"></i> ${activeDetailVariant ? activeDetailVariant + ' Seçeneği ile ' : ''}Sepete Ekle (${minQty} Ad.)
-                    </button>
+                        <h3 style="font-size:22px; margin:10px 0 6px 0; color:#0f172a;">${prod.name}</h3>
+                        ${activeBonus ? `
+                            <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:6px;">
+                                <i class="fa-solid fa-coins"></i>
+                                <span>TRENDTAN BAKİYE KAZANMA ŞANSI — ${activeBonus.startTime} - ${activeBonus.endTime} arasında +${formatMoney(activeBonus.rewardAmount)} kazanın!</span>
+                            </div>
+                        ` : (scheduledRules.length > 0 ? `
+                            <div class="bonus-chance-badge" style="font-size:12px; padding:6px 10px; margin-top:6px; background:#fff7ed; border-color:#fdba74; color:#9a3412;">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>TRENDTAN BAKİYE KAZANMA ŞANSI — Seçili saat aralığı: ${scheduledRules[0].startTime} - ${scheduledRules[0].endTime} (+${formatMoney(scheduledRules[0].rewardAmount)})</span>
+                            </div>
+                        ` : '')}
+                        <p style="margin-top:10px; color:#334155; line-height:1.6;">${prod.desc || 'Açıklama bulunmuyor.'}</p>
+                        <div class="price-block" style="margin-top:14px;">
+                            ${effOldPrice > effPrice ? `<span class="old-price">${formatMoney(effOldPrice)}</span>` : ''}
+                            <span class="current-price" style="font-size:22px;">${formatMoney(effPrice)}</span>
+                            <span class="shipping-info-text">Min. Sipariş: <strong>${minQty} adet</strong> • Stok: <strong>${isOutOfStock ? 'Stokta Yok' : prod.stock + ' adet'}</strong> • ${effPrice >= MIN_ORDER_AMOUNT ? '500 TL Üzeri Kargo Avantajı' : '500 TL Altı 150,00 ₺ Kargo'}</span>
+                        </div>
+                        ${variants.length > 0 ? `
+                            <div class="form-group" style="margin-top:14px;">
+                                <label>${detailSelectLabel}</label>
+                                <div class="variant-chips-wrap">
+                                    ${variants.map(v => {
+                                        const active = v === activeDetailVariant;
+                                        return `
+                                            <button type="button" class="variant-chip-btn ${active ? 'active' : ''}" onclick="selectDetailPageVariant('${v.replace(/'/g, "\\'")}')">
+                                                <i class="fa-solid ${active ? 'fa-square-check' : 'fa-square'}"></i>
+                                                <span>${v}</span>
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="card-add-row" style="margin-top:18px; max-width:340px;">
+                            <button type="button" class="btn-add-cart green-add-btn ${isOutOfStock ? 'gray-out-btn' : ''}" style="flex:1; padding:12px 16px;" ${isOutOfStock ? 'disabled' : ''} onclick="addFromDetailPage('${prod.id}')">
+                                <i class="fa-solid ${isOutOfStock ? 'fa-ban' : 'fa-cart-plus'}"></i> ${isOutOfStock ? 'Stokta Yok' : 'Sepete Ekle'}
+                            </button>
+                            ${!isOutOfStock ? `
+                                <div class="card-qty-box" style="height:42px;">
+                                    <button type="button" class="card-qty-btn" style="width:32px;" onclick="changeDetailPageQty(-1)">-</button>
+                                    <span class="card-qty-val" style="min-width:28px;font-size:13.5px;">${activeDetailQty}</span>
+                                    <button type="button" class="card-qty-btn" style="width:32px;" onclick="changeDetailPageQty(1)">+</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
                 </div>
             `;
+
+            renderRecommendedProductsSection(prod);
         }
 
         window.addToCart = function(productId, customQty = null, chosenVariant = '') {
             const product = (db.products || []).find(p => p.id === productId);
             if (!product) return;
+            if (Number(product.stock || 0) <= 0) {
+                showToast('Bu ürün stokta yok.');
+                return;
+            }
             const minQty = Math.max(1, Number(product.minOrderQty || 1));
             const addCount = customQty ? Math.max(minQty, Number(customQty)) : minQty;
             const variantLabel = chosenVariant || '';
@@ -3870,7 +4564,7 @@
             }
             persistUiState();
             updateCartUI();
-            showToast(`${product.name}${variantLabel ? ` (${variantLabel})` : ''} sepete eklendi.`);
+            showToast(`${product.name}${variantLabel ? ` (${variantLabel})` : ''} (${addCount} adet) sepete eklendi.`);
         };
 
         window.changeCartQty = function(cartKey, delta) {
@@ -3888,12 +4582,13 @@
         };
 
         function calculateCartTotals() {
-            let subtotal = 0, shippingTotal = 0, totalCount = 0;
+            let subtotal = 0, totalCount = 0;
             cart.forEach(item => {
                 subtotal += getEffectivePrice(item.product) * item.qty;
-                shippingTotal += Number(item.product.shipping);
                 totalCount += item.qty;
             });
+            const meetsMinOrder = subtotal >= MIN_ORDER_AMOUNT;
+            const shippingTotal = subtotal > 0 && subtotal < MIN_ORDER_AMOUNT ? BELOW_MIN_SHIPPING_FEE : 0;
             let discount = 0;
             if (appliedCoupon && subtotal > 0) {
                 discount = appliedCoupon.type === 'percent' ? (subtotal * appliedCoupon.value) / 100 : Math.min(subtotal, appliedCoupon.value);
@@ -3902,7 +4597,7 @@
             const availableWallet = currentCustomer ? Math.max(0, Number(currentCustomer.walletPoints || 0)) : 0;
             const walletUsed = afterCoupon > 0 ? Math.min(afterCoupon, availableWallet) : 0;
             const grandTotal = Math.max(0, afterCoupon - walletUsed);
-            return { subtotal, shippingTotal, discount, walletUsed, grandTotal, totalCount };
+            return { subtotal, shippingTotal, meetsMinOrder, discount, walletUsed, grandTotal, totalCount };
         }
 
         function updateCartUI() {
@@ -3911,15 +4606,16 @@
             const container = $('cartItemsContainer');
             if (container) {
                 container.innerHTML = cart.length === 0
-                    ? `<p style="text-align:center; color:#64748b; margin-top:40px;">Sepetiniz boş.</p>`
+                    ? `<p style="text-align:center; color:#64748b; margin-top:40px;">Sepetiniz boş. Minimum alışveriş tutarı ${formatMoney(MIN_ORDER_AMOUNT)}'dir.</p>`
                     : cart.map(item => {
                         const key = item.cartKey || `${item.product.id}__${item.selectedVariant || ''}`;
                         const imgs = getProductImages(item.product);
+                        const vImg = getVariantImageForProduct(item.product, item.selectedVariant);
                         const unitPrice = getEffectivePrice(item.product);
                         const bonusRule = getActiveBonusRuleForProduct(item.product.id);
                         return `
                             <div class="cart-item">
-                                <img src="${imgs[0] || ''}" alt="${item.product.name}">
+                                <img src="${vImg || imgs[0] || ''}" alt="${item.product.name}">
                                 <div class="cart-item-info">
                                     <div class="cart-item-title">${item.product.name} ${item.selectedVariant ? `<small>(${item.selectedVariant})</small>` : ''}</div>
                                     ${bonusRule ? `<div style="font-size:10.5px; color:#15803d; font-weight:700;">TRENDTAN BAKİYE KAZANMA ŞANSI (+${formatMoney(bonusRule.rewardAmount)})</div>` : ''}
@@ -3980,6 +4676,10 @@
             if ($('editProductId')) $('editProductId').value = '';
             if ($('prodMinQty')) $('prodMinQty').value = '1';
             if ($('customVariantExtra')) $('customVariantExtra').value = '';
+            if ($('variantImageKeyInput')) $('variantImageKeyInput').value = '';
+            if ($('variantImageMapText')) $('variantImageMapText').value = '';
+            formVariantImages = {};
+            renderVariantImageChipsPreview();
             uploadedImages = [];
             renderSellerImagePreviews();
             renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
@@ -3998,10 +4698,18 @@
             $('prodOldPrice').value = prod.oldPrice || '';
             $('prodPrice').value = (prod.price && Number(prod.price) !== Number(prod.oldPrice)) ? prod.price : '';
             if ($('prodMinQty')) $('prodMinQty').value = prod.minOrderQty || 1;
-            $('prodShipping').value = prod.shipping;
             $('prodStock').value = prod.stock;
             $('prodDesc').value = prod.desc || '';
             if ($('customVariantExtra')) $('customVariantExtra').value = '';
+            if ($('variantImageKeyInput')) $('variantImageKeyInput').value = '';
+            formVariantImages = { ...(prod.variantImages || {}) };
+            if ($('variantImageMapText')) {
+                $('variantImageMapText').value = Object.entries(formVariantImages)
+                    .filter(([, u]) => typeof u === 'string' && u.startsWith('http'))
+                    .map(([k, u]) => `${k} = ${u}`)
+                    .join('\n');
+            }
+            renderVariantImageChipsPreview();
             uploadedImages = [...getProductImages(prod)].slice(0, 4);
             renderSellerImagePreviews();
             renderCatalogVariantOptions(normCat, prod.variants || []);
@@ -4015,10 +4723,13 @@
             if (!confirm('Bu ürünü kalıcı olarak silmek istediğinize emin misiniz?')) return;
             db.products = (db.products || []).filter(p => p.id !== prodId);
             db.timedBonusRules = (db.timedBonusRules || []).filter(r => r.productId !== prodId);
+            db.trendProductIds = (db.trendProductIds || []).filter(id => id !== prodId);
+            db.bestSellerProductIds = (db.bestSellerProductIds || []).filter(id => id !== prodId);
             const ok = await deleteProductFromCollection(prodId);
             if (ok) {
                 await saveDB();
                 renderSellerDashboard();
+                renderShowcaseBands();
                 renderProducts();
                 showToast('Ürün silindi.');
             }
@@ -4079,7 +4790,10 @@
 
         function renderSellerDashboard() {
             if (!currentSeller) return;
-            if ($('sellerStoreTitle')) $('sellerStoreTitle').textContent = `${currentSeller.companyName} — ${currentSeller.fullName}`;
+            const ribbonBadgeHtml = currentSeller.ribbonText
+                ? `<span class="seller-ribbon-badge"><i class="fa-solid fa-award"></i> ${currentSeller.ribbonText}</span>`
+                : '';
+            if ($('sellerStoreTitle')) $('sellerStoreTitle').innerHTML = `${currentSeller.companyName} — ${currentSeller.fullName} ${ribbonBadgeHtml}`;
             const myProducts = (db.products || []).filter(p => p.sellerId === currentSeller.id);
             const myOrders = (db.orders || []).filter(o => o.sellerId === currentSeller.id);
             const activeOrders = myOrders.filter(o => o.status !== 'completed');
@@ -4093,12 +4807,13 @@
 
             if ($('sellerProductsTableBody')) {
                 $('sellerProductsTableBody').innerHTML = myProducts.length === 0
-                    ? `<tr><td colspan="7" style="text-align:center;">Henüz ürün eklenmemiş.</td></tr>`
+                    ? `<tr><td colspan="8" style="text-align:center;">Henüz ürün eklenmemiş.</td></tr>`
                     : myProducts.map(p => {
                         const imgs = getProductImages(p);
                         const effPrice = getEffectivePrice(p);
                         const effOld = getEffectiveOldPrice(p);
                         const prodCat = normalizeCategoryName(p.category);
+                        const out = Number(p.stock || 0) <= 0;
                         return `
                             <tr>
                                 <td><img src="${imgs[0] || ''}" class="table-thumb"></td>
@@ -4107,6 +4822,12 @@
                                 <td style="color:#f27a1a; font-weight:700;">${formatMoney(effPrice)}</td>
                                 <td>${Math.max(1, Number(p.minOrderQty || 1))} adet</td>
                                 <td>${p.stock} adet</td>
+                                <td>
+                                    <label class="checkbox-label" title="Stok 0 olunca otomatik tiklenir">
+                                        <input type="checkbox" ${out ? 'checked' : ''} disabled>
+                                        <span style="color:${out ? '#dc2626' : '#64748b'}; font-weight:700;">Stokta Yok</span>
+                                    </label>
+                                </td>
                                 <td>
                                     <button class="btn-sm btn-outline" type="button" onclick="editSellerProduct('${p.id}')"><i class="fa-solid fa-pen"></i> Düzenle</button>
                                     <button class="btn-sm btn-danger" type="button" onclick="deleteSellerProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -4163,6 +4884,7 @@
             if ($('adminActiveSellersCount')) $('adminActiveSellersCount').textContent = (db.sellers || []).length;
             if ($('adminCustomerCount')) $('adminCustomerCount').textContent = (db.customers || []).length;
 
+            renderAdminShowcaseSelectionTab();
             renderAdminTimedBonusTab();
             renderAdminLiveSupportTab();
 
@@ -4236,7 +4958,7 @@
                             <td><strong>${app.companyName}</strong></td>
                             <td>${app.fullName}</td>
                             <td>${app.phone}<br><small>${app.email}</small></td>
-                            <td><code>${app.taxOrTc}</code></td>
+                            <td><code>${app.taxOrTc}</code>${app.ribbonText ? `<br><span class="seller-ribbon-badge" style="margin-left:0;margin-top:4px;"><i class="fa-solid fa-award"></i> ${app.ribbonText}</span>` : ''}</td>
                             <td>${app.address}</td>
                             <td>${app.date}</td>
                             <td>
@@ -4252,7 +4974,7 @@
                     ? `<tr><td colspan="7" style="text-align:center;">Henüz onaylanmış satıcı hesabı yok.</td></tr>`
                     : db.sellers.map(s => `
                         <tr>
-                            <td><strong>${s.companyName}</strong><br><small>${s.fullName}</small></td>
+                            <td><strong>${s.companyName}</strong> ${s.ribbonText ? `<span class="seller-ribbon-badge"><i class="fa-solid fa-award"></i> ${s.ribbonText}</span>` : ''}<br><small>${s.fullName}</small></td>
                             <td>${s.address}</td>
                             <td><code>${s.username}</code></td>
                             <td><code>${s.password}</code></td>
@@ -4311,6 +5033,7 @@
                     <strong>Yetkili:</strong> ${app.fullName}<br>
                     <strong>Telefon / E-Posta:</strong> ${app.phone} — ${app.email}<br>
                     <strong>Kod:</strong> ${app.taxOrTc}<br>
+                    ${app.ribbonText ? `<strong>Kurdele:</strong> ${app.ribbonText}<br>` : ''}
                     <strong>Açık Adres:</strong> ${app.address}
                 `;
             }
@@ -4329,7 +5052,7 @@
 
         window.toggleSellerStatus = async function(sellerId) {
             const s = db.sellers.find(x => x.id === sellerId);
-            if (s) { s.active = !s.active; await saveDB(); renderAdminDashboard(); renderProducts(); }
+            if (s) { s.active = !s.active; await saveDB(); renderAdminDashboard(); renderProducts(); renderShowcaseBands(); }
         };
 
         window.deleteSeller = async function(sellerId) {
@@ -4343,6 +5066,7 @@
             await saveDB();
             renderAdminDashboard();
             renderProducts();
+            renderShowcaseBands();
         };
 
         window.deleteCustomer = async function(customerId) {
@@ -4360,6 +5084,64 @@
 
         function bindAllUIEvents() {
             buildLuckyWheelDisc();
+
+            if ($('sideWheelDockBtn')) {
+                $('sideWheelDockBtn').addEventListener('click', openWheelModalOrPrompt);
+            }
+
+            if ($('backToStoreFromDetailPage')) {
+                $('backToStoreFromDetailPage').addEventListener('click', () => {
+                    activeDetailProductId = null;
+                    try { sessionStorage.removeItem(SESSION_KEYS.detailProductId); } catch (_) {}
+                    switchMainView('customerStoreView');
+                });
+            }
+
+            if ($('addVariantImageBtn')) {
+                $('addVariantImageBtn').addEventListener('click', async () => {
+                    const keyInput = $('variantImageKeyInput');
+                    const fileInput = $('variantImageFileInput');
+                    const key = keyInput ? keyInput.value.trim() : '';
+                    const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+                    if (!key) {
+                        showToast('Lütfen önce seçenek adı girin (Örn: Kırmızı, 42, M).');
+                        return;
+                    }
+                    if (!file) {
+                        showToast('Lütfen bu seçenek için bir görsel dosyası seçin.');
+                        return;
+                    }
+                    try {
+                        const compressed = await compressImageToBase64(file);
+                        formVariantImages[key] = compressed;
+                        if (!selectedFormVariants.includes(key)) {
+                            selectedFormVariants.push(key);
+                            renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik', selectedFormVariants);
+                        }
+                        renderVariantImageChipsPreview();
+                        if (keyInput) keyInput.value = '';
+                        if (fileInput) fileInput.value = '';
+                        showToast(`"${key}" seçeneğine görsel bağlandı.`);
+                    } catch (_) {
+                        showToast('Seçenek görseli yüklenemedi.');
+                    }
+                });
+            }
+
+            /* Trend & En Çok Satanlar Seçimi Kaydetme */
+            if ($('saveShowcaseSelectionBtn')) {
+                $('saveShowcaseSelectionBtn').addEventListener('click', async () => {
+                    const trendChecked = Array.from(document.querySelectorAll('.admin-trend-chk:checked')).map(el => el.value);
+                    const bestChecked = Array.from(document.querySelectorAll('.admin-bestseller-chk:checked')).map(el => el.value);
+                    db.trendProductIds = trendChecked;
+                    db.bestSellerProductIds = bestChecked;
+                    trendSlideOffset = 0;
+                    await saveDB();
+                    renderShowcaseBands();
+                    renderProducts();
+                    showToast('Trend ve En Çok Satanlar seçimi kaydedildi.');
+                });
+            }
 
             /* Toplam Ciroyu Sıfırla & Geçmiş Gün Sipariş Toplamlarına Kaydet */
             if ($('resetPlatformRevenueBtn')) {
@@ -4508,67 +5290,22 @@
                     syncLoggedInCustomerSupportSession(true);
                     updateHeaderMemberButton();
                     updateCartUI();
-                    if ($('customerAuthModal')) $('customerAuthModal').classList.add('hidden');
                     $('customerLoginForm').reset();
-                    switchMainView('customerProfileView');
-                    renderCustomerProfileView();
+                    if ($('customerAuthModal')) $('customerAuthModal').classList.add('hidden');
                     showToast(`Tekrar hoş geldiniz, ${found.fullName}!`);
                 });
             }
 
-            if ($('customerProfileForm')) {
-                $('customerProfileForm').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    if (!currentCustomer) return;
-                    const firstName = $('profFirstName').value.trim();
-                    const lastName = $('profLastName').value.trim();
-                    const phone = $('profPhone').value.trim();
-                    const email = $('profEmail').value.trim().toLowerCase();
-                    const address = $('profAddress').value.trim();
-                    const newPass = $('profNewPassword').value;
-                    const newPassConfirm = $('profNewPasswordConfirm').value;
-
-                    if (newPass || newPassConfirm) {
-                        if (newPass.length < 4) {
-                            showToast('Yeni şifre en az 4 karakter olmalıdır.');
-                            return;
-                        }
-                        if (newPass !== newPassConfirm) {
-                            showToast('Yeni şifre ve şifre tekrar eşleşmiyor!');
-                            return;
-                        }
-                    }
-
-                    const updated = {
-                        ...currentCustomer,
-                        firstName,
-                        lastName,
-                        fullName: `${firstName} ${lastName}`.trim(),
-                        phone,
-                        email,
-                        address,
-                        password: newPass ? newPass : currentCustomer.password,
-                        updatedAt: new Date().toLocaleDateString('tr-TR')
-                    };
-
-                    currentCustomer = updated;
-                    await saveShopCustomerRecord(updated);
-                    syncLoggedInCustomerSupportSession(true);
-                    updateHeaderMemberButton();
-                    renderCustomerProfileView();
-                    showToast('Profil bilgileriniz kaydedildi.');
-                });
-            }
-
-            /* Tek Kullanımlık Şanslı Çark Çevirme (Yalnızca 50 TL veya 75 TL diliminde durur) */
             if ($('spinLuckyWheelBtn')) {
                 $('spinLuckyWheelBtn').addEventListener('click', async () => {
-                    if (isWheelSpinning || !currentCustomer) return;
+                    if (isWheelSpinning) return;
+                    if (!currentCustomer) {
+                        openWheelModalOrPrompt();
+                        return;
+                    }
                     const fresh = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
-                    currentCustomer = fresh;
-
                     if (fresh.wheelSpun) {
-                        showToast('Bu hesap için çark hakkınız zaten kullanıldı.');
+                        showToast('Çark hakkınızı daha önce kullandınız.');
                         updateWheelModalUI();
                         return;
                     }
@@ -4577,60 +5314,103 @@
                     const btn = $('spinLuckyWheelBtn');
                     if (btn) btn.disabled = true;
 
-                    const sliceDeg = 360 / WHEEL_SLICES.length;
                     const chosenIdx = ALLOWED_WIN_INDICES[Math.floor(Math.random() * ALLOWED_WIN_INDICES.length)];
-                    const wonAmount = Number(WHEEL_SLICES[chosenIdx].amount || 50);
-                    const sliceCenter = chosenIdx * sliceDeg + sliceDeg / 2;
-                    const targetMod = (360 - sliceCenter) % 360;
+                    const wonSlice = WHEEL_SLICES[chosenIdx];
+                    const n = WHEEL_SLICES.length;
+                    const step = 360 / n;
+                    const sliceCenterAngle = chosenIdx * step + step / 2;
+                    const targetMod = (360 - (sliceCenterAngle % 360)) % 360;
                     const currentMod = ((currentWheelRotation % 360) + 360) % 360;
-                    let delta = targetMod - currentMod;
-                    if (delta < 0) delta += 360;
-                    currentWheelRotation += 6 * 360 + delta;
+                    const deltaToTarget = (targetMod - currentMod + 360) % 360;
+                    const nextRotation = currentWheelRotation + 360 * 6 + deltaToTarget;
+                    currentWheelRotation = nextRotation;
 
                     const disc = $('luckyWheelDisc');
                     if (disc) {
-                        disc.style.transform = `rotate(${currentWheelRotation}deg)`;
+                        disc.style.transform = `rotate(${nextRotation}deg)`;
                     }
 
                     setTimeout(async () => {
-                        const latest = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
-                        latest.wheelSpun = true;
-                        latest.wheelWonAmount = wonAmount;
-                        latest.walletPoints = Number(latest.walletPoints || 0) + wonAmount;
-                        currentCustomer = latest;
+                        fresh.wheelSpun = true;
+                        fresh.wheelWonAmount = wonSlice.amount;
+                        fresh.walletPoints = Number(fresh.walletPoints || 0) + Number(wonSlice.amount);
+                        currentCustomer = fresh;
 
-                        await saveShopCustomerRecord(latest);
+                        await saveShopCustomerRecord(fresh);
                         updateHeaderMemberButton();
                         updateCartUI();
                         updateWheelModalUI();
                         if ($('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
                             renderCustomerProfileView();
                         }
+
                         isWheelSpinning = false;
-                        showToast(`Tebrikler! Şanslı Çarktan ${wonAmount} TL puan bakiyesi kazandınız!`);
-                    }, 4450);
+                        if ($('wheelStatusInfo')) {
+                            $('wheelStatusInfo').innerHTML = `🎉 Tebrikler <strong>${fresh.fullName}</strong>! <strong>${wonSlice.label}</strong> puan/bakiye kazandınız ve bakiyenize eklendi!`;
+                        }
+                        showToast(`Tebrikler! ${wonSlice.label} puan/bakiye hesabınıza eklendi.`);
+                    }, 4500);
                 });
             }
 
-            /* Zamanlı Seçili Ürün & Puan Kuralı Formu */
+            if ($('customerProfileForm')) {
+                $('customerProfileForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!currentCustomer) return;
+                    const fresh = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+                    const firstName = $('profFirstName').value.trim();
+                    const lastName = $('profLastName').value.trim();
+                    const phone = $('profPhone').value.trim();
+                    const email = $('profEmail').value.trim().toLowerCase();
+                    const address = $('profAddress').value.trim();
+                    const newPass = $('profNewPassword').value;
+                    const newPassConf = $('profNewPasswordConfirm').value;
+
+                    if (newPass || newPassConf) {
+                        if (newPass.length < 4) {
+                            showToast('Yeni şifre en az 4 karakter olmalıdır.');
+                            return;
+                        }
+                        if (newPass !== newPassConf) {
+                            showToast('Yeni şifre ve tekrar şifresi eşleşmiyor.');
+                            return;
+                        }
+                        fresh.password = newPass;
+                    }
+
+                    fresh.firstName = firstName;
+                    fresh.lastName = lastName;
+                    fresh.fullName = `${firstName} ${lastName}`.trim();
+                    fresh.phone = phone;
+                    fresh.email = email;
+                    fresh.address = address;
+                    currentCustomer = fresh;
+
+                    await saveShopCustomerRecord(fresh);
+                    syncLoggedInCustomerSupportSession(true);
+                    updateHeaderMemberButton();
+                    renderCustomerProfileView();
+                    showToast('Profil bilgileriniz kaydedildi.');
+                });
+            }
+
             if ($('adminTimedBonusForm')) {
                 $('adminTimedBonusForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const productId = $('bonusProductSelect')?.value;
-                    const rewardAmount = parseFloat($('bonusRewardAmount')?.value || '0');
-                    const startTime = $('bonusStartTime')?.value || '09:00';
-                    const endTime = $('bonusEndTime')?.value || '23:59';
-                    const enabled = Boolean($('bonusRuleEnabled')?.checked);
+                    const productId = $('bonusProductSelect').value;
+                    const rewardAmount = Number($('bonusRewardAmount').value || 0);
+                    const startTime = $('bonusStartTime').value;
+                    const endTime = $('bonusEndTime').value;
+                    const enabled = $('bonusRuleEnabled').checked;
 
-                    if (!productId || rewardAmount <= 0) {
-                        showToast('Lütfen ürün ve geçerli bir puan/bakiye tutarı girin.');
+                    if (!productId || rewardAmount <= 0 || !startTime || !endTime) {
+                        showToast('Lütfen ürün, puan/bakiye tutarı ve saat aralığını girin.');
                         return;
                     }
-
                     const prod = (db.products || []).find(p => p.id === productId);
                     if (!Array.isArray(db.timedBonusRules)) db.timedBonusRules = [];
                     db.timedBonusRules.unshift({
-                        id: 'bonus_' + Date.now(),
+                        id: 'bonus_rule_' + Date.now(),
                         productId,
                         productName: prod ? prod.name : productId,
                         rewardAmount,
@@ -4638,52 +5418,57 @@
                         endTime,
                         enabled
                     });
-
                     await saveDB();
                     $('adminTimedBonusForm').reset();
-                    if ($('bonusStartTime')) $('bonusStartTime').value = '09:00';
-                    if ($('bonusEndTime')) $('bonusEndTime').value = '23:59';
-                    if ($('bonusRuleEnabled')) $('bonusRuleEnabled').checked = true;
+                    $('bonusStartTime').value = '09:00';
+                    $('bonusEndTime').value = '23:59';
+                    $('bonusRuleEnabled').checked = true;
                     renderAdminTimedBonusTab();
                     renderProducts();
-                    updateCartUI();
                     showToast('Zamanlı seçili ürün puan kuralı kaydedildi.');
                 });
             }
 
             if ($('openLiveSupportBtn')) {
-                $('openLiveSupportBtn').addEventListener('click', async () => {
+                $('openLiveSupportBtn').addEventListener('click', () => {
                     if (!currentCustomer) {
-                        showToast('Canlı destek hattına yazmak için önce kayıt olun veya giriş yapın.');
+                        isSupportWindowOpen = true;
+                        try { sessionStorage.setItem(SESSION_KEYS.supportOpen, '1'); } catch (_) {}
+                        renderCustomerSupportWidget();
                         if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
-                        switchCustomerAuthTab('custLoginTab');
+                        switchCustomerAuthTab('custRegisterTab');
+                        showToast('Canlı destek için lütfen önce müşteri kaydı oluşturun veya giriş yapın.');
                         return;
                     }
                     isSupportWindowOpen = !isSupportWindowOpen;
-                    saveSessionJson(SESSION_KEYS.supportOpen, isSupportWindowOpen);
+                    try { sessionStorage.setItem(SESSION_KEYS.supportOpen, isSupportWindowOpen ? '1' : '0'); } catch (_) {}
                     if (isSupportWindowOpen) {
                         syncLoggedInCustomerSupportSession(true);
-                    } else {
-                        renderCustomerSupportWidget();
                     }
-                });
-            }
-            if ($('closeLiveSupportBtn')) {
-                $('closeLiveSupportBtn').addEventListener('click', () => {
-                    isSupportWindowOpen = false;
-                    saveSessionJson(SESSION_KEYS.supportOpen, false);
                     renderCustomerSupportWidget();
                 });
             }
+
+            if ($('closeLiveSupportBtn')) {
+                $('closeLiveSupportBtn').addEventListener('click', () => {
+                    isSupportWindowOpen = false;
+                    try { sessionStorage.setItem(SESSION_KEYS.supportOpen, '0'); } catch (_) {}
+                    renderCustomerSupportWidget();
+                });
+            }
+
             if ($('clearMySupportChatBtn')) {
                 $('clearMySupportChatBtn').addEventListener('click', async () => {
-                    if (!currentCustomer) return;
-                    if (!confirm('Gizlilik gereği mevcut sohbet kaydınız silinsin mi?')) return;
-                    const mChatId = getMemberChatId(currentCustomer);
-                    liveChats = liveChats.filter(c => c.id !== mChatId);
+                    if (!currentCustomer) {
+                        showToast('Önce müşteri hesabınıza giriş yapın.');
+                        return;
+                    }
+                    if (!confirm('Gizlilik için sohbet geçmişinizi silmek istiyor musunuz?')) return;
+                    const mId = getMemberChatId(currentCustomer);
+                    liveChats = liveChats.filter(c => c.id !== mId);
                     if (firestoreReady && firestoreDb) {
                         isSaving = true;
-                        try { await deleteDoc(doc(firestoreDb, "trendtan_live_chats", mChatId)); } catch (_) {}
+                        try { await deleteDoc(doc(firestoreDb, "trendtan_live_chats", mId)); } catch (_) {}
                         finally { setTimeout(() => { isSaving = false; }, 250); }
                     }
                     const freshChat = createMemberChatObj(currentCustomer);
@@ -4691,39 +5476,32 @@
                     await persistLiveChatDoc(freshChat);
                     renderCustomerSupportWidget();
                     renderAdminLiveSupportTab();
-                    showToast('Sohbet kaydınız temizlendi.');
+                    showToast('Sohbet kaydınız silindi.');
                 });
             }
+
             if ($('liveSupportForm')) {
                 $('liveSupportForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
                     if (!currentCustomer) {
-                        showToast('Canlı destek hattına yazmak için önce giriş yapın.');
                         if ($('customerAuthModal')) $('customerAuthModal').classList.remove('hidden');
-                        switchCustomerAuthTab('custLoginTab');
+                        switchCustomerAuthTab('custRegisterTab');
+                        showToast('Mesaj göndermek için lütfen önce giriş yapın veya kayıt olun.');
                         return;
                     }
                     const inp = $('liveSupportInput');
-                    if (!inp) return;
-                    const text = inp.value.trim();
+                    const text = inp ? inp.value.trim() : '';
                     if (!text) return;
-                    inp.value = '';
 
-                    const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                    const mChatId = getMemberChatId(currentCustomer);
-                    let chat = liveChats.find(c => c.id === mChatId);
-                    if (!chat) chat = createMemberChatObj(currentCustomer);
-
-                    chat.customerId = currentCustomer.id;
-                    chat.customerName = currentCustomer.fullName || `${currentCustomer.firstName || ''} ${currentCustomer.lastName || ''}`.trim();
-                    chat.customerPhone = currentCustomer.phone || '';
-                    chat.customerEmail = currentCustomer.email || '';
-                    chat.customerAddress = currentCustomer.address || '';
-                    chat.step = 'connected';
-                    chat.messages.push({ sender: 'user', text, time: nowStr });
-                    chat.updatedAt = Date.now();
+                    syncLoggedInCustomerSupportSession(false);
+                    const chat = getCurrentCustomerChat();
+                    const nowTime = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    chat.messages = Array.isArray(chat.messages) ? chat.messages : [];
+                    chat.messages.push({ sender: 'user', text, time: nowTime });
                     chat.unreadForAdmin = Number(chat.unreadForAdmin || 0) + 1;
-
+                    chat.updatedAt = Date.now();
+                    chat.step = 'connected';
+                    if (inp) inp.value = '';
                     renderCustomerSupportWidget();
                     await persistLiveChatDoc(chat);
                     renderAdminLiveSupportTab();
@@ -4734,34 +5512,31 @@
                 $('adminChatReplyForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const inp = $('adminChatReplyInput');
-                    if (!inp) return;
-                    const replyText = inp.value.trim();
-                    if (!replyText) return;
-                    const target = liveChats.find(c => c.id === selectedAdminChatId);
-                    if (!target) { showToast('Önce bir müşteri sohbeti seçin.'); return; }
-
-                    inp.value = '';
-                    const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                    target.messages.push({ sender: 'agent', text: replyText, time: nowStr });
-                    target.updatedAt = Date.now();
-                    target.unreadForAdmin = 0;
-
+                    const text = inp ? inp.value.trim() : '';
+                    if (!text || !selectedAdminChatId) return;
+                    const chat = liveChats.find(c => c.id === selectedAdminChatId);
+                    if (!chat) return;
+                    const nowTime = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    chat.messages = Array.isArray(chat.messages) ? chat.messages : [];
+                    chat.messages.push({ sender: 'agent', text, time: nowTime });
+                    chat.updatedAt = Date.now();
+                    if (inp) inp.value = '';
                     renderAdminLiveSupportTab();
+                    await persistLiveChatDoc(chat);
                     renderCustomerSupportWidget();
-                    await persistLiveChatDoc(target);
                 });
             }
 
             if ($('adminClearAllChatsBtn')) {
                 $('adminClearAllChatsBtn').addEventListener('click', async () => {
-                    if (!confirm('Gizlilik gereği tüm canlı destek konuşmaları kalıcı olarak silinsin mi?')) return;
-                    const idsToDelete = liveChats.map(c => c.id);
+                    if (!confirm('Tüm canlı destek sohbet kayıtlarını kalıcı olarak silmek istiyor musunuz?')) return;
+                    const oldIds = liveChats.map(c => c.id);
                     liveChats = [];
                     selectedAdminChatId = '';
                     if (firestoreReady && firestoreDb) {
                         isSaving = true;
                         try {
-                            for (const cid of idsToDelete) {
+                            for (const cid of oldIds) {
                                 await deleteDoc(doc(firestoreDb, "trendtan_live_chats", cid));
                             }
                         } catch (_) {}
@@ -4772,127 +5547,152 @@
                         liveChats.unshift(freshChat);
                         await persistLiveChatDoc(freshChat);
                     }
-                    renderCustomerSupportWidget();
                     renderAdminLiveSupportTab();
+                    renderCustomerSupportWidget();
                     showToast('Tüm canlı destek kayıtları silindi.');
                 });
             }
 
-            function updateSoundButtonLabel() {
-                const btn = $('soundToggleBtn');
-                if (!btn) return;
-                btn.innerHTML = soundEnabled
-                    ? `<i class="fa-solid fa-volume-high"></i> Ses: Açık`
-                    : `<i class="fa-solid fa-volume-xmark"></i> Ses: Kapalı`;
-            }
-            updateSoundButtonLabel();
-
             if ($('soundToggleBtn')) {
+                const syncSoundBtn = () => {
+                    $('soundToggleBtn').innerHTML = soundEnabled
+                        ? '<i class="fa-solid fa-volume-high"></i> Ses: Açık'
+                        : '<i class="fa-solid fa-volume-xmark"></i> Ses: Kapalı';
+                };
+                syncSoundBtn();
                 $('soundToggleBtn').addEventListener('click', () => {
                     soundEnabled = !soundEnabled;
                     saveSessionJson(SESSION_KEYS.soundEnabled, soundEnabled);
-                    updateSoundButtonLabel();
+                    syncSoundBtn();
                     if (soundEnabled) playNotificationTone();
                     showToast(soundEnabled ? 'Sesli bildirim açıldı.' : 'Sesli bildirim kapatıldı.');
                 });
             }
 
-            if ($('searchInput')) $('searchInput').value = currentSearch;
-            if ($('freeShippingFilter')) $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
-            if ($('sortSelect')) $('sortSelect').value = savedFilters.sort || 'default';
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.category === currentCategory));
-            renderCatalogVariantOptions($('prodCategory') ? $('prodCategory').value : 'Elektronik');
-            renderCustomerSupportWidget();
-
-            if ($('prodCategory')) {
-                $('prodCategory').addEventListener('change', (e) => {
-                    renderCatalogVariantOptions(e.target.value);
-                });
-            }
-
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentCategory = btn.dataset.category;
-                    persistUiState();
-                    renderProducts();
-                });
-            });
-
-            if ($('searchInput')) $('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value; persistUiState(); renderProducts(); });
-            if ($('searchBtn')) $('searchBtn').addEventListener('click', () => { currentSearch = $('searchInput') ? $('searchInput').value : ''; persistUiState(); renderProducts(); });
-            if ($('freeShippingFilter')) $('freeShippingFilter').addEventListener('change', () => { persistUiState(); renderProducts(); });
-            if ($('sortSelect')) $('sortSelect').addEventListener('change', () => { persistUiState(); renderProducts(); });
-
             if ($('openTrackOrderBtn')) {
                 $('openTrackOrderBtn').addEventListener('click', () => {
                     if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
                     try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
+                    const savedQ = sessionStorage.getItem(SESSION_KEYS.trackQuery);
+                    if (savedQ && $('trackCodeInput')) {
+                        $('trackCodeInput').value = savedQ;
+                        runOrderTrackingSearch(savedQ);
+                    }
                 });
             }
-
             if ($('trackSearchSubmitBtn')) {
                 $('trackSearchSubmitBtn').addEventListener('click', () => {
                     runOrderTrackingSearch($('trackCodeInput') ? $('trackCodeInput').value : '');
                 });
             }
+            if ($('trackCodeInput')) {
+                $('trackCodeInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        runOrderTrackingSearch($('trackCodeInput').value);
+                    }
+                });
+            }
 
-            if ($('openCartBtn')) $('openCartBtn').addEventListener('click', () => {
-                if ($('cartDrawer')) $('cartDrawer').classList.add('open');
-                if ($('cartOverlay')) $('cartOverlay').classList.remove('hidden');
+            document.querySelectorAll('#categoryList .cat-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === currentCategory);
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#categoryList .cat-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    switchMainView('customerStoreView');
+                    persistUiState();
+                    renderProducts();
+                });
             });
+
+            if ($('searchInput')) {
+                $('searchInput').value = currentSearch;
+                $('searchInput').addEventListener('input', (e) => {
+                    currentSearch = e.target.value;
+                    persistUiState();
+                    renderProducts();
+                });
+            }
+            if ($('searchBtn')) {
+                $('searchBtn').addEventListener('click', () => {
+                    currentSearch = $('searchInput') ? $('searchInput').value : '';
+                    switchMainView('customerStoreView');
+                    persistUiState();
+                    renderProducts();
+                });
+            }
+            if ($('freeShippingFilter')) {
+                $('freeShippingFilter').checked = Boolean(savedFilters.freeShipping);
+                $('freeShippingFilter').addEventListener('change', () => { persistUiState(); renderProducts(); });
+            }
+            if ($('sortSelect')) {
+                $('sortSelect').value = savedFilters.sort || 'default';
+                $('sortSelect').addEventListener('change', () => { persistUiState(); renderProducts(); });
+            }
+
+            if ($('openCartBtn')) {
+                $('openCartBtn').addEventListener('click', () => {
+                    if ($('cartDrawer')) $('cartDrawer').classList.add('open');
+                    if ($('cartOverlay')) $('cartOverlay').classList.remove('hidden');
+                    updateCartUI();
+                });
+            }
             if ($('closeCartBtn')) $('closeCartBtn').addEventListener('click', closeCart);
             if ($('cartOverlay')) $('cartOverlay').addEventListener('click', closeCart);
 
             if ($('applyCouponBtn')) {
                 $('applyCouponBtn').addEventListener('click', () => {
                     const code = ($('cartCouponInput') ? $('cartCouponInput').value : '').trim().toUpperCase();
-                    const found = (db.coupons || []).find(c => c.code === code);
-                    const msgEl = $('couponMessage');
-                    if (!found) {
-                        appliedCoupon = null;
-                        if (msgEl) { msgEl.style.color = '#dc2626'; msgEl.textContent = 'Geçersiz kupon kodu!'; }
-                    } else {
+                    if (!code) return;
+                    const found = (db.coupons || []).find(c => c.code.toUpperCase() === code);
+                    if (found) {
                         appliedCoupon = found;
-                        const label = found.type === 'percent' ? `%${found.value} İndirim` : formatMoney(found.value) + ' İndirim';
-                        if (msgEl) { msgEl.style.color = '#16a34a'; msgEl.textContent = `"${found.code}" kuponu uygulandı (${label}).`; }
+                        persistUiState();
+                        if ($('couponMessage')) {
+                            $('couponMessage').textContent = `${found.code} kuponu uygulandı!`;
+                            $('couponMessage').style.color = '#16a34a';
+                        }
+                        updateCartUI();
+                    } else {
+                        appliedCoupon = null;
+                        persistUiState();
+                        if ($('couponMessage')) {
+                            $('couponMessage').textContent = 'Geçersiz veya süresi dolmuş kupon kodu.';
+                            $('couponMessage').style.color = '#dc2626';
+                        }
+                        updateCartUI();
                     }
-                    persistUiState();
-                    updateCartUI();
                 });
             }
 
             if ($('proceedCheckoutBtn')) {
                 $('proceedCheckoutBtn').addEventListener('click', () => {
-                    if (cart.length === 0) { showToast('Sepetiniz boş.'); return; }
+                    if (cart.length === 0) { showToast('Sepetiniz boş!'); return; }
+                    const totals = calculateCartTotals();
+                    if (!totals.meetsMinOrder) {
+                        showToast(`Minimum alışveriş tutarı ${formatMoney(MIN_ORDER_AMOUNT)}'dir. Sepet ara toplamınız ${formatMoney(totals.subtotal)}.`);
+                        return;
+                    }
                     closeCart();
                     if (currentCustomer) {
-                        if ($('custName') && !$('custName').value) $('custName').value = currentCustomer.fullName || '';
-                        if ($('custPhone') && !$('custPhone').value) $('custPhone').value = currentCustomer.phone || '';
-                        if ($('custAddress') && !$('custAddress').value) $('custAddress').value = currentCustomer.address || '';
+                        if ($('custName')) $('custName').value = currentCustomer.fullName || '';
+                        if ($('custPhone')) $('custPhone').value = currentCustomer.phone || '';
+                        if ($('custAddress')) $('custAddress').value = currentCustomer.address || '';
                     }
-                    const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
-                    if (eftRadio) eftRadio.checked = true;
-                    if ($('eftPaymentOption')) $('eftPaymentOption').classList.add('selected');
-                    if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
-                    if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
-                    const { walletUsed, grandTotal } = calculateCartTotals();
-                    const walletBox = $('checkoutWalletNotice');
-                    if (walletBox) {
-                        if (walletUsed > 0) {
-                            walletBox.classList.remove('hidden');
-                            walletBox.innerHTML = `<i class="fa-solid fa-coins"></i> Puan / Cüzdan bakiyenizden <strong>${formatMoney(walletUsed)}</strong> sipariş tutarından düşülecek.`;
+                    if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(totals.grandTotal);
+                    if ($('modalFinalPriceTop')) $('modalFinalPriceTop').textContent = formatMoney(totals.grandTotal);
+                    if ($('checkoutWalletNotice')) {
+                        if (totals.walletUsed > 0) {
+                            $('checkoutWalletNotice').classList.remove('hidden');
+                            $('checkoutWalletNotice').innerHTML = `<i class="fa-solid fa-coins"></i> Hesabınızdaki <strong>${formatMoney(totals.walletUsed)}</strong> puan/cüzdan bakiyesi bu siparişe otomatik uygulanacaktır.`;
                         } else {
-                            walletBox.classList.add('hidden');
-                            walletBox.innerHTML = '';
+                            $('checkoutWalletNotice').classList.add('hidden');
                         }
                     }
-                    if ($('modalFinalPrice')) $('modalFinalPrice').textContent = formatMoney(grandTotal);
-                    if ($('modalFinalPriceTop')) $('modalFinalPriceTop').textContent = formatMoney(grandTotal);
-                    const btnText = grandTotal > 0 ? 'Siparişi Onayla (Havale / EFT)' : 'Siparişi Onayla (Puan Bakiyesi ile)';
-                    if ($('checkoutSubmitBtn')) $('checkoutSubmitBtn').textContent = btnText;
-                    if ($('checkoutSubmitBtnTop')) $('checkoutSubmitBtnTop').textContent = 'Siparişi Onayla';
+                    if ($('activePosLabel')) {
+                        $('activePosLabel').textContent = 'Sanal POS Onayı Bekleniyor';
+                    }
                     if ($('checkoutModal')) $('checkoutModal').classList.remove('hidden');
                 });
             }
@@ -4900,12 +5700,14 @@
             document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     if (e.target.disabled) {
+                        e.target.checked = false;
                         const eftRadio = document.querySelector('input[name="paymentMethod"][value="Havale / EFT"]');
                         if (eftRadio) eftRadio.checked = true;
+                        showToast('Sanal POS onay sürecimiz henüz tamamlanmadığı için yalnızca Havale / EFT aktiftir.');
                         return;
                     }
-                    if ($('eftPaymentOption')) $('eftPaymentOption').classList.toggle('selected', e.target.value === 'Havale / EFT');
-                    if ($('cardPaymentOption')) $('cardPaymentOption').classList.remove('selected');
+                    document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                    e.target.closest('.payment-option')?.classList.add('selected');
                     if ($('cardFieldsBox')) $('cardFieldsBox').classList.add('hidden');
                 });
             });
@@ -4913,132 +5715,128 @@
             if ($('checkoutForm')) {
                 $('checkoutForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const custName = $('custName').value.trim();
-                    const custPhone = $('custPhone').value.trim();
-                    const custAddress = $('custAddress').value.trim();
-                    const { walletUsed, grandTotal } = calculateCartTotals();
-                    const paymentMethod = grandTotal > 0
-                        ? 'Havale / EFT (MUSTAFA TAN - EN PARA)'
-                        : 'Puan / Cüzdan Bakiyesi ile Ödendi';
-                    const today = new Date().toLocaleDateString('tr-TR');
-
-                    let targetShopCust = currentCustomer
-                        ? ((db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer)
-                        : ((db.shopCustomers || []).find(c =>
-                            (c.phone && c.phone.replace(/\s+/g, '') === custPhone.replace(/\s+/g, '')) ||
-                            (c.fullName && c.fullName.toLowerCase() === custName.toLowerCase())
-                        ) || null);
-
-                    let currentWalletBalance = targetShopCust ? Math.max(0, Number(targetShopCust.walletPoints || 0)) : 0;
-                    if (walletUsed > 0) {
-                        currentWalletBalance = Math.max(0, currentWalletBalance - walletUsed);
+                    const { subtotal, shippingTotal, meetsMinOrder, discount, walletUsed, grandTotal } = calculateCartTotals();
+                    if (!meetsMinOrder) {
+                        showToast(`Minimum alışveriş tutarı ${formatMoney(MIN_ORDER_AMOUNT)}'dir.`);
+                        return;
                     }
+                    const name = $('custName').value.trim();
+                    const phone = $('custPhone').value.trim();
+                    const address = $('custAddress').value.trim();
+                    const paymentMethod = 'Havale / EFT';
+                    const orderDate = new Date().toLocaleDateString('tr-TR');
 
-                    let customer = db.customers.find(c => c.phone === custPhone || c.name.toLowerCase() === custName.toLowerCase());
-                    if (customer) {
-                        customer.name = custName; customer.phone = custPhone; customer.address = custAddress;
-                        customer.totalSpent = Number(customer.totalSpent) + grandTotal;
-                        customer.orderCount = Number(customer.orderCount) + 1;
-                        customer.lastOrderDate = today;
-                    } else {
-                        db.customers.unshift({ id: 'cust_' + Date.now(), name: custName, phone: custPhone, address: custAddress, totalSpent: grandTotal, orderCount: 1, lastOrderDate: today });
-                    }
-
-                    const sellerGroups = {};
-                    const touchedProducts = [];
-                    let totalEarnedBonus = 0;
-
+                    let earnedBonusPoints = 0;
+                    const groupedBySeller = {};
                     cart.forEach(item => {
-                        const sId = item.product.sellerId;
-                        if (!sellerGroups[sId]) sellerGroups[sId] = [];
-                        sellerGroups[sId].push(item);
-                        const dbProd = db.products.find(p => p.id === item.product.id);
-                        if (dbProd) {
-                            dbProd.stock = Math.max(0, dbProd.stock - item.qty);
-                            touchedProducts.push(dbProd);
-                        }
-                        const bonusRule = getActiveBonusRuleForProduct(item.product.id);
-                        if (bonusRule) {
-                            totalEarnedBonus += Number(bonusRule.rewardAmount || 0);
+                        const sid = item.product.sellerId || 'default_seller';
+                        if (!groupedBySeller[sid]) groupedBySeller[sid] = [];
+                        groupedBySeller[sid].push(item);
+
+                        const activeRule = getActiveBonusRuleForProduct(item.product.id);
+                        if (activeRule) {
+                            earnedBonusPoints += Number(activeRule.rewardAmount || 0) * Number(item.qty || 1);
                         }
                     });
 
-                    if (totalEarnedBonus > 0 && targetShopCust) {
-                        currentWalletBalance += totalEarnedBonus;
-                        targetShopCust.walletPoints = currentWalletBalance;
-                        if (currentCustomer && currentCustomer.id === targetShopCust.id) {
-                            currentCustomer = targetShopCust;
-                        }
-                        await saveShopCustomerRecord(targetShopCust);
-                    } else if (walletUsed > 0 && targetShopCust) {
-                        targetShopCust.walletPoints = currentWalletBalance;
-                        if (currentCustomer && currentCustomer.id === targetShopCust.id) {
-                            currentCustomer = targetShopCust;
-                        }
-                        await saveShopCustomerRecord(targetShopCust);
-                    }
+                    const createdTrackingCodes = [];
+                    const sellerKeys = Object.keys(groupedBySeller);
+                    const totalSellerCount = Math.max(1, sellerKeys.length);
 
-                    const createdCodes = [];
-                    Object.keys(sellerGroups).forEach((sId, idx) => {
-                        const groupItems = sellerGroups[sId];
-                        const groupRaw = groupItems.reduce((sum, i) => sum + (getEffectivePrice(i.product) * i.qty) + Number(i.product.shipping), 0);
-                        const groupTotal = Math.max(0, groupRaw - walletUsed);
-                        const itemsText = groupItems.map(i => `${i.product.name}${i.selectedVariant ? ` [${i.selectedVariant}]` : ''} (x${i.qty})`).join(', ');
+                    sellerKeys.forEach((sid, idx) => {
+                        const sItems = groupedBySeller[sid];
+                        const sSub = sItems.reduce((acc, it) => acc + getEffectivePrice(it.product) * it.qty, 0);
+                        const ratio = subtotal > 0 ? sSub / subtotal : 1 / totalSellerCount;
+                        const sShip = shippingTotal > 0 ? Math.round(shippingTotal * ratio * 100) / 100 : 0;
+                        const sDisc = discount > 0 ? Math.round(discount * ratio * 100) / 100 : 0;
+                        const sWallet = walletUsed > 0 ? Math.round(walletUsed * ratio * 100) / 100 : 0;
+                        const sTotal = Math.max(0, Math.round((sSub + sShip - sDisc - sWallet) * 100) / 100);
                         const trackingCode = 'TRN-' + Math.floor(100000 + Math.random() * 900000);
-                        createdCodes.push(trackingCode);
-                        const sellerName = groupItems[0]?.product?.sellerName || getSellerDisplayName(sId);
-                        const groupBonus = idx === 0 ? totalEarnedBonus : 0;
+                        createdTrackingCodes.push(trackingCode);
 
                         db.orders.unshift({
-                            id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
+                            id: 'ORD-' + (Date.now() + idx),
                             trackingCode,
-                            sellerId: sId,
-                            sellerName,
-                            customerName: custName,
-                            customerPhone: custPhone,
-                            customerAddress: custAddress,
-                            itemsText,
-                            total: groupTotal,
-                            earnedBonusPoints: groupBonus,
+                            sellerId: sid,
+                            sellerName: getSellerDisplayName(sid),
+                            customerName: name,
+                            customerPhone: phone,
+                            customerAddress: address,
+                            itemsText: sItems.map(it => `${it.product.name}${it.selectedVariant ? ` (${it.selectedVariant})` : ''} (${it.qty} adet)`).join(', '),
+                            total: sTotal,
+                            earnedBonusPoints: idx === 0 ? earnedBonusPoints : 0,
                             paymentMethod,
-                            carrierCargoNo: '',
                             status: 'pending',
-                            date: today
+                            date: orderDate
                         });
                     });
 
-                    for (const tp of touchedProducts) {
-                        await saveProductToCollection(tp);
+                    for (const item of cart) {
+                        const prod = (db.products || []).find(p => p.id === item.product.id);
+                        if (prod) {
+                            prod.stock = Math.max(0, Number(prod.stock || 0) - Number(item.qty || 0));
+                            await saveProductToCollection(prod);
+                        }
                     }
-                    await saveDB();
-                    cart = []; appliedCoupon = null;
+
+                    if (!Array.isArray(db.customers)) db.customers = [];
+                    const existingCust = db.customers.find(c => c.phone === phone);
+                    if (existingCust) {
+                        existingCust.name = name;
+                        existingCust.address = address;
+                        existingCust.totalSpent = Number(existingCust.totalSpent || 0) + grandTotal;
+                        existingCust.orderCount = Number(existingCust.orderCount || 0) + 1;
+                        existingCust.lastOrderDate = orderDate;
+                    } else {
+                        db.customers.push({
+                            id: 'CUST-' + Date.now(),
+                            name,
+                            phone,
+                            address,
+                            totalSpent: grandTotal,
+                            orderCount: 1,
+                            lastOrderDate: orderDate
+                        });
+                    }
+
+                    if (currentCustomer) {
+                        const freshCust = (db.shopCustomers || []).find(c => c.id === currentCustomer.id) || currentCustomer;
+                        const currentBal = Math.max(0, Number(freshCust.walletPoints || 0));
+                        const nextBal = Math.max(0, Math.round((currentBal - walletUsed + earnedBonusPoints) * 100) / 100);
+                        freshCust.walletPoints = nextBal;
+                        currentCustomer = freshCust;
+                        await saveShopCustomerRecord(freshCust);
+                    }
+
+                    const ok = await saveDB();
+                    if (!ok) return;
+
+                    cart = [];
+                    appliedCoupon = null;
                     persistUiState();
                     updateHeaderMemberButton();
-                    updateCartUI(); renderProducts();
-                    if ($('customerProfileView') && !$('customerProfileView').classList.contains('hidden')) {
-                        renderCustomerProfileView();
-                    }
+                    updateCartUI();
+                    renderShowcaseBands();
+                    renderProducts();
                     if ($('checkoutModal')) $('checkoutModal').classList.add('hidden');
                     $('checkoutForm').reset();
+                    if (currentSeller) renderSellerDashboard();
+                    if ($('superAdminDashboardView') && !$('superAdminDashboardView').classList.contains('hidden')) renderAdminDashboard();
 
-                    if ($('trackOrderModal') && $('trackCodeInput') && createdCodes[0]) {
-                        $('trackCodeInput').value = createdCodes[0];
-                        $('trackOrderModal').classList.remove('hidden');
-                        try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '1'); } catch (_) {}
-                        runOrderTrackingSearch(createdCodes[0]);
-                    }
-                    if (totalEarnedBonus > 0) {
-                        showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')} • Seçili üründen +${formatMoney(totalEarnedBonus)} puan/bakiye kazandınız!`);
-                    } else {
-                        showToast(`Siparişiniz alındı! Takip Kodu: ${createdCodes.join(', ')}`);
-                    }
+                    const bonusMsg = earnedBonusPoints > 0 ? ` • +${formatMoney(earnedBonusPoints)} puan/bakiye hesabınıza eklendi!` : '';
+                    showToast(`Siparişiniz alındı! Takip Kodu: ${createdTrackingCodes.join(', ')}${bonusMsg}`);
                 });
             }
 
             if ($('openSellerModalBtn')) {
                 $('openSellerModalBtn').addEventListener('click', () => {
-                    if (currentSeller) { switchMainView('sellerDashboardView'); renderSellerDashboard(); }
-                    else if ($('sellerAuthModal')) { $('sellerAuthModal').classList.remove('hidden'); switchSellerAuthTab('sellerLoginTab'); }
+                    if (currentSeller) {
+                        switchMainView('sellerDashboardView');
+                        renderSellerDashboard();
+                    } else {
+                        if ($('sellerAuthModal')) $('sellerAuthModal').classList.remove('hidden');
+                        switchSellerAuthTab('sellerLoginTab');
+                    }
                 });
             }
 
@@ -5051,59 +5849,93 @@
                     e.preventDefault();
                     const firstName = $('applyFirstName').value.trim();
                     const lastName = $('applyLastName').value.trim();
-                    db.sellerApplications.unshift({
-                        id: 'app_' + Date.now(), firstName, lastName, fullName: `${firstName} ${lastName}`,
-                        phone: $('applyPhone').value.trim(), email: $('applyEmail').value.trim(),
-                        companyName: $('applyCompanyName').value.trim(), taxOrTc: $('applyTaxOrTc').value.trim(),
-                        address: $('applyAddress').value.trim(), date: new Date().toLocaleDateString('tr-TR')
+                    const fullName = `${firstName} ${lastName}`.trim();
+                    const phone = $('applyPhone').value.trim();
+                    const email = $('applyEmail').value.trim();
+                    const companyName = $('applyCompanyName').value.trim();
+                    const taxOrTc = $('applyTaxOrTc').value.trim();
+                    const ribbonText = $('applyRibbonText') ? $('applyRibbonText').value.trim() : '';
+                    const address = $('applyAddress').value.trim();
+
+                    if (!Array.isArray(db.sellerApplications)) db.sellerApplications = [];
+                    db.sellerApplications.push({
+                        id: 'APP-' + Date.now(),
+                        firstName,
+                        lastName,
+                        fullName,
+                        phone,
+                        email,
+                        companyName,
+                        taxOrTc,
+                        ribbonText,
+                        address,
+                        date: new Date().toLocaleDateString('tr-TR')
                     });
-                    await saveDB();
+                    const ok = await saveDB();
+                    if (!ok) return;
                     $('sellerApplyForm').reset();
                     if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
-                    showToast('Kurumsal satıcı başvurunuz alındı ve yönetim paneline kaydedildi.');
+                    showToast('Kurumsal satıcı başvurunuz alındı. Yönetici onayından sonra giriş yapabilirsiniz.');
                 });
             }
 
             if ($('sellerLoginForm')) {
-                $('sellerLoginForm').addEventListener('submit', async (e) => {
+                $('sellerLoginForm').addEventListener('submit', (e) => {
                     e.preventDefault();
                     const u = $('sellerLoginUser').value.trim();
                     const p = $('sellerLoginPass').value.trim();
-                    const seller = (db.sellers || []).find(s => s.username === u && s.password === p);
-                    if (!seller) { showToast('Kullanıcı adı veya şifre hatalı!'); return; }
-                    if (!seller.active) { showToast('Satıcı hesabınız şu anda pasif durumda.'); return; }
-                    currentSeller = seller;
-                    try { sessionStorage.setItem(SESSION_KEYS.sellerId, seller.id); } catch (_) {}
+                    const found = (db.sellers || []).find(s => s.username === u && s.password === p);
+                    if (!found) { showToast('Kullanıcı adı veya şifre hatalı!'); return; }
+                    if (!found.active) { showToast('Satıcı hesabınız pasif durumda.'); return; }
+                    currentSeller = found;
+                    try { sessionStorage.setItem(SESSION_KEYS.sellerId, found.id); } catch (_) {}
                     if ($('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden');
                     $('sellerLoginForm').reset();
                     switchMainView('sellerDashboardView');
                     renderSellerDashboard();
-                    showToast(`${seller.companyName} paneline hoş geldiniz.`);
+                    showToast(`Hoş geldiniz, ${found.companyName}!`);
+                });
+            }
+
+            if ($('backToStoreFromSeller')) $('backToStoreFromSeller').addEventListener('click', () => switchMainView('customerStoreView'));
+            if ($('sellerLogoutBtn')) {
+                $('sellerLogoutBtn').addEventListener('click', () => {
+                    currentSeller = null;
+                    try { sessionStorage.removeItem(SESSION_KEYS.sellerId); } catch (_) {}
+                    switchMainView('customerStoreView');
+                });
+            }
+
+            if ($('prodCategory')) {
+                $('prodCategory').addEventListener('change', (e) => {
+                    renderCatalogVariantOptions(normalizeCategoryName(e.target.value));
                 });
             }
 
             if ($('prodImageFile')) {
-                $('prodImageFile').addEventListener('change', async function(e) {
+                $('prodImageFile').addEventListener('change', async (e) => {
                     const files = Array.from(e.target.files || []);
                     if (!files.length) return;
-                    if (uploadedImages.length >= 4) {
-                        showToast('1000+ ürün kapasitesi için ürün başına en fazla 4 görsel eklenebilir.');
+                    const remainingSlots = Math.max(0, 4 - uploadedImages.length);
+                    if (remainingSlots <= 0) {
+                        showToast('En fazla 4 fotoğraf yükleyebilirsiniz.');
                         return;
                     }
-                    showToast(`${files.length} görsel hızlı sıkıştırılıyor...`);
+                    const selectedFiles = files.slice(0, remainingSlots);
                     try {
-                        for (const file of files) {
-                            if (uploadedImages.length >= 4) break;
-                            const base64Img = await compressImageToBase64(file, 440, 0.56);
-                            const finalImg = base64Img.length > 160000 ? await compressImageToBase64(file, 360, 0.48) : base64Img;
-                            if (finalImg) uploadedImages.push(finalImg);
+                        for (const f of selectedFiles) {
+                            const compressed = await compressImageToBase64(f);
+                            if (compressed) uploadedImages.push(compressed);
                         }
                         renderSellerImagePreviews();
-                        showToast(`${uploadedImages.length} görsel hazır, ürünü kaydedince yayınlanacak.`);
-                    } catch (err) {
-                        showToast('Görseller işlenemedi, farklı bir resim deneyin.');
+                    } catch (_) {
+                        showToast('Görsel yüklenirken bir hata oluştu.');
                     }
                 });
+            }
+
+            if ($('cancelEditProductBtn')) {
+                $('cancelEditProductBtn').addEventListener('click', resetSellerProductForm);
             }
 
             if ($('sellerProductForm')) {
@@ -5112,100 +5944,123 @@
                     if (!currentSeller) return;
                     const editId = $('editProductId').value;
                     const name = $('prodName').value.trim();
-                    const category = $('prodCategory').value;
-                    const oldPrice = parseFloat($('prodOldPrice').value);
-                    const rawDiscountPrice = $('prodPrice').value.trim();
-                    const price = rawDiscountPrice ? parseFloat(rawDiscountPrice) : oldPrice;
-                    const minOrderQty = Math.max(1, parseInt($('prodMinQty') ? $('prodMinQty').value : '1', 10) || 1);
-                    const shipping = parseFloat($('prodShipping').value);
-                    const stock = parseInt($('prodStock').value, 10);
+                    const category = normalizeCategoryName($('prodCategory').value);
+                    const rawOldPrice = Number($('prodOldPrice').value || 0);
+                    const rawDiscountPrice = Number($('prodPrice').value || 0);
+                    const minOrderQty = Math.max(1, Number($('prodMinQty') ? $('prodMinQty').value : 1));
+                    const stock = Math.max(0, Number($('prodStock').value || 0));
                     const desc = $('prodDesc').value.trim();
 
-                    const extraRaw = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
-                    const extraItems = extraRaw ? extraRaw.split(',').map(x => x.trim()).filter(Boolean) : [];
-                    const variants = [...new Set([...selectedFormVariants, ...extraItems])];
-
-                    if (variants.length === 0) {
-                        if (category === 'Ayakkabı') showToast('Lütfen en az bir ayakkabı numarası (34-50) işaretleyin.');
-                        else if (category === 'Gözlük') showToast('Lütfen en az bir gözlük rengi işaretleyin.');
-                        else showToast('Lütfen en az bir seçenek işaretleyin veya yazın.');
+                    if (rawOldPrice <= 0) {
+                        showToast('Lütfen geçerli bir normal satış fiyatı girin.');
                         return;
                     }
-                    if (!editId && uploadedImages.length === 0) { showToast('Lütfen ürün için en az bir görsel seçin.'); return; }
 
-                    if (editId) {
-                        const prod = db.products.find(p => p.id === editId);
-                        if (prod) {
-                            prod.name = name; prod.category = category; prod.oldPrice = oldPrice;
-                            prod.price = price; prod.minOrderQty = minOrderQty; prod.variants = variants;
-                            prod.shipping = shipping; prod.stock = stock; prod.desc = desc;
-                            if (uploadedImages.length > 0) {
-                                prod.images = [...uploadedImages].slice(0, 4);
-                                prod.image = prod.images[0];
-                            }
-                            const ok = await saveProductToCollection(prod);
-                            if (ok) {
-                                showToast('Ürün güncellendi.');
-                                resetSellerProductForm();
-                                renderSellerDashboard();
-                                renderProducts();
-                            }
-                        }
-                    } else {
-                        const imgs = [...uploadedImages].slice(0, 4);
-                        const newProd = {
-                            id: 'prod_' + Date.now(), sellerId: currentSeller.id, sellerName: currentSeller.companyName,
-                            name, category, oldPrice, price, minOrderQty, variants, shipping, stock,
-                            image: imgs[0], images: imgs, desc
-                        };
-                        if (!db.products.some(x => x.id === newProd.id)) db.products.unshift(newProd);
-                        const ok = await saveProductToCollection(newProd);
-                        if (ok) {
-                            showToast('Yeni ürün koleksiyona kaydedildi ve yayına alındı.');
-                            resetSellerProductForm();
-                            renderSellerDashboard();
-                            renderProducts();
-                        }
+                    const price = rawDiscountPrice > 0 ? rawDiscountPrice : rawOldPrice;
+                    const oldPrice = rawDiscountPrice > 0 && rawOldPrice > rawDiscountPrice ? rawOldPrice : 0;
+
+                    const extraText = $('customVariantExtra') ? $('customVariantExtra').value.trim() : '';
+                    const extraItems = extraText
+                        ? extraText.split(',').map(s => s.trim()).filter(Boolean)
+                        : [];
+
+                    const parsedTextMap = parseVariantImageMapFromText($('variantImageMapText') ? $('variantImageMapText').value : '');
+                    const finalVariantImages = { ...formVariantImages, ...parsedTextMap };
+
+                    const variants = [...new Set([...selectedFormVariants, ...extraItems, ...Object.keys(finalVariantImages)])];
+                    if (variants.length === 0) {
+                        showToast('Lütfen en az bir seçenek (numara, renk veya beden) işaretleyin ya da yazın.');
+                        return;
                     }
+
+                    let finalImages = [...uploadedImages];
+                    if (!finalImages.length && editId) {
+                        const existingProd = (db.products || []).find(p => p.id === editId);
+                        if (existingProd) finalImages = getProductImages(existingProd);
+                    }
+                    if (!finalImages.length && Object.keys(finalVariantImages).length > 0) {
+                        finalImages = [Object.values(finalVariantImages)[0]];
+                    }
+                    if (!finalImages.length) {
+                        showToast('Lütfen en az 1 ürün görseli yükleyin.');
+                        return;
+                    }
+
+                    const prodPayload = {
+                        id: editId || ('PROD-' + Date.now()),
+                        sellerId: currentSeller.id,
+                        sellerName: currentSeller.companyName,
+                        name,
+                        category,
+                        oldPrice,
+                        price,
+                        minOrderQty,
+                        stock,
+                        variants,
+                        variantImages: finalVariantImages,
+                        desc,
+                        images: finalImages.slice(0, 4),
+                        image: finalImages[0]
+                    };
+
+                    const idx = (db.products || []).findIndex(p => p.id === prodPayload.id);
+                    if (idx >= 0) db.products[idx] = prodPayload;
+                    else db.products.unshift(prodPayload);
+
+                    const ok = await saveProductToCollection(prodPayload);
+                    if (!ok) return;
+                    await saveDB();
+
+                    resetSellerProductForm();
+                    renderSellerDashboard();
+                    renderShowcaseBands();
+                    renderProducts();
+                    showToast(editId ? 'Ürün güncellendi!' : 'Ürün başarıyla yayınlandı!');
                 });
             }
 
-            if ($('cancelEditProductBtn')) $('cancelEditProductBtn').addEventListener('click', resetSellerProductForm);
-
-            let logoClickCount = 0;
-            let logoClickTimer = null;
-            function openAdminModal() {
+            let logoClickCount = 0, logoClickTimer = null;
+            const openAdminPrompt = () => {
                 if ($('adminLoginModal')) $('adminLoginModal').classList.remove('hidden');
-            }
+                if ($('superAdminPassInput')) $('superAdminPassInput').focus();
+            };
             if ($('secretAdminTrigger')) {
                 $('secretAdminTrigger').addEventListener('click', () => {
                     logoClickCount++;
                     clearTimeout(logoClickTimer);
-                    logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1500);
-                    if (logoClickCount >= 5) { logoClickCount = 0; openAdminModal(); }
+                    if (logoClickCount >= 5) { logoClickCount = 0; openAdminPrompt(); }
+                    else { logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1400); }
                 });
             }
             document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'A') { e.preventDefault(); openAdminModal(); }
+                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); openAdminPrompt(); }
             });
-            if (new URLSearchParams(window.location.search).get('admin') === 'trendtan') openAdminModal();
+            try {
+                if (new URLSearchParams(window.location.search).get('admin') === 'trendtan') setTimeout(openAdminPrompt, 250);
+            } catch (_) {}
 
             if ($('adminLoginForm')) {
                 $('adminLoginForm').addEventListener('submit', (e) => {
                     e.preventDefault();
-                    const enteredPass = ($('superAdminPassInput') ? $('superAdminPassInput').value : '').trim();
-                    const expectedPass = (db.adminPassword || 'trendtan2026').trim();
-                    if (enteredPass === expectedPass || enteredPass === 'trendtan2026') {
+                    const pass = $('superAdminPassInput').value.trim();
+                    if (pass === (db.adminPassword || 'trendtan2026')) {
                         try { sessionStorage.setItem(SESSION_KEYS.adminAuth, '1'); } catch (_) {}
                         if ($('adminLoginModal')) $('adminLoginModal').classList.add('hidden');
-                        $('adminLoginForm').reset();
+                        $('superAdminPassInput').value = '';
                         switchMainView('superAdminDashboardView');
                         renderAdminDashboard();
-                        if (soundEnabled) playNotificationTone();
-                        showToast('Süper Admin Paneli açıldı.');
+                        showToast('Süper Admin paneline hoş geldiniz.');
                     } else {
                         showToast('Yönetici şifresi hatalı!');
                     }
+                });
+            }
+
+            if ($('backToStoreFromAdmin')) $('backToStoreFromAdmin').addEventListener('click', () => switchMainView('customerStoreView'));
+            if ($('adminLogoutBtn')) {
+                $('adminLogoutBtn').addEventListener('click', () => {
+                    try { sessionStorage.removeItem(SESSION_KEYS.adminAuth); } catch (_) {}
+                    switchMainView('customerStoreView');
                 });
             }
 
@@ -5215,141 +6070,192 @@
                     const appId = $('approveAppId').value;
                     const app = (db.sellerApplications || []).find(a => a.id === appId);
                     if (!app) return;
+                    const username = $('assignSellerUsername').value.trim();
+                    const password = $('assignSellerPassword').value.trim();
+
                     db.sellers.push({
-                        id: 'seller_' + Date.now(), firstName: app.firstName, lastName: app.lastName,
-                        fullName: app.fullName, companyName: app.companyName, taxOrTc: app.taxOrTc,
-                        address: app.address, phone: app.phone, email: app.email,
-                        username: $('assignSellerUsername').value.trim(),
-                        password: $('assignSellerPassword').value.trim(),
+                        id: 'SELLER-' + Date.now(),
+                        companyName: app.companyName,
+                        fullName: app.fullName,
+                        phone: app.phone,
+                        email: app.email,
+                        taxOrTc: app.taxOrTc,
+                        ribbonText: app.ribbonText || '',
+                        address: app.address,
+                        username,
+                        password,
                         active: true
                     });
                     db.sellerApplications = db.sellerApplications.filter(a => a.id !== appId);
-                    await saveDB();
+                    const ok = await saveDB();
+                    if (!ok) return;
                     if ($('approveSellerModal')) $('approveSellerModal').classList.add('hidden');
                     renderAdminDashboard();
-                    showToast('Satıcı başvurusu onaylandı ve hesap oluşturuldu.');
+                    renderProducts();
+                    renderShowcaseBands();
+                    showToast(`${app.companyName} onaylandı! Kullanıcı adı: ${username}`);
                 });
             }
 
             if ($('adminCouponForm')) {
                 $('adminCouponForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    db.coupons.push({ code: $('newCouponCode').value.trim().toUpperCase(), type: $('newCouponType').value, value: parseFloat($('newCouponValue').value) });
-                    await saveDB();
+                    const code = $('newCouponCode').value.trim().toUpperCase();
+                    const type = $('newCouponType').value;
+                    const value = Number($('newCouponValue').value);
+                    if (!code || value <= 0) return;
+                    db.coupons.push({ code, type, value });
+                    const ok = await saveDB();
+                    if (!ok) return;
                     $('adminCouponForm').reset();
                     renderAdminDashboard();
-                    showToast('Kupon eklendi.');
+                    showToast(`${code} kuponu eklendi.`);
                 });
             }
 
             if ($('posSettingsForm')) {
                 $('posSettingsForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    db.posConfig = { provider: $('posProvider').value, apiKey: $('posApiKey').value.trim(), secretKey: $('posSecretKey').value.trim(), merchantSalt: $('posMerchantSalt').value.trim() };
-                    await saveDB();
-                    showToast('Sanal POS bilgileri kaydedildi.');
-                });
-            }
-
-            if ($('backToStoreFromSeller')) $('backToStoreFromSeller').addEventListener('click', () => switchMainView('customerStoreView'));
-            if ($('backToStoreFromAdmin')) $('backToStoreFromAdmin').addEventListener('click', () => switchMainView('customerStoreView'));
-            if ($('sellerLogoutBtn')) {
-                $('sellerLogoutBtn').addEventListener('click', () => {
-                    currentSeller = null;
-                    try { sessionStorage.removeItem(SESSION_KEYS.sellerId); } catch (_) {}
-                    switchMainView('customerStoreView');
-                    showToast('Satıcı çıkışı yapıldı.');
-                });
-            }
-            if ($('adminLogoutBtn')) {
-                $('adminLogoutBtn').addEventListener('click', () => {
-                    try { sessionStorage.removeItem(SESSION_KEYS.adminAuth); } catch (_) {}
-                    switchMainView('customerStoreView');
-                    showToast('Admin çıkışı yapıldı.');
-                });
-            }
-
-            document.querySelectorAll('.dash-tabs').forEach(tabBar => {
-                tabBar.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.addEventListener('click', async () => {
-                        const parent = btn.closest('.dashboard-section');
-                        if (!parent) return;
-                        parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                        parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                        btn.classList.add('active');
-                        const targetContent = $(btn.dataset.tab);
-                        if (targetContent) targetContent.classList.add('active');
-                        const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
-                        savedTabs[parent.id] = btn.dataset.tab;
-                        saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
-
-                        if (btn.dataset.tab === 'admin-timed-bonus') {
-                            renderAdminTimedBonusTab();
-                        }
-                        if (btn.dataset.tab === 'admin-live-support' && selectedAdminChatId) {
-                            const target = liveChats.find(c => c.id === selectedAdminChatId);
-                            if (target && Number(target.unreadForAdmin || 0) > 0) {
-                                target.unreadForAdmin = 0;
-                                await persistLiveChatDoc(target);
-                            }
-                            renderAdminLiveSupportTab();
-                        }
-                    });
-                });
-            });
-
-            /* Dış Katmana (Backdrop) Dokununca Modalları Kapatma */
-            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-                backdrop.addEventListener('click', (e) => {
-                    if (e.target === backdrop) {
-                        backdrop.classList.add('hidden');
-                        if (backdrop.id === 'trackOrderModal') {
-                            try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
-                        }
+                    db.posConfig = {
+                        provider: $('posProvider').value,
+                        apiKey: $('posApiKey').value.trim(),
+                        secretKey: $('posSecretKey').value.trim(),
+                        merchantSalt: $('posMerchantSalt').value.trim()
+                    };
+                    const ok = await saveDB();
+                    if (!ok) return;
+                    if ($('activePosLabel')) {
+                        $('activePosLabel').textContent = 'Sanal POS Onayı Bekleniyor';
                     }
+                    showToast('Sanal POS yapılandırması kaydedildi.');
+                });
+            }
+
+            document.querySelectorAll('.dash-tabs .tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const parentSection = btn.closest('.dashboard-section');
+                    if (!parentSection) return;
+                    parentSection.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    parentSection.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    const targetTab = $(btn.dataset.tab);
+                    if (targetTab) targetTab.classList.add('active');
+                    const savedTabs = loadSessionJson(SESSION_KEYS.dashTabs, {});
+                    savedTabs[parentSection.id] = btn.dataset.tab;
+                    saveSessionJson(SESSION_KEYS.dashTabs, savedTabs);
                 });
             });
 
             document.querySelectorAll('[data-close]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const modal = $(btn.dataset.close);
-                    if (modal) modal.classList.add('hidden');
-                    if (btn.dataset.close === 'trackOrderModal') {
-                        try { sessionStorage.removeItem(SESSION_KEYS.trackOpen); } catch (_) {}
+                    const modalId = btn.getAttribute('data-close');
+                    if ($(modalId)) $(modalId).classList.add('hidden');
+                    if (modalId === 'trackOrderModal') {
+                        try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '0'); } catch (_) {}
+                    }
+                });
+            });
+
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) {
+                        backdrop.classList.add('hidden');
+                        if (backdrop.id === 'trackOrderModal') {
+                            try { sessionStorage.setItem(SESSION_KEYS.trackOpen, '0'); } catch (_) {}
+                        }
                     }
                 });
             });
         }
 
+        renderShowcaseBands();
+        renderProducts();
+        updateCartUI();
+        renderCustomerSupportWidget();
         bindAllUIEvents();
-        applySavedDashTabs();
         restoreSessionViewIfPossible();
-        requestAnimationFrame(() => refreshAllViews());
+        applySavedDashTabs();
 
-        (async () => {
+        if (sessionStorage.getItem(SESSION_KEYS.trackOpen) === '1') {
+            if ($('trackOrderModal')) $('trackOrderModal').classList.remove('hidden');
+            const savedQ = sessionStorage.getItem(SESSION_KEYS.trackQuery);
+            if (savedQ && $('trackCodeInput')) {
+                $('trackCodeInput').value = savedQ;
+                runOrderTrackingSearch(savedQ);
+            }
+        }
+
+        (async function initCloudSync() {
             try {
-                const firebaseApp = initializeApp(firebaseConfig);
-                firestoreDb = getFirestore(firebaseApp);
+                const app = initializeApp(firebaseConfig);
+                firestoreDb = getFirestore(app);
                 storeDocRef = doc(firestoreDb, "trendtan_store", "main_state");
                 productsColRef = collection(firestoreDb, "trendtan_products");
                 liveChatsColRef = collection(firestoreDb, "trendtan_live_chats");
-                const shopCustColRef = collection(firestoreDb, "trendtan_shop_customers");
+
+                const snap = await getDoc(storeDocRef);
+                if (!snap.exists()) {
+                    await setDoc(storeDocRef, { ...DEFAULT_DB, products: [] });
+                } else {
+                    const data = snap.data() || {};
+                    db = {
+                        ...DEFAULT_DB,
+                        ...data,
+                        shopCustomers: (Array.isArray(data.shopCustomers) && data.shopCustomers.length > 0)
+                            ? data.shopCustomers
+                            : (db.shopCustomers || []),
+                        products: db.products || [],
+                        pastOrders: Array.isArray(data.pastOrders) ? data.pastOrders : [],
+                        dailyRevenueHistory: Array.isArray(data.dailyRevenueHistory) ? data.dailyRevenueHistory : [],
+                        revenueResetOffset: Number(data.revenueResetOffset || 0),
+                        timedBonusRules: Array.isArray(data.timedBonusRules) ? data.timedBonusRules : [],
+                        trendProductIds: Array.isArray(data.trendProductIds) ? data.trendProductIds : [],
+                        bestSellerProductIds: Array.isArray(data.bestSellerProductIds) ? data.bestSellerProductIds : []
+                    };
+                }
+
                 firestoreReady = true;
+
+                onSnapshot(storeDocRef, (docSnap) => {
+                    if (isSaving || !docSnap.exists()) return;
+                    const data = docSnap.data() || {};
+                    db = {
+                        ...DEFAULT_DB,
+                        ...data,
+                        shopCustomers: (Array.isArray(data.shopCustomers) && data.shopCustomers.length > 0)
+                            ? data.shopCustomers
+                            : (db.shopCustomers || []),
+                        products: db.products || [],
+                        pastOrders: Array.isArray(data.pastOrders) ? data.pastOrders : [],
+                        dailyRevenueHistory: Array.isArray(data.dailyRevenueHistory) ? data.dailyRevenueHistory : [],
+                        revenueResetOffset: Number(data.revenueResetOffset || 0),
+                        timedBonusRules: Array.isArray(data.timedBonusRules) ? data.timedBonusRules : [],
+                        trendProductIds: Array.isArray(data.trendProductIds) ? data.trendProductIds : [],
+                        bestSellerProductIds: Array.isArray(data.bestSellerProductIds) ? data.bestSellerProductIds : []
+                    };
+                    writeLocalCache(CACHE_KEYS.mainState, {
+                        ...db,
+                        products: []
+                    });
+                    writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers || []);
+                    refreshAllViews();
+                });
 
                 onSnapshot(productsColRef, (colSnap) => {
                     if (isSaving) return;
-                    const list = [];
+                    const colProducts = [];
                     colSnap.forEach((d) => {
                         const item = d.data() || {};
-                        list.push({ id: item.id || d.id, ...item });
+                        colProducts.push({ id: item.id || d.id, ...item });
                     });
-                    list.sort((a, b) => {
-                        const numA = parseInt((a.id || '').replace(/\D+/g, ''), 10) || 0;
-                        const numB = parseInt((b.id || '').replace(/\D+/g, ''), 10) || 0;
-                        return numB - numA;
-                    });
-                    db.products = list;
-                    writeLocalCache(CACHE_KEYS.products, db.products);
+                    if (colProducts.length > 0) {
+                        db.products = colProducts;
+                    } else if (Array.isArray(db.products) && db.products.length > 0) {
+                        db.products.forEach(p => {
+                            if (p && p.id) setDoc(doc(firestoreDb, "trendtan_products", p.id), p).catch(() => {});
+                        });
+                    }
+                    writeLocalCache(CACHE_KEYS.products, db.products || []);
                     refreshAllViews();
                 });
 
@@ -5358,85 +6264,11 @@
                     handleLiveChatsSnapshot(colSnap);
                 });
 
-                onSnapshot(shopCustColRef, (colSnap) => {
-                    if (isSaving) return;
-                    const custList = [];
-                    colSnap.forEach((d) => {
-                        const item = d.data() || {};
-                        custList.push({ id: item.id || d.id, ...item });
-                    });
-                    if (custList.length > 0) {
-                        const merged = [...(db.shopCustomers || [])];
-                        custList.forEach(c => {
-                            const idx = merged.findIndex(m => m.id === c.id);
-                            if (idx >= 0) merged[idx] = { ...merged[idx], ...c };
-                            else merged.push(c);
-                        });
-                        db.shopCustomers = merged;
-                        writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
-                        refreshAllViews();
-                    }
-                });
-
-                const snap = await getDoc(storeDocRef);
-                if (snap.exists()) {
-                    const remoteData = snap.data() || {};
-                    const mergedShopCusts = [...(db.shopCustomers || [])];
-                    (remoteData.shopCustomers || []).forEach(c => {
-                        const idx = mergedShopCusts.findIndex(m => m.id === c.id);
-                        if (idx >= 0) mergedShopCusts[idx] = { ...c, ...mergedShopCusts[idx] };
-                        else mergedShopCusts.push(c);
-                    });
-                    db = {
-                        ...JSON.parse(JSON.stringify(DEFAULT_DB)),
-                        ...remoteData,
-                        shopCustomers: mergedShopCusts,
-                        products: Array.isArray(remoteData.products) && remoteData.products.length > 0
-                            ? remoteData.products
-                            : db.products,
-                        pastOrders: Array.isArray(remoteData.pastOrders) ? remoteData.pastOrders : (db.pastOrders || []),
-                        dailyRevenueHistory: Array.isArray(remoteData.dailyRevenueHistory) ? remoteData.dailyRevenueHistory : (db.dailyRevenueHistory || []),
-                        revenueResetOffset: Number(remoteData.revenueResetOffset ?? db.revenueResetOffset ?? 0),
-                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || [])
-                    };
-                    if (db.products.length > 0) writeLocalCache(CACHE_KEYS.products, db.products);
-                    writeLocalCache(CACHE_KEYS.mainState, db);
-                    writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
-                    restoreSessionViewIfPossible();
-                    refreshAllViews();
-                } else {
-                    await saveDB(false);
-                }
-
-                onSnapshot(storeDocRef, (docSnap) => {
-                    if (isSaving || !docSnap.exists()) return;
-                    const remoteData = docSnap.data() || {};
-                    const mergedShopCusts = [...(db.shopCustomers || [])];
-                    (remoteData.shopCustomers || []).forEach(c => {
-                        const idx = mergedShopCusts.findIndex(m => m.id === c.id);
-                        if (idx >= 0) mergedShopCusts[idx] = { ...c, ...mergedShopCusts[idx] };
-                        else mergedShopCusts.push(c);
-                    });
-                    db = {
-                        ...db,
-                        ...remoteData,
-                        shopCustomers: mergedShopCusts,
-                        products: Array.isArray(remoteData.products) && remoteData.products.length > 0
-                            ? remoteData.products
-                            : db.products,
-                        pastOrders: Array.isArray(remoteData.pastOrders) ? remoteData.pastOrders : (db.pastOrders || []),
-                        dailyRevenueHistory: Array.isArray(remoteData.dailyRevenueHistory) ? remoteData.dailyRevenueHistory : (db.dailyRevenueHistory || []),
-                        revenueResetOffset: Number(remoteData.revenueResetOffset ?? db.revenueResetOffset ?? 0),
-                        timedBonusRules: Array.isArray(remoteData.timedBonusRules) ? remoteData.timedBonusRules : (db.timedBonusRules || [])
-                    };
-                    writeLocalCache(CACHE_KEYS.mainState, db);
-                    writeLocalCache(CACHE_KEYS.shopCustomers, db.shopCustomers);
-                    refreshAllViews();
-                });
-            } catch (err) {
-                console.warn("Firebase senkronizasyonu başlatılamadı, yerel önbellek kullanılıyor:", err);
                 restoreSessionViewIfPossible();
+                applySavedDashTabs();
                 refreshAllViews();
+            } catch (err) {
+                console.warn('Firestore bağlantısı:', err);
             }
         })();
     </script>
